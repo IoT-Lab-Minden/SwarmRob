@@ -103,6 +103,13 @@ class ServiceComposition:
             allocated_worker_list.append(worker)
         return allocated_worker_list
 
+    def is_empty(self):
+        """
+            Returns true when service list is empty
+        :return:
+        """
+        return self.get_service_count() == 0
+
     def get_service_count(self):
         """
             Returns the amount of registered services in this service composition
@@ -132,7 +139,6 @@ class ServiceComposition:
         :return: list
         """
         return list(self._allocation.keys())
-
 
     def format_service_composition_as_table(self):
         """

@@ -1,0 +1,17 @@
+version: '3'
+services:
+  rosmaster:
+    image: repository:5000/ros-master
+    environment:
+      - ROS_IP=hm_rosmaster_1
+  camera:
+    image: repository:5000/ros-smart-camera
+    environment:
+      - ROS_URI=http://rosmaster_1:11311
+      - CAMERA_NAME=Cam
+    depends_on:
+      - rosmaster
+    devices:
+      - /dev/video0:/dev/video0
+    volumes:
+      - /var/run/acpid.socket:/var/run/acpid.socket

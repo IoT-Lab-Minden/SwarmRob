@@ -64,23 +64,24 @@ class Config(object, metaclass=SingletonType):
     The config object is responsible for reading the settings from the config file located at '/etc/swarmrob.conf'
     """
 
-    def __init__(self, file=CONFIG_FILE):
+    def __init__(self):
         """
         Initializes the config
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        self._file = file
+        self._file = None
         self._config = None
         self._load_config()
 
-    def _load_config(self):
+    def _load_config(self, file=CONFIG_FILE):
         """
             load_config loads the configuration located at '/etc/swarmrob.conf'
         :return:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        self._file = file
         self._config = configparser.ConfigParser()
         self._config.read(self._file)
 

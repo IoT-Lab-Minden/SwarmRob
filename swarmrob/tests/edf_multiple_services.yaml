@@ -1,0 +1,10 @@
+version: '3'
+services: 
+ foo:
+  image: hello-world
+ bar:
+  image: hello-python
+ baz:
+  image: hello-minden
+ foobar:
+  image: hello-foobar

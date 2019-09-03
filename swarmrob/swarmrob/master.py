@@ -31,7 +31,7 @@ from clint.textui import colored, indent, puts
 from logger import local_logger
 from services import edf_parser
 from utils.cmd_parser import Argument, CMDParser
-from utils.errors import NetworkException
+from utils.errors import NetworkException, CompositionException
 from utils import network
 from utils import pyro_interface
 from utils import table_builder
@@ -252,9 +252,13 @@ def start_swarm_by_compose_file():
 
     try:
         swarm_composition = edf_parser.create_service_composition_from_edf(params.compose_file)
-    except IOError:
-        llogger.error("Unable to load compose file: %s", params.compose_file)
-        puts(colored.red("Unable to load compose file: " + params.compose_file))
+    except CompositionException as e:
+        puts(colored.red(str(e)))
+        llogger.exception(e, "Unable to load edf file")
+        return
+
+    if swarm_composition.is_empty():
+        puts(colored.red("No services found. Make sure the edf file exists and contains services."))
         return
 
     llogger.debug("Try to start swarm: %s with the following composition", params.uuid)
@@ -277,5 +281,5 @@ def start_swarm_by_compose_file():
         swarmrob_daemon_proxy.start_swarm_by_composition(jsonpickle.encode(swarm_composition), params.uuid)
         puts(colored.yellow("Successfully started swarm"))
     except RuntimeError as e:
-        puts("Error while starting swarm")
+        puts("Error while starting swarm\n" + str(e))
         llogger.exception(e, "Error while starting swarm")

@@ -23,8 +23,10 @@ from parse import *
 
 import jsonpickle
 import yaml
+import yaml.scanner
 
 from logger import local_logger
+from utils.errors import CompositionException
 from . import service_composition
 from . import service
 
@@ -40,7 +42,7 @@ def load_edf(path_to_edf):
     llogger.debug("Load EDF: %s", path_to_edf)
     file_stream = open(str(path_to_edf), 'r')
     edf_object = yaml.safe_load_all(file_stream)
-    return edf_object
+    return edf_object, file_stream
 
 
 def create_service_composition_from_edf(path_to_edf):
@@ -51,13 +53,22 @@ def create_service_composition_from_edf(path_to_edf):
     """
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
-    edf_object = load_edf(path_to_edf)
     service_composition_obj = service_composition.ServiceComposition()
-    for edf_dict in edf_object:
-        for key, value in list(edf_dict.items()):
-            service_composition_obj = composition_options[key](value, service_composition_obj)
-
-    llogger.debug("Parsed Service Composition %s", jsonpickle.encode(service_composition_obj))
+    try:
+        edf_object, file_stream = load_edf(path_to_edf)
+    except IOError:
+        llogger.error("Unable to load compose file: %s", path_to_edf)
+        return service_composition_obj
+    try:
+        for edf_dict in edf_object:
+            for key, value in list(edf_dict.items()):
+                service_composition_obj = composition_options[key](value, service_composition_obj)
+        llogger.debug("Parsed Service Composition %s", jsonpickle.encode(service_composition_obj))
+        file_stream.close()
+    except yaml.scanner.ScannerError:
+        llogger.error("Unable to load compose file: %s", path_to_edf)
+        file_stream.close()
+        raise CompositionException("Malformed EDF file")
     return service_composition_obj
 
 
@@ -113,7 +124,7 @@ def parse_edf_version(version_value, srv_composition):
     """
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
-    srv_composition._version = version_value
+    srv_composition._version = int(version_value)
     return srv_composition
 
 

@@ -45,3 +45,10 @@ class SwarmException(SwarmRobException):
         Errors related to a swarm
     """
     pass
+
+
+class CompositionException(SwarmRobException):
+    """
+        Errors related to the experiment definition
+    """
+    pass
