@@ -1,0 +1,14 @@
+version: '3'
+services:
+  master:
+    image: "swarmrob_test:ubuntu_18_04"
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  worker_ubuntu_18_04:
+    image: "swarmrob_test:ubuntu_18_04"
+    depends_on:
+      - master
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>SwarmRob &#8212; SwarmRob 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="Installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="swarmrob">
+<h1>SwarmRob<a class="headerlink" href="#swarmrob" title="Permalink to this headline">¶</a></h1>
+<p>Because of the very heterogeneous composition of software and hardware in robotics, the reproduction of experiments is a common problem.
+SwarmRob is a python framework that uses container technologies and orchestration to enable the simple sharing of experimental artifacts and improve the reproducibility
+in robotics research.</p>
+<div class="section" id="general-informations">
+<h2>General Informations<a class="headerlink" href="#general-informations" title="Permalink to this headline">¶</a></h2>
+<p>The reproduction of experiments and its results is one of the fundamental problems of robotics. SwarmRob tries to solve it by providing a solution for re-executing and reproducing experiments. The solution allows to run an experiment not only on one robot but also having a cluster of robots run multiple services that communicate with each other. For this purpose, SwarmRob uses container virtualization in combination with an orchestration mechanism that is adapted to the requirements of robotics. The software is oriented along the master-worker-pattern, where a single master manages the experiment together with the participating robots called worker (See <a class="reference internal" href="#sr-architecture"><span class="std std-numref">Fig. 1</span></a>).</p>
+<div class="figure align-center" id="id1">
+<span id="sr-architecture"></span><a class="reference internal image-reference" href="_static/images/swarmrob_architecture.png"><img alt="_static/images/swarmrob_architecture.png" src="_static/images/swarmrob_architecture.png" /></a>
+<p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">The Architecture of SwarmRob - The green cubes represent the worker
+nodes and the red cubes represent the master nodes. Every bounding box
+illustrates a swarm.The outer box illustrates the local network of the laboratory
+and the grey boxes illustrates the repositories where the worker can obtain
+the definition files.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>An experiment is described using Docker-like configuration files which can be published using private or public repositories and can be obtained by other researchers. The workflow can be subdivided in two phases: the research phase and the review phase (See <a class="reference internal" href="#sr-workflow"><span class="std std-numref">Fig. 2</span></a>).</p>
+<div class="figure align-center" id="id2">
+<span id="sr-workflow"></span><a class="reference internal image-reference" href="_static/images/workflow.png"><img alt="_static/images/workflow.png" src="_static/images/workflow.png" /></a>
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Workflow of SwarmRob - The figure illustrates the research phase (left timeline) and the review phase (right timeline) of the workflow with their
+related subphases.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<p>The research phase is the phase where the experiment is developed and specified by the responsible researchers. Every robot participating in the experiment is specified using a Service Definition File (SDF). The SDF includes the complete functional scope of Docker and should be an executable image of this specific robot. An example of a valid SDF is shown in the following code block.</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="s"> iotlab/indigo</span>
+<span class="c"># Initialize the catkin workspace</span>
+<span class="k">USER</span><span class="s"> ros</span>
+<span class="k">WORKDIR</span><span class="s"> /home/ros/src</span>
+<span class="k">RUN</span> /usr/bin/python /opt/ros/indigo/bin/
+catkin_init_workspace
+<span class="k">RUN</span> git clone --recursive https://gitlab/repository/
+ROSMaster.git -b master
+<span class="k">WORKDIR</span><span class="s"> /home/ros</span>
+<span class="c"># Build the catkin workspace</span>
+<span class="k">RUN</span> /opt/ros/indigo/bin/catkin_make
+<span class="c">#...</span>
+<span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&quot;/home/ros/startup.sh&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Afterwards, the researcher can compose the experiment by the defining an experiment definition file (EDF) that references the prior defined SDFs. An EDF is a subset of docker-compose adapted to specific requirements of robotics like the definition of required hardware, e.g. camera, laser scanner etc.. The difference between docker-compose and SwarmRob is that the definition of devices is taken into account within the orchestration and allocation process. An example of a valid EDF is shown in the following code block.</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span>services:
+  rosmaster:
+    #Specifies the location of the image
+    image: repository:5000/ros-master
+    environment:
+      - <span class="nv">ROS_IP</span><span class="o">=</span>hm_rosmaster_1
+  camera:
+    image: repository:5000/ros-smart-camera
+    #Specifies service-specific environment variables
+    environment:
+      - <span class="nv">ROS_URI</span><span class="o">=</span>http://rosmaster_1:11311
+      - <span class="nv">CAMERA_NAME</span><span class="o">=</span>Cam
+    #Specifies the cross-service dependencies
+    depends_on:
+      - <span class="s2">&quot;rosmaster&quot;</span>
+    #Specifies the required devices
+    devices:
+      - <span class="s2">&quot;/dev/video0:/dev/video0&quot;</span>
+</pre></div>
+</div>
+<p>Afterwards, the researchers just need to publish the SDFs and EDFs along with the publication to allow other researchers to get them and reproduce the experiment. As previously described, therefore SwarmRob relies on container virtualization to enable the reproduction of software-intensive multi-robot experiments. A key feature of multi-robot systems is the communicaiton. In order to enable a capsulated and inference-free communication between the robots, SwarmRob makes use of the virtual network feature of Docker based on VXLAN. While the use of container virtualization becomes more common in robotics, especially the networking is a very time-consuming and error-prone procedure. SwarmRob automates this by using a distributed key-value store to spread the correct network configuration to all participating robots. This enables the communication between e.g. ROS nodes via virtual networks on top of the original underlying network. The whole configuration of the swarm is carried out by the software. The researchers only need to initialize a swarm, add the workers and start the swarm.</p>
+<div class="figure align-center" id="id3">
+<span id="sr-networking"></span><a class="reference internal image-reference" href="_static/images/networking.png"><img alt="_static/images/networking.png" src="_static/images/networking.png" /></a>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">System and Inter-Robot Network Architecture using Overlay Networks - The Underlay Network represents the physical network connection between
+the hosts, the Intra-Swarm Communication represents the commands and
+information exchanged between the participants of a swarm and the Overlay
+Network is the communication channel used for the communication between
+containerized applications</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<p>A good start to connect with SwarmRob is to follow the Getting started guide which you can find <a class="reference internal" href="GettingStarted.html#gettingstarted"><span class="std std-ref">here</span></a>.</p>
+<p>If you want to have an overview of SwarmRob you can take a look at all the commands <a class="reference internal" href="Commands.html#commands"><span class="std std-ref">here</span></a>.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Informations on how to install SwamRob are available <a class="reference internal" href="Installation.html#installation"><span class="std std-ref">here</span></a>.</p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>GPL License</p>
+<blockquote>
+<div><p>Copyright 2018,2019 Aljoscha Pörtner
+Copyright 2019 André Kirsch</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.</p>
+<p>Dieses Programm ist Freie Software: Sie können es unter den Bedingungen
+der GNU General Public License, wie von der Free Software Foundation,
+Version 3 der Lizenz oder (nach Ihrer Wahl) jeder neueren
+veröffentlichten Version, weiter verteilen und/oder modifizieren.</p>
+<p>Dieses Programm wird in der Hoffnung bereitgestellt, dass es nützlich sein wird, jedoch
+OHNE JEDE GEWÄHR,; sogar ohne die implizite
+Gewähr der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
+Siehe die GNU General Public License für weitere Einzelheiten.</p>
+<p>Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
+Programm erhalten haben. Wenn nicht, siehe &lt;<a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>&gt;.</p>
+</div></blockquote>
+</div>
+<div class="section" id="navigation">
+<h2>Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">swarmrob</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="#">
+    <img class="logo" src="_static/images/SwarmRob_Main_Logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A Toolkit for Reproducibility and Sharing of Experimental Artifacts in Robotics Research</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=IoT-Lab-Minden&repo=SwarmRob&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">swarmrob</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="Installation.html" title="next chapter">Installation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Aljoscha Pörtner.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

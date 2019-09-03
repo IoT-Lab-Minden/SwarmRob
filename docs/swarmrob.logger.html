@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>swarmrob.logger package &#8212; SwarmRob 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="swarmrob.services package" href="swarmrob.services.html" />
+    <link rel="prev" title="swarmrob.gortools package" href="swarmrob.gortools.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="swarmrob-logger-package">
+<h1>swarmrob.logger package<a class="headerlink" href="#swarmrob-logger-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-swarmrob.logger.evaluation_logger">
+<span id="swarmrob-logger-evaluation-logger-module"></span><h2>swarmrob.logger.evaluation_logger module<a class="headerlink" href="#module-swarmrob.logger.evaluation_logger" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="swarmrob.logger.evaluation_logger.EvaluationLogger">
+<em class="property">class </em><code class="sig-prename descclassname">swarmrob.logger.evaluation_logger.</code><code class="sig-name descname">EvaluationLogger</code><a class="headerlink" href="#swarmrob.logger.evaluation_logger.EvaluationLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The evaluation logger is responsible for logging the evaluation split up into the three log types Costs, Allocations
+and Alloc_metrics.</p>
+<dl class="method">
+<dt id="swarmrob.logger.evaluation_logger.EvaluationLogger.create_file">
+<code class="sig-name descname">create_file</code><span class="sig-paren">(</span><em class="sig-param">log_type</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.evaluation_logger.EvaluationLogger.create_file" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Creates the sessions log_file for the specified log_type if it doesn’t already exist.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>log_type</strong> – which file should be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>boolean, True if the file has been created otherwise False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.evaluation_logger.EvaluationLogger.create_log_folder">
+<code class="sig-name descname">create_log_folder</code><span class="sig-paren">(</span><em class="sig-param">log_type</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.evaluation_logger.EvaluationLogger.create_log_folder" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Creates the log_folder for the specified log_type if it doesn’t already exist.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>log_type</strong> – which folder should be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>boolean, True if the folder has been created otherwise False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.evaluation_logger.EvaluationLogger.enable">
+<code class="sig-name descname">enable</code><span class="sig-paren">(</span><em class="sig-param">enable=True</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.evaluation_logger.EvaluationLogger.enable" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Enables or disables the evaluation logger. If the log_ident or the log_folder is None the evaluation logger
+can’t be enabled.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>enable</strong> – defines whether the evaluation logger should be enabled or disabled</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new status of the evaluation logger</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.evaluation_logger.EvaluationLogger.get_filepath">
+<code class="sig-name descname">get_filepath</code><span class="sig-paren">(</span><em class="sig-param">log_type</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.evaluation_logger.EvaluationLogger.get_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Creates the filepath for the specified log_type.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>log_type</strong> – which filepath should be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string describing the filepath</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.evaluation_logger.EvaluationLogger.get_log_type_header">
+<code class="sig-name descname">get_log_type_header</code><span class="sig-paren">(</span><em class="sig-param">log_type</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.evaluation_logger.EvaluationLogger.get_log_type_header" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Returns a list of headers for the specified log_type.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>log_type</strong> – which headers should be returned</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of header strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.evaluation_logger.EvaluationLogger.reset_time">
+<code class="sig-name descname">reset_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.evaluation_logger.EvaluationLogger.reset_time" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Resets or creates a new time string used in the file name. Resetting the time will always create a new file
+if there is enough time between two resets (1 second).</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.evaluation_logger.EvaluationLogger.set_log_folder">
+<code class="sig-name descname">set_log_folder</code><span class="sig-paren">(</span><em class="sig-param">new_log_folder</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.evaluation_logger.EvaluationLogger.set_log_folder" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Sets a new log folder. If the new log folder is None then logging will be disabled.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_log_folder</strong> – new log folder</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the new log folder</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.evaluation_logger.EvaluationLogger.set_log_ident">
+<code class="sig-name descname">set_log_ident</code><span class="sig-paren">(</span><em class="sig-param">new_log_ident</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.evaluation_logger.EvaluationLogger.set_log_ident" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Sets a new log identifier. If the new log identifier is None then logging will be disabled.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_log_ident</strong> – new log identifier</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the new log identifier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.evaluation_logger.EvaluationLogger.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">log_type</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.evaluation_logger.EvaluationLogger.write" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Logs data for the specified log_type.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – list of values that should be logged</p></li>
+<li><p><strong>log_type</strong> – to which log_type the data corresponds to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>boolean, True if data has been logged otherwise False</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="swarmrob.logger.evaluation_logger.LogType">
+<em class="property">class </em><code class="sig-prename descclassname">swarmrob.logger.evaluation_logger.</code><code class="sig-name descname">LogType</code><a class="headerlink" href="#swarmrob.logger.evaluation_logger.LogType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Enum class for the different evaluation log types</p>
+<dl class="attribute">
+<dt id="swarmrob.logger.evaluation_logger.LogType.ALLOCATIONS">
+<code class="sig-name descname">ALLOCATIONS</code><em class="property"> = 'allocations'</em><a class="headerlink" href="#swarmrob.logger.evaluation_logger.LogType.ALLOCATIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="swarmrob.logger.evaluation_logger.LogType.ALLOC_METRICS">
+<code class="sig-name descname">ALLOC_METRICS</code><em class="property"> = 'alloc_metrics'</em><a class="headerlink" href="#swarmrob.logger.evaluation_logger.LogType.ALLOC_METRICS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="swarmrob.logger.evaluation_logger.LogType.COSTS">
+<code class="sig-name descname">COSTS</code><em class="property"> = 'costs'</em><a class="headerlink" href="#swarmrob.logger.evaluation_logger.LogType.COSTS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="swarmrob.logger.evaluation_logger.SingletonType">
+<em class="property">class </em><code class="sig-prename descclassname">swarmrob.logger.evaluation_logger.</code><code class="sig-name descname">SingletonType</code><a class="headerlink" href="#swarmrob.logger.evaluation_logger.SingletonType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<p>Helper class for singleton</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-swarmrob.logger.local_logger">
+<span id="swarmrob-logger-local-logger-module"></span><h2>swarmrob.logger.local_logger module<a class="headerlink" href="#module-swarmrob.logger.local_logger" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="swarmrob.logger.local_logger.LocalLogger">
+<em class="property">class </em><code class="sig-prename descclassname">swarmrob.logger.local_logger.</code><code class="sig-name descname">LocalLogger</code><a class="headerlink" href="#swarmrob.logger.local_logger.LocalLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Singleton class for the local logger</p>
+<dl class="method">
+<dt id="swarmrob.logger.local_logger.LocalLogger.debug">
+<code class="sig-name descname">debug</code><span class="sig-paren">(</span><em class="sig-param">msg</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.local_logger.LocalLogger.debug" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Overwritten debug method of the logging module</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> – Message that should be logged</p></li>
+<li><p><strong>args</strong> – List of additional arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.local_logger.LocalLogger.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><em class="sig-param">msg</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.local_logger.LocalLogger.error" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Overwritten error method of the logging module</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> – Message that should be logged</p></li>
+<li><p><strong>args</strong> – List of additional arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.local_logger.LocalLogger.exception">
+<code class="sig-name descname">exception</code><span class="sig-paren">(</span><em class="sig-param">exception</em>, <em class="sig-param">msg=''</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.local_logger.LocalLogger.exception" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Overwritten exception method of the logging module</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exception</strong> – Thrown exception</p></li>
+<li><p><strong>msg</strong> – Message that should be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.local_logger.LocalLogger.log_call">
+<code class="sig-name descname">log_call</code><span class="sig-paren">(</span><em class="sig-param">function_name</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.local_logger.LocalLogger.log_call" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.local_logger.LocalLogger.log_method_call">
+<code class="sig-name descname">log_method_call</code><span class="sig-paren">(</span><em class="sig-param">class_name</em>, <em class="sig-param">method_name</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.local_logger.LocalLogger.log_method_call" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="swarmrob.logger.local_logger.SingletonType">
+<em class="property">class </em><code class="sig-prename descclassname">swarmrob.logger.local_logger.</code><code class="sig-name descname">SingletonType</code><a class="headerlink" href="#swarmrob.logger.local_logger.SingletonType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<p>Helper class for singleton</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-swarmrob.logger.remote_logger">
+<span id="swarmrob-logger-remote-logger-module"></span><h2>swarmrob.logger.remote_logger module<a class="headerlink" href="#module-swarmrob.logger.remote_logger" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="swarmrob.logger.remote_logger.RemoteLogger">
+<em class="property">class </em><code class="sig-prename descclassname">swarmrob.logger.remote_logger.</code><code class="sig-name descname">RemoteLogger</code><span class="sig-paren">(</span><em class="sig-param">hostname</em>, <em class="sig-param">port</em>, <em class="sig-param">worker_uuid</em>, <em class="sig-param">swarm_uuid</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logger.RemoteLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Singleton class for the remote logger</p>
+<dl class="method">
+<dt id="swarmrob.logger.remote_logger.RemoteLogger.debug">
+<code class="sig-name descname">debug</code><span class="sig-paren">(</span><em class="sig-param">msg</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logger.RemoteLogger.debug" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Overwritten debug method of the logging module. Adds additional information like the uuid of the swarm and
+worker to the remote logging</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> – Message that should be logged</p></li>
+<li><p><strong>args</strong> – List of additional arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.remote_logger.RemoteLogger.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><em class="sig-param">msg</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logger.RemoteLogger.error" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Overwritten error method of the logging module. Adds additional information like the uuid of the swarm and
+worker to the remote logging</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> – Message that should be logged</p></li>
+<li><p><strong>args</strong> – List of additional arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.remote_logger.RemoteLogger.exception">
+<code class="sig-name descname">exception</code><span class="sig-paren">(</span><em class="sig-param">exception</em>, <em class="sig-param">msg=''</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logger.RemoteLogger.exception" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Overwritten exception method of the logging module. Adds additional information like the uuid of the swarm
+and worker to the remote logging</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exception</strong> – Thrown exception</p></li>
+<li><p><strong>msg</strong> – Message that should be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="swarmrob.logger.remote_logger.SingletonType">
+<em class="property">class </em><code class="sig-prename descclassname">swarmrob.logger.remote_logger.</code><code class="sig-name descname">SingletonType</code><a class="headerlink" href="#swarmrob.logger.remote_logger.SingletonType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<p>Helper class for singleton</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-swarmrob.logger.remote_logging_server">
+<span id="swarmrob-logger-remote-logging-server-module"></span><h2>swarmrob.logger.remote_logging_server module<a class="headerlink" href="#module-swarmrob.logger.remote_logging_server" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="swarmrob.logger.remote_logging_server.LogRecordSocketReceiver">
+<em class="property">class </em><code class="sig-prename descclassname">swarmrob.logger.remote_logging_server.</code><code class="sig-name descname">LogRecordSocketReceiver</code><span class="sig-paren">(</span><em class="sig-param">host='localhost'</em>, <em class="sig-param">port=0</em>, <em class="sig-param">handler=&lt;class 'swarmrob.logger.remote_logging_server.LogRecordStreamHandler'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logging_server.LogRecordSocketReceiver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">socketserver.ThreadingTCPServer</span></code></p>
+<p>Simple TCP socket-based logging receiver</p>
+<dl class="attribute">
+<dt id="swarmrob.logger.remote_logging_server.LogRecordSocketReceiver.allow_reuse_address">
+<code class="sig-name descname">allow_reuse_address</code><em class="property"> = 1</em><a class="headerlink" href="#swarmrob.logger.remote_logging_server.LogRecordSocketReceiver.allow_reuse_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.remote_logging_server.LogRecordSocketReceiver.serve_until_stopped">
+<code class="sig-name descname">serve_until_stopped</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logging_server.LogRecordSocketReceiver.serve_until_stopped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serves the TCP logging server until break</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="swarmrob.logger.remote_logging_server.LogRecordStreamHandler">
+<em class="property">class </em><code class="sig-prename descclassname">swarmrob.logger.remote_logging_server.</code><code class="sig-name descname">LogRecordStreamHandler</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">client_address</em>, <em class="sig-param">server</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logging_server.LogRecordStreamHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">socketserver.StreamRequestHandler</span></code></p>
+<p>Handles the streaming logging requests of the workers</p>
+<dl class="method">
+<dt id="swarmrob.logger.remote_logging_server.LogRecordStreamHandler.handle">
+<code class="sig-name descname">handle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logging_server.LogRecordStreamHandler.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle multiple requests - each expected to be a 4-byte length,
+followed by the LogRecord in pickle format. Logs the record
+according to whatever policy is configured locally.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="swarmrob.logger.remote_logging_server.LogRecordStreamHandler.handle_log_record">
+<code class="sig-name descname">handle_log_record</code><span class="sig-paren">(</span><em class="sig-param">record</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logging_server.LogRecordStreamHandler.handle_log_record" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Handles an incoming log record and passes it to the classic logger</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>record</strong> – record that should be logged</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="swarmrob.logger.remote_logging_server.RemoteLoggingServer">
+<em class="property">class </em><code class="sig-prename descclassname">swarmrob.logger.remote_logging_server.</code><code class="sig-name descname">RemoteLoggingServer</code><span class="sig-paren">(</span><em class="sig-param">interface=None</em><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logging_server.RemoteLoggingServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></p>
+<p>Wrapper class for the actual remote logging server</p>
+<dl class="method">
+<dt id="swarmrob.logger.remote_logging_server.RemoteLoggingServer.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#swarmrob.logger.remote_logging_server.RemoteLoggingServer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the remote logging server and run until interrupt</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-swarmrob.logger">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-swarmrob.logger" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/images/SwarmRob_Main_Logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A Toolkit for Reproducibility and Sharing of Experimental Artifacts in Robotics Research</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=IoT-Lab-Minden&repo=SwarmRob&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">swarmrob</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">swarmrob</a><ul>
+  <li><a href="swarmrob.html">swarmrob package</a><ul>
+      <li>Previous: <a href="swarmrob.gortools.html" title="previous chapter">swarmrob.gortools package</a></li>
+      <li>Next: <a href="swarmrob.services.html" title="next chapter">swarmrob.services package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Aljoscha Pörtner.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/swarmrob.logger.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

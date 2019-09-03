@@ -1,0 +1,4 @@
+version: '3'
+services: 
+ rviz:
+  image: localhost:5000/longtime_programm
