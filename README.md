@@ -1,4 +1,5 @@
 # Swarmrob
+![SwarmRob Logo](docs/_static/images/SwarmRob_Main_Logo.png)
 ## Container Orchestration for Robot Applications
 Because of the very heterogeneous composition of software and hardware in robotics, the reproduction of experiments is a common problem.
 SwarmRob is a python framework that uses container technologies and orchestration to enable the simple sharing of experimental artifacts and improve the reproducibility
@@ -11,7 +12,7 @@ The reproduction of experiments and its results is one of the fundamental proble
 
 - ./build_project.sh
 
-### Start Swarmrob
+### Start SwarmRob
 
 - Start Daemons
 	- swarmrob daemon start
