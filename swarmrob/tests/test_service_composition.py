@@ -132,7 +132,7 @@ class TestServiceComposition(TestCase):
     def test_get_service_key_list(self):
         self.composition.add_service("KEY", self.service)
         self.composition.add_service("KEY2", self.service)
-        self.assertEqual(["KEY", "KEY2"], self.composition.get_service_key_list())
+        self.assertEqual(sorted(["KEY", "KEY2"]), sorted(self.composition.get_service_key_list()))
 
     def test_get_service_key_list_empty(self):
         self.assertEqual([], self.composition.get_service_key_list())
@@ -141,4 +141,4 @@ class TestServiceComposition(TestCase):
         self.composition.add_service("KEY", self.service)
         self.composition.add_service("KEY2", self.service)
         self.composition.assign_worker_to_service("KEY", self.worker)
-        self.assertEqual(["KEY", "KEY2"], self.composition.get_service_key_list())
+        self.assertEqual(sorted(["KEY", "KEY2"]), sorted(self.composition.get_service_key_list()))

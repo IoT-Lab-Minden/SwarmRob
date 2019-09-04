@@ -22,7 +22,6 @@ from __future__ import division
 
 import sys
 
-import jsonpickle
 import sympy
 
 from logger import evaluation_logger

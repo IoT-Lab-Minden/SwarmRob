@@ -40,17 +40,18 @@ def allocate_services_to_workers(services=None, workers=None, hardware_matrix=No
     """
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
-
+    if workers is None or services is None or len(services) == 0:
+        return None
     if len(workers) > 1:
-        return allocate_dynamic(services, workers, hardware_matrix, cost_matrix, capacity_matrix)
+        return _allocate_dynamic(services, workers, hardware_matrix, cost_matrix, capacity_matrix)
     elif len(workers) == 1:
-        return allocate_static(services, workers)
+        return _allocate_static(services, workers)
     else:
         llogger.debug("No workers available. So no service could be assigned to a worker")
         return None
 
 
-def allocate_static(services, workers):
+def _allocate_static(services, workers):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     if len(workers) != 1:
@@ -65,43 +66,63 @@ def allocate_static(services, workers):
     return service_allocation_dict
 
 
-def allocate_dynamic(services, workers, hardware_matrix, cost_matrix, capacity_matrix):
+def _allocate_dynamic(services, workers, hardware_matrix, cost_matrix, capacity_matrix):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     if len(workers) < 1:
         return None
+    if not _are_matrices_valid(len(services), len(workers), hardware_matrix, cost_matrix, capacity_matrix):
+        llogger.error("Invalid matrices")
+        return None
     if capacity_matrix is None:
         capacity_matrix = numpy.ones((len(services), len(workers)), dtype=numpy.int).tolist()
-    start_nodes, end_nodes, capacities, costs, supply = get_min_cost_flow_params(len(workers), len(services),
-                                                                                 hardware_matrix, cost_matrix,
-                                                                                 capacity_matrix)
-    min_cost_flow = create_simple_min_flow_cost(start_nodes, end_nodes, capacities, costs, supply)
-    return solve_using_min_flow_cost(min_cost_flow, services, workers)
+    start_nodes, end_nodes, capacities, costs, supply = _get_min_cost_flow_params(len(workers), len(services),
+                                                                                  hardware_matrix, cost_matrix,
+                                                                                  capacity_matrix)
+    min_cost_flow = _create_simple_min_flow_cost(start_nodes, end_nodes, capacities, costs, supply)
+    return _solve_using_min_flow_cost(min_cost_flow, services, workers)
 
 
-def get_min_cost_flow_params(worker_count, service_count, hardware_matrix, cost_matrix, capacity_matrix):
+def _are_matrices_valid(service_count, worker_count, hardware_matrix, cost_matrix, capacity_matrix):
+    if hardware_matrix is None or cost_matrix is None:
+        return False
+    if len(hardware_matrix) != service_count or len(cost_matrix) != service_count:
+        return False
+    for i in range(len(hardware_matrix)):
+        if len(hardware_matrix[i]) != worker_count or len(cost_matrix[i]) != worker_count:
+            return False
+    if capacity_matrix is not None:
+        if len(capacity_matrix) != service_count:
+            return False
+        for i in range(len(capacity_matrix)):
+            if len(capacity_matrix[i]) != worker_count:
+                return False
+    return True
+
+
+def _get_min_cost_flow_params(worker_count, service_count, hardware_matrix, cost_matrix, capacity_matrix):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
 
-    llogger.debug("Matrix of Hardware:\n %s", numpy.asmatrix(hardware_matrix))
-    llogger.debug("Matrix of Costs:\n %s", numpy.asmatrix(cost_matrix))
-    llogger.debug("Matrix of Capacity:\n %s", numpy.asmatrix(capacity_matrix))
+    llogger.debug("Matrix of Hardware:\n %s", numpy.asarray(hardware_matrix))
+    llogger.debug("Matrix of Costs:\n %s", numpy.asarray(cost_matrix))
+    llogger.debug("Matrix of Capacity:\n %s", numpy.asarray(capacity_matrix))
 
-    supply = generate_supply(worker_count, service_count)
+    supply = _generate_supply(worker_count, service_count)
     wc, sn_arcs_out_of_source, en_arcs_out_of_source, cap_arcs_out_of_source, costs_arcs_out_of_source\
-        = generate_source_worker_arcs(worker_count)
+        = _generate_source_worker_arcs(worker_count)
     sn_arcs_leading_into_sink, en_arcs_leading_into_sink, cap_arcs_leading_into_sink, costs_arcs_leading_into_sink\
-        = generate_service_sink_arcs(wc, worker_count, service_count)
+        = _generate_service_sink_arcs(wc, worker_count, service_count)
     sn_arcs_between_worker_and_service, en_arcs_between_worker_and_service, costs_arcs_between_worker_and_service,\
-        cap_arcs_between_worker_and_service = generate_worker_service_arcs(worker_count, hardware_matrix, cost_matrix,
-                                                                           capacity_matrix)
+        cap_arcs_between_worker_and_service = _generate_worker_service_arcs(worker_count, hardware_matrix, cost_matrix,
+                                                                            capacity_matrix)
 
-    start_nodes = combine_to_list(sn_arcs_out_of_source, sn_arcs_between_worker_and_service, sn_arcs_leading_into_sink)
-    end_nodes = combine_to_list(en_arcs_out_of_source, en_arcs_between_worker_and_service, en_arcs_leading_into_sink)
-    capacities = combine_to_list(cap_arcs_out_of_source, cap_arcs_between_worker_and_service,
-                                 cap_arcs_leading_into_sink)
-    costs = combine_to_list(costs_arcs_out_of_source, costs_arcs_between_worker_and_service,
-                            costs_arcs_leading_into_sink)
+    start_nodes = _combine_to_list(sn_arcs_out_of_source, sn_arcs_between_worker_and_service, sn_arcs_leading_into_sink)
+    end_nodes = _combine_to_list(en_arcs_out_of_source, en_arcs_between_worker_and_service, en_arcs_leading_into_sink)
+    capacities = _combine_to_list(cap_arcs_out_of_source, cap_arcs_between_worker_and_service,
+                                  cap_arcs_leading_into_sink)
+    costs = _combine_to_list(costs_arcs_out_of_source, costs_arcs_between_worker_and_service,
+                             costs_arcs_leading_into_sink)
 
     llogger.debug("Start nodes: %s", start_nodes)
     llogger.debug("End nodes: %s", end_nodes)
@@ -111,7 +132,7 @@ def get_min_cost_flow_params(worker_count, service_count, hardware_matrix, cost_
     return start_nodes, end_nodes, capacities, costs, supply
 
 
-def generate_source_worker_arcs(worker_count):
+def _generate_source_worker_arcs(worker_count):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     sn_arcs_out_of_source = [0]
@@ -128,7 +149,7 @@ def generate_source_worker_arcs(worker_count):
     return wc, sn_arcs_out_of_source, en_arcs_out_of_source, cap_arcs_out_of_source, costs_arcs_out_of_source
 
 
-def generate_service_sink_arcs(wc, worker_count, service_count):
+def _generate_service_sink_arcs(wc, worker_count, service_count):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     en_arcs_leading_into_sink = [service_count + 1 + worker_count]
@@ -144,14 +165,14 @@ def generate_service_sink_arcs(wc, worker_count, service_count):
         costs_arcs_leading_into_sink
 
 
-def generate_worker_service_arcs(worker_count, hardware_matrix, cost_matrix, capacity_matrix):
+def _generate_worker_service_arcs(worker_count, hardware_matrix, cost_matrix, capacity_matrix):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     sn_arcs_between_worker_and_service = []
     en_arcs_between_worker_and_service = []
     cap_arcs_between_worker_and_service = []
     costs_arcs_between_worker_and_service = []
-    it = numpy.nditer(numpy.asmatrix(hardware_matrix), order='F', flags=['multi_index'])
+    it = numpy.nditer(numpy.asarray(hardware_matrix), order='F', flags=['multi_index'])
     while not it.finished:
         llogger.debug("%d <%s>" % (it[0], it.multi_index))
         if it[0] == 1:
@@ -167,7 +188,7 @@ def generate_worker_service_arcs(worker_count, hardware_matrix, cost_matrix, cap
         costs_arcs_between_worker_and_service, cap_arcs_between_worker_and_service
 
 
-def combine_to_list(arcs_a, arcs_b, arcs_c):
+def _combine_to_list(arcs_a, arcs_b, arcs_c):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     nodes = list(arcs_a)
@@ -176,7 +197,7 @@ def combine_to_list(arcs_a, arcs_b, arcs_c):
     return nodes
 
 
-def generate_supply(worker_count, service_count):
+def _generate_supply(worker_count, service_count):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     supply = [worker_count]
@@ -185,7 +206,7 @@ def generate_supply(worker_count, service_count):
     return supply
 
 
-def solve_using_min_flow_cost(min_cost_flow, services, workers):
+def _solve_using_min_flow_cost(min_cost_flow, services, workers):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     size_of_workers = len(workers) + 1
@@ -198,16 +219,16 @@ def solve_using_min_flow_cost(min_cost_flow, services, workers):
         for arc in range(min_cost_flow.NumArcs()):
             if min_cost_flow.Tail(arc) != source and min_cost_flow.Head(arc) != sink:
                 if min_cost_flow.Flow(arc) > 0:
-                    service_dict = append_service_to_allocation(services[min_cost_flow.Head(arc) - size_of_workers],
-                                                                worker_value_list[min_cost_flow.Tail(arc) - 1],
-                                                                min_cost_flow.UnitCost(arc), service_dict)
+                    service_dict = _append_service_to_allocation(services[min_cost_flow.Head(arc) - size_of_workers],
+                                                                 worker_value_list[min_cost_flow.Tail(arc) - 1],
+                                                                 min_cost_flow.UnitCost(arc), service_dict)
         return service_dict
     else:
         llogger.debug('There was an issue with the min cost flow input.')
         return None
 
 
-def append_service_to_allocation(service, worker, costs, service_allocation_dict):
+def _append_service_to_allocation(service, worker, costs, service_allocation_dict):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     llogger.debug('Worker %s assigned to service %s.  Cost = %d' % (worker, service, costs))
@@ -217,7 +238,7 @@ def append_service_to_allocation(service, worker, costs, service_allocation_dict
     return service_allocation_dict
 
 
-def create_simple_min_flow_cost(start_nodes, end_nodes, capacities, costs, supply):
+def _create_simple_min_flow_cost(start_nodes, end_nodes, capacities, costs, supply):
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     # Import the ortools inside the method because it can only be instantiated on x64-based systems

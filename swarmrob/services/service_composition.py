@@ -50,7 +50,7 @@ class ServiceComposition:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        if service_key is None or service_key == ''  or service_object is None:
+        if service_key is None or service_key == '' or service_object is None:
             return
         llogger.debug("Add service: %s", service_key)
         llogger.debug("\n" + service_object.format_service_definition_as_table())
@@ -66,7 +66,7 @@ class ServiceComposition:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        if service_key not in self._allocation.keys() or type(worker_object) is not swarm_engine_worker.Worker:
+        if service_key not in self._allocation.keys() or worker_object is None:
             return
         self._allocation.update({str(service_key): str(worker_object.uuid)})
         llogger.debug("Worker: %s allocated to service %s", worker_object.uuid, service_key)

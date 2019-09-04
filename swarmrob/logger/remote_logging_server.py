@@ -29,7 +29,6 @@ import threading
 import pickle
 
 from utils import network
-from utils.errors import NetworkException
 
 MAX_BYTE_SIZE_FOR_LOG_ROTATING = 100000
 FILE_COUNT_FOR_LOG_ROTATING = 5

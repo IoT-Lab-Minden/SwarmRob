@@ -92,10 +92,10 @@ class EvaluationLogger(metaclass=SingletonType):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         self.log_folder = new_log_folder
-        if '~' in self.log_folder:
-            self.log_folder.replace('~', path.expanduser('~'))
         if self.log_folder is None:
             self.enabled = False
+        elif '~' in self.log_folder:
+            self.log_folder = self.log_folder.replace('~', path.expanduser('~'))
         llogger.debug("Evaluation log folder set to %s", self.log_folder)
         return self.log_folder
 
@@ -108,8 +108,6 @@ class EvaluationLogger(metaclass=SingletonType):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         self.log_ident = new_log_ident
-        if self.log_ident is None:
-            self.enabled = False
         llogger.debug("Evaluation log identifier set to %s", self.log_ident)
         return self.log_ident
 
@@ -135,7 +133,7 @@ class EvaluationLogger(metaclass=SingletonType):
         if enable is False:
             self.enabled = False
             llogger.debug("The evaluation logger is disabled")
-        elif self.log_ident is not None and self.log_folder is not None:
+        elif self.log_folder is not None:
             self.enabled = True
             llogger.debug("The evaluation logger is enabled")
         return self.enabled
@@ -195,7 +193,10 @@ class EvaluationLogger(metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        return self.log_folder + str(log_type.value) + '/' + str(log_type.value) + '_' + self.log_ident + '_'\
+        ident = ""
+        if self.log_ident is not None or self.log_ident != "":
+            ident = '_' + self.log_ident
+        return self.log_folder + str(log_type.value) + '/' + str(log_type.value) + ident + '_'\
             + self.timestr + FILE_ENDING
 
     def get_log_type_header(self, log_type):
