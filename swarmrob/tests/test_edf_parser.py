@@ -24,7 +24,7 @@ class TestEdfParser(TestCase):
 
     def test_version_file(self):
         composition = edf_parser.create_service_composition_from_edf(VERSION_FILE)
-        self.assertEqual(3, composition._version)
+        self.assertEqual("3", composition._version)
         self.assertTrue(composition.is_empty())
 
     def test_simple_service(self):
@@ -75,7 +75,7 @@ class TestEdfComplex(TestCase):
         self.composition = edf_parser.create_service_composition_from_edf(COMPLEX_FILE)
 
     def test_version(self):
-        self.assertEqual(3, self.composition._version)
+        self.assertEqual("3", self.composition._version)
 
     def test_service_count(self):
         self.assertEqual(2, self.composition.get_service_count())

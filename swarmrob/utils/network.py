@@ -66,6 +66,8 @@ def check_network_bandwidth_of_repository(tag_of_repository):
     """
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
+    if tag_of_repository is None:
+        raise NetworkException("Repository is None")
     try:
         s = speedtest.Speedtest()
         s.get_best_server(s.set_mini_server("http://" + str(tag_of_repository) + ":" + str(SPEEDTEST_MINI_PORT)))
@@ -74,7 +76,7 @@ def check_network_bandwidth_of_repository(tag_of_repository):
         llogger.debug(results_dict)
         return results_dict
     except (speedtest.SpeedtestMiniConnectFailure, speedtest.ConfigRetrievalError):
-        raise NetworkException
+        raise NetworkException("Unable to check network bandwidth")
 
 
 def get_ip_of_interface(interface_name):

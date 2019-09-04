@@ -124,7 +124,7 @@ def parse_edf_version(version_value, srv_composition):
     """
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
-    srv_composition._version = int(version_value)
+    srv_composition._version = version_value
     return srv_composition
 
 

@@ -23,6 +23,7 @@ import sys
 from terminaltables import SingleTable
 
 from logger import local_logger
+from swarmengine import swarm_engine_worker
 
 
 class ServiceComposition:
@@ -49,6 +50,8 @@ class ServiceComposition:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if service_key is None or service_key == ''  or service_object is None:
+            return
         llogger.debug("Add service: %s", service_key)
         llogger.debug("\n" + service_object.format_service_definition_as_table())
         self._services.update({str(service_key): service_object})
@@ -63,6 +66,8 @@ class ServiceComposition:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if service_key not in self._allocation.keys() or type(worker_object) is not swarm_engine_worker.Worker:
+            return
         self._allocation.update({str(service_key): str(worker_object.uuid)})
         llogger.debug("Worker: %s allocated to service %s", worker_object.uuid, service_key)
 
@@ -75,8 +80,9 @@ class ServiceComposition:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        for service_key in service_key_list:
-            self.assign_worker_to_service(service_key, worker_object)
+        if type(service_key_list) is list:
+            for service_key in service_key_list:
+                self.assign_worker_to_service(service_key, worker_object)
 
     def get_open_allocations(self):
         """
@@ -100,7 +106,8 @@ class ServiceComposition:
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         allocated_worker_list = list()
         for _, worker in list(self._allocation.items()):
-            allocated_worker_list.append(worker)
+            if worker is not None:
+                allocated_worker_list.append(worker)
         return allocated_worker_list
 
     def is_empty(self):
@@ -123,7 +130,7 @@ class ServiceComposition:
         :param service_key: key of the service
         :return: worker_key
         """
-        return self._allocation[service_key]
+        return self._allocation.get(service_key)
 
     def get_service(self, service_key):
         """

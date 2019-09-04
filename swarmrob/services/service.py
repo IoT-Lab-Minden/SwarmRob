@@ -58,6 +58,8 @@ class Service:
 
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if env_key is None or env_value is None or env_key == '' or env_value == '':
+            return
         self._environment.update({os.path.expandvars(str(env_key)): os.path.expandvars(str(env_value))})
 
     def add_deployment(self, deployment_key, deployment_value):
@@ -69,6 +71,8 @@ class Service:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if deployment_key is None or deployment_value is None or deployment_key == '' or deployment_value == '':
+            return
         self._deploy.update({os.path.expandvars(str(deployment_key)): os.path.expandvars(str(deployment_value))})
 
     def add_dependency(self, dependency_value):
@@ -79,6 +83,8 @@ class Service:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if dependency_value is None or dependency_value == '':
+            return
         self._dependsOn.add(str(dependency_value))
 
     def add_volume(self, volume_source, volume_dest, mode='rw'):
@@ -91,6 +97,9 @@ class Service:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if volume_source is None or volume_dest is None or volume_source == '' or volume_dest == ''\
+                or mode is None or mode is '':
+            return
         self._volumes.update({os.path.expandvars(str(volume_source)): dict(
             {'bind': os.path.expandvars(str(volume_dest)), 'mode': mode})})
 
@@ -104,6 +113,14 @@ class Service:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if device_source is None or device_dest is None or device_source == '' or device_dest == ''\
+                or mode is None or mode is '':
+            return
+        for i in range(len(self._devices)):
+            device = self._devices[i].split(":")
+            if device[0] == device_source or device[1] == device_dest:
+                self._devices[i] = os.path.expandvars(str(device_source) + ":" + str(device_dest) + ":" + str(mode))
+                return
         self._devices.append(os.path.expandvars(str(device_source) + ":" + str(device_dest) + ":" + str(mode)))
 
     @property
@@ -120,6 +137,10 @@ class Service:
         :param started_services: list of key of started services
         :return:
         """
+        if started_services is None:
+            if len(self._dependsOn) == 0:
+                return True
+            return False
         for dependency in self._dependsOn:
             if dependency not in started_services:
                 return False
