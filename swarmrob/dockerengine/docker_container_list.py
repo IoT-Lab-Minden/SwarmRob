@@ -67,5 +67,7 @@ class DockerContainerList(list):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        for container in self.get_running_containers():
+        containers = self.get_running_containers()
+        for container in containers:
             container.kill()
+        return len(containers)
