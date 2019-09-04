@@ -74,27 +74,6 @@ def worker_status_to_table(worker_info):
     return swarm_status_table.table
 
 
-def swarm_to_table(swarm):
-    """
-    Transforms the list of swarms into a user-friendly table.
-    Example:
-        >>> swarm_list_to_table({TODO})
-    Args:
-        swarm: swarm
-    Returns:
-        table (terminaltables.SingleTable): List of swarms represented as a table
-    """
-    llogger = local_logger.LocalLogger()
-    llogger.log_call(sys._getframe().f_code.co_name)
-    if swarm is None:
-        return "No swarm has been initialized"
-    table_data = [['UUID', 'AdvertiseAddress', 'Number of Workers']]
-    table_data.append([str(swarm.uuid), str(swarm.advertise_address), str(swarm.get_worker_count())])
-    table_object = SingleTable(table_data)
-    table_object.title = SWARM_LIST_TITLE
-    return table_object.table
-
-
 def swarm_status_to_worker_list(swarm_status):
     """
     Extracts the worker list of the swarm status and transforms it into a user-friendly list representation.
