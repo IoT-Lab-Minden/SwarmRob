@@ -2,7 +2,7 @@ import sys
 import os
 
 from unittest import TestCase
-from utils import cmd_parser
+from swarmrob.utils import cmd_parser
 
 
 class TestArgument(TestCase):

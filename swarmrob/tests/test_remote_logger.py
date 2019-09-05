@@ -1,5 +1,5 @@
 from unittest import TestCase
-from logger import remote_logger
+from swarmrob.logger import remote_logger
 
 
 class TestRemoteLogger(TestCase):

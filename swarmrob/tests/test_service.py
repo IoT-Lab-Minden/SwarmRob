@@ -1,5 +1,5 @@
 from unittest import TestCase
-from services import service
+from swarmrob.services import service
 
 
 class TestService(TestCase):

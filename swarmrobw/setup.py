@@ -10,7 +10,8 @@ setup(
     description = "An Orchestration Tool for Container-based Robot Applications",
     license = "BSD",
     url = "https://github.com/aljoschap/swarmrob",
-    packages=['swarmrob', 'swarmengine','dockerengine','logger','utils'],
+    packages=['swarmrob', 'swarmrob.swarmengine', 'swarmrob.dockerengine',
+              'swarmrob.logger','swarmrob.utils'],
     entry_points = {
         'console_scripts' : ['swarmrob-worker = swarmrob.swarmrob:main']
     },

@@ -28,13 +28,13 @@ import Pyro4.errors
 from clint.arguments import Args
 from clint.textui import colored, indent, puts
 
-from logger import local_logger
-from services import edf_parser
-from utils.cmd_parser import Argument, CMDParser
-from utils.errors import NetworkException, CompositionException
-from utils import network
-from utils import pyro_interface
-from utils import table_builder
+from .logger import local_logger
+from .services import edf_parser
+from .utils.cmd_parser import Argument, CMDParser
+from .utils.errors import NetworkException, CompositionException
+from .utils import network
+from .utils import pyro_interface
+from .utils import table_builder
 from . import daemon
 
 

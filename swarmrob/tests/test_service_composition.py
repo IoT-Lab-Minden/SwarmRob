@@ -1,6 +1,6 @@
 from unittest import TestCase
-from swarmengine import swarm_engine_worker
-from services import service_composition, service
+from swarmrob.swarmengine import swarm_engine_worker
+from swarmrob.services import service_composition, service
 
 
 class TestServiceComposition(TestCase):

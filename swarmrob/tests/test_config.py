@@ -1,6 +1,6 @@
 import os
 from unittest import TestCase
-from utils import config
+from swarmrob.utils import config
 
 DIR = os.path.dirname(__file__)
 TEST_CONFIG = DIR + "/swarmrob_test.conf"

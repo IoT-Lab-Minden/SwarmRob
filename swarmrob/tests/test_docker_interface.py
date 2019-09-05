@@ -1,9 +1,9 @@
 import docker.errors
 from unittest import TestCase
-from dockerengine import docker_interface
-from logger import remote_logger
-from services import service
-from utils.errors import DockerException
+from swarmrob.dockerengine import docker_interface
+from swarmrob.logger import remote_logger
+from swarmrob.services import service
+from swarmrob.utils.errors import DockerException
 
 
 class TestDockerInterfaceInit(TestCase):

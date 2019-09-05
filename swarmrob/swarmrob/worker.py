@@ -26,10 +26,10 @@ from clint.textui import puts, colored, indent
 
 import jsonpickle
 
-from logger import local_logger
-from utils.cmd_parser import Argument, CMDParser
-from utils.errors import NetworkException
-from utils import network, pyro_interface, table_builder
+from .logger import local_logger
+from .utils.cmd_parser import Argument, CMDParser
+from .utils.errors import NetworkException
+from .utils import network, pyro_interface, table_builder
 from . import daemon
 
 

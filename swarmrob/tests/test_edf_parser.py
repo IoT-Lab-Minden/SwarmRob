@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
-from services import edf_parser
-from utils.errors import CompositionException
+from swarmrob.services import edf_parser
+from swarmrob.utils.errors import CompositionException
 
 DIR = os.path.dirname(__file__)
 EMPTY_FILE = DIR + "/edf_empty.yaml"

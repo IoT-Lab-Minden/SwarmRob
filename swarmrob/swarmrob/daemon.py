@@ -31,11 +31,11 @@ import Pyro4.errors
 from clint.arguments import Args
 from clint.textui import puts, colored, indent
 
-from logger import local_logger
-from swarmengine import swarmrob_d
-from utils.cmd_parser import Argument, CMDParser
-from utils.errors import NetworkException
-from utils import network, process_helper, cmd_helper, pyro_interface
+from .logger import local_logger
+from .swarmengine import swarmrob_d
+from .utils.cmd_parser import Argument, CMDParser
+from .utils.errors import NetworkException
+from .utils import network, process_helper, cmd_helper, pyro_interface
 
 SWARMROB_MASTER_URI_ENV = "SWARMROB_MASTER_URI"
 WORKER_PORT = 0

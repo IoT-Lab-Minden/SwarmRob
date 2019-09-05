@@ -1,6 +1,6 @@
 from unittest import TestCase
-from utils import network
-from utils import errors
+from swarmrob.utils import network
+from swarmrob.utils import errors
 
 
 class TestNetworkInfo(TestCase):

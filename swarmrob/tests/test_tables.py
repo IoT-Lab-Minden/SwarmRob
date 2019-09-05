@@ -1,8 +1,8 @@
 import jsonpickle
 from unittest import TestCase
-from swarmengine import swarm_engine_worker, swarmrob_d, swarm_engine_master, swarm_engine, swarm
-from services import service, service_composition
-from utils import table_builder
+from swarmrob.swarmengine import swarm_engine_worker, swarmrob_d, swarm_engine_master, swarm_engine, swarm
+from swarmrob.services import service, service_composition
+from swarmrob.utils import table_builder
 
 
 class TestTables(TestCase):

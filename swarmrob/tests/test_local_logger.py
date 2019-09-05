@@ -1,5 +1,5 @@
 from unittest import TestCase
-from logger import local_logger
+from swarmrob.logger import local_logger
 
 
 class TestLocalLogger(TestCase):

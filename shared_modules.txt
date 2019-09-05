@@ -1,9 +1,9 @@
-dockerengine
-logger
-scripts
-swarmengine
+swarmrob/dockerengine
+swarmrob/logger
+swarmrob/swarmengine
 swarmrob/daemon.py
 swarmrob/swarmrob.py
 swarmrob/worker.py
-utils
+swarmrob/utils
+scripts
 requirements.txt

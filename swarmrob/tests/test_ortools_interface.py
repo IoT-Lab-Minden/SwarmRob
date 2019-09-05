@@ -1,6 +1,6 @@
 from unittest import TestCase
-from swarmengine.swarm_engine_worker import Worker
-from service_allocation import ortools_interface
+from swarmrob.swarmengine.swarm_engine_worker import Worker
+from swarmrob.service_allocation import ortools_interface
 
 
 class TestOrToolsInterface(TestCase):

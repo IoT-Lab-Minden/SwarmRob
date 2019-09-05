@@ -1,5 +1,5 @@
 from unittest import TestCase
-from dockerengine import docker_container_list
+from swarmrob.dockerengine import docker_container_list
 
 
 class DummyContainer:

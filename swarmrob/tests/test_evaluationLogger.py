@@ -1,7 +1,7 @@
 import time
 from unittest import TestCase
 from os import path
-from logger import evaluation_logger
+from swarmrob.logger import evaluation_logger
 
 
 class TestEvaluationLogger(TestCase):

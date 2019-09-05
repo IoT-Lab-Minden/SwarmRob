@@ -25,10 +25,10 @@ import traceback
 from clint.arguments import Args
 from clint.textui import puts, colored, indent
 
-from logger import local_logger
-from utils.cmd_parser import Argument, CMDParser
-from utils.errors import NetworkException
-from utils import network
+from .logger import local_logger
+from .utils.cmd_parser import Argument, CMDParser
+from .utils.errors import NetworkException
+from .utils import network
 from . import worker
 from . import daemon
 
