@@ -3,6 +3,7 @@ import jsonpickle
 from unittest import TestCase
 from swarmrob.service_allocation import cost_calculation
 from swarmrob.services import service
+from swarmrob.logger import evaluation_logger
 
 
 class WorkerDummy:
@@ -40,6 +41,7 @@ class WorkerDummy:
 
 class TestCostCalculation(TestCase):
     def setUp(self):
+        evaluation_logger.EvaluationLogger().enable(False)
         self.cost_calculation = cost_calculation.CostCalculation()
 
     def test___init__(self):

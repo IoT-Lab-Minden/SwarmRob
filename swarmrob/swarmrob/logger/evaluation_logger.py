@@ -168,6 +168,7 @@ class EvaluationLogger(metaclass=SingletonType):
         if not os.path.isfile(filepath):
             with open(filepath, 'wb') as csv_file:
                 writer = csv.writer(csv_file, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                print(self.get_log_type_header(log_type))
                 writer.writerow(self.get_log_type_header(log_type))
             return True
         return False
@@ -194,9 +195,9 @@ class EvaluationLogger(metaclass=SingletonType):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         ident = ""
-        if self.log_ident is not None or self.log_ident != "":
+        if self.log_ident is not None and self.log_ident != "":
             ident = '_' + self.log_ident
-        return self.log_folder + str(log_type.value) + '/' + str(log_type.value) + ident + '_'\
+        return self.log_folder + '/' + str(log_type.value) + '/' + str(log_type.value) + ident + '_'\
             + self.timestr + FILE_ENDING
 
     def get_log_type_header(self, log_type):
