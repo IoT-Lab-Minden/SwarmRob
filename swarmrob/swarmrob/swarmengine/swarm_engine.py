@@ -274,7 +274,8 @@ class SwarmEngine(object, metaclass=SingletonType):
             hardware_matrix=hardware_matrix,
             cost_matrix=cost_matrix)
         time_of_allocation = datetime.datetime.now() - start_timer
-        evaluation_logger.EvaluationLogger().write(["Time of service_allocation", "*", "*", time_of_allocation.total_seconds(),
+        evaluation_logger.EvaluationLogger().write(["Time of service_allocation", "*", "*",
+                                                    time_of_allocation.total_seconds(),
                                                     self.swarm.get_worker_count(), len(allocations)],
                                                    evaluation_logger.LogType.ALLOC_METRICS)
         return service_allocation_dict
