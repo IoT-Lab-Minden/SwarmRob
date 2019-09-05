@@ -22,7 +22,7 @@ import queue
 import datetime
 import sys
 import threading
-import traceback
+import time
 from collections import deque
 
 import jsonpickle
@@ -145,6 +145,10 @@ class SwarmEngine(object, metaclass=SingletonType):
         service_key_queue = deque(list(composition._allocation.keys()))
         started_services = []
         while len(service_key_queue) > 0:
+            # TODO: DIRTY FIX: waiting 1 sec to make sure docker has cleaned up before starting next service
+            #                  because of a docker daemon bug not finding the network when starting two services
+            #                  at the same time on the same worker
+            time.sleep(1)
             service_key = service_key_queue.popleft()
             worker_key = composition.get_worker_key(service_key)
             service = composition.get_service(service_key)
@@ -224,7 +228,7 @@ class SwarmEngine(object, metaclass=SingletonType):
     def get_cost_and_hardware_row_for_service(self, service):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        from costs import cost_calculation
+        from service_allocation import cost_calculation
         hardware_row_for_service = []
         cost_row_for_service = []
         column_id = 0
@@ -261,7 +265,7 @@ class SwarmEngine(object, metaclass=SingletonType):
     def allocate_services_to_workers(self, composition, allocations):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        from gortools import ortools_interface
+        from service_allocation import ortools_interface
         hardware_matrix, cost_matrix = self.get_cost_and_hardware_matrix(composition, allocations)
         start_timer = datetime.datetime.now()
         service_allocation_dict = ortools_interface.allocate_services_to_workers(
@@ -270,7 +274,7 @@ class SwarmEngine(object, metaclass=SingletonType):
             hardware_matrix=hardware_matrix,
             cost_matrix=cost_matrix)
         time_of_allocation = datetime.datetime.now() - start_timer
-        evaluation_logger.EvaluationLogger().write(["Time of allocation", "*", "*", time_of_allocation.total_seconds(),
+        evaluation_logger.EvaluationLogger().write(["Time of service_allocation", "*", "*", time_of_allocation.total_seconds(),
                                                     self.swarm.get_worker_count(), len(allocations)],
                                                    evaluation_logger.LogType.ALLOC_METRICS)
         return service_allocation_dict

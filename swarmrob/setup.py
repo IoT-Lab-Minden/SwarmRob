@@ -30,8 +30,8 @@ setup(
     description="An Orchestration Tool for Container-based Robot Applications",
     license="GPL v3",
     url="https://github.com/aljoschap/swarmrob",
-    packages=['swarmrob', 'swarmengine', 'services', 'dockerengine', 'logger', 'gortools',
-              'utils', 'costs'],
+    packages=['swarmrob', 'swarmengine', 'services', 'dockerengine', 'logger',
+              'utils', 'service_allocation'],
     entry_points={
         'console_scripts': ['swarmrob = swarmrob.swarmrob:main']
     },
