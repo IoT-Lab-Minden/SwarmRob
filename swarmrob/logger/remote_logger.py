@@ -22,19 +22,7 @@ import logging
 from logging import handlers
 
 
-class SingletonType(type):
-    """
-    Helper class for singleton
-    """
-    def __call__(cls, *args, **kwargs):
-        try:
-            return cls.__instance
-        except AttributeError:
-            cls.__instance = super(SingletonType, cls).__call__(*args, **kwargs)
-            return cls.__instance
-
-
-class RemoteLogger(object, metaclass=SingletonType):
+class RemoteLogger(object):
     """
     Singleton class for the remote logger
     """
@@ -47,6 +35,7 @@ class RemoteLogger(object, metaclass=SingletonType):
         """
         self.worker_uuid = worker_uuid
         self.swarm_uuid = swarm_uuid
+        self.remote_logger = None
         if hostname is not None and port is not None:
             self.server_name = hostname
             self.server_port = port
@@ -71,6 +60,8 @@ class RemoteLogger(object, metaclass=SingletonType):
         """
         if self.remote_logger is not None:
             self.remote_logger.debug(msg, *args, extra={'swarm_uuid': self.swarm_uuid, 'worker_uuid': self.worker_uuid})
+            return True
+        return False
 
     def error(self, msg, *args):
         """
@@ -82,6 +73,8 @@ class RemoteLogger(object, metaclass=SingletonType):
         """
         if self.remote_logger is not None:
             self.remote_logger.error(msg, *args, extra={'swarm_uuid': self.swarm_uuid, 'worker_uuid': self.worker_uuid})
+            return True
+        return False
 
     def exception(self, exception, msg=""):
         """
@@ -92,6 +85,7 @@ class RemoteLogger(object, metaclass=SingletonType):
         :return:
         """
         if self.remote_logger is not None:
-            error_message = msg + "\n" + exception
-            self.remote_logger.error(error_message,
-                                     extra={'swarm_uuid': self.swarm_uuid, 'worker_uuid': self.worker_uuid})
+            error_msg = msg + "\n" + exception
+            self.remote_logger.error(error_msg, extra={'swarm_uuid': self.swarm_uuid, 'worker_uuid': self.worker_uuid})
+            return True
+        return False

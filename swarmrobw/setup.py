@@ -14,11 +14,8 @@ setup(
     entry_points = {
         'console_scripts' : ['swarmrob-worker = swarmrob.swarmrob:main']
     },
-    scripts = ['scripts/start_swarmrob_nameservice.sh'],
     data_files = [
-	('/swarmrob/scripts', ['scripts/start_swarmrob_nameservice.sh','scripts/etcd.conf']),
-    ('/swarmrob',['requirements.txt']),
-	#('/usr/lib/systemd/system', ['scripts/swarmrobd-worker.service','scripts/swarmrobns.service'])
+    ('/swarmrob',['scripts/swarmrob.conf']),
     ],
     classifiers=[
         "License :: OSI Approved :: GPL v3 License",

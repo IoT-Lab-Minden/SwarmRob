@@ -196,7 +196,7 @@ class Worker:
         service_definition = jsonpickle.decode(service_definition_as_json)
         try:
             container = docker_interface_object.run_container_in_background(service_definition, self._remote_logger,
-                                                                            self._swarm_uuid, self._uuid, swarm_network)
+                                                                            swarm_network)
             container.service_definition = service_definition
             self._container_list.append(container)
             return True

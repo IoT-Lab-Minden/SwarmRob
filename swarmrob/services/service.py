@@ -31,14 +31,14 @@ class Service:
     Class that abstracts a service of the EDF
     """
 
-    def __init__(self):
+    def __init__(self, id=None, tag=None):
         """
         Initialization of a Service object
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        self._id = None
-        self._tag = None
+        self._id = id
+        self._tag = tag
         self._environment = dict()
         self._deploy = dict()
         self._dependsOn = set()

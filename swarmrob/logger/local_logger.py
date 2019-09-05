@@ -61,12 +61,14 @@ class LocalLogger(object, metaclass=SingletonType):
         self.enable = False
 
     def log_method_call(self, class_name, method_name):
-        if self.log_calls:
+        if self.log_calls and self.enable:
             self.debug("Call: %s %s", class_name, method_name)
+        return self.log_calls and self.enable
 
     def log_call(self, function_name):
-        if self.log_calls:
+        if self.log_calls and self.enable:
             self.debug("Call: %s", function_name)
+        return self.log_calls and self.enable
 
     def debug(self, msg, *args):
         """
@@ -77,6 +79,7 @@ class LocalLogger(object, metaclass=SingletonType):
         """
         if self.enable is True:
             self.local_logger.debug(msg, *args)
+        return self.enable
 
     def error(self, msg, *args):
         """
@@ -87,6 +90,7 @@ class LocalLogger(object, metaclass=SingletonType):
         """
         if self.enable is True:
             self.local_logger.error(msg, *args)
+        return self.enable
 
     def exception(self, exception, msg=""):
         """
@@ -98,3 +102,4 @@ class LocalLogger(object, metaclass=SingletonType):
         if self.enable is True:
             error_message = msg + "\n" + str(exception)
             self.local_logger.error(error_message)
+        return self.enable
