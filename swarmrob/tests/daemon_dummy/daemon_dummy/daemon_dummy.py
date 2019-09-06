@@ -47,7 +47,12 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         self._swarm_list_of_worker = dict()
 
     def reset_dummy(self):
+        llogger = local_logger.LocalLogger()
+        llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        llogger.debug("RESETTING DAEMON DUMMY")
         self._master = None
+        self._swarm_engine.reset()
+        self._swarm_list_of_worker = dict()
 
     def shutdown(self, host_ip):
         """

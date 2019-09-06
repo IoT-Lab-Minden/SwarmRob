@@ -10,6 +10,7 @@ import uuid
 from .logger import local_logger
 from . import swarm_engine_dummy
 
+
 @Pyro4.expose
 @Pyro4.behavior(instance_mode="single")
 class Master:
@@ -163,7 +164,7 @@ class Master:
         worker_uuid = jsonpickle.decode(worker_uuid_as_json)
         llogger.debug("Try to unregister worker: %s", worker_uuid)
         swarm_uuid = jsonpickle.decode(swarm_uuid_as_json)
-        swarm_engine.SwarmEngine().unregister_worker_in_swarm(swarm_uuid, worker_uuid)
+        swarm_engine_dummy.SwarmEngine().unregister_worker_in_swarm(swarm_uuid, worker_uuid)
         return self.get_swarm_status_as_json()
 
     def get_swarm_status_as_json(self):

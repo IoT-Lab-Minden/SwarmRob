@@ -2,6 +2,7 @@ import sys
 import os
 
 from unittest import TestCase
+from unittest.mock import patch
 from swarmrob.utils import cmd_parser
 
 
@@ -33,11 +34,16 @@ class TestCmdParser(TestCase):
         parser = cmd_parser.CMDParser()
         self.assertEqual(parser.parse_arguments().__dict__, {'verbose': False},
                          msg="Default parser must contain verbose argument")
-        self.assertEqual(parser.parse_arguments(['--verbose']).__dict__, {'verbose': True},
+
+    @patch('sys.argv', ['--verbose'])
+    def test_default_cmd_parser_verbose_true(self):
+        parser = cmd_parser.CMDParser()
+        self.assertEqual(parser.parse_arguments().__dict__, {'verbose': True},
                          msg="Default parser must contain verbose argument")
 
+    @patch('sys.argv', ['--uuid', 'foo', '--interface', 'bar'])
     def test_parser_with_arguments(self):
         parser = cmd_parser.CMDParser(arguments=[cmd_parser.Argument.UUID, cmd_parser.Argument.INTERFACE])
-        args = parser.parse_arguments(['--uuid', 'foo', '--interface', 'bar'])
+        args = parser.parse_arguments()
         self.assertEqual(args.__dict__, {'verbose': False, 'uuid': 'foo', 'interface': 'bar'},
                          msg='Parsed arguments: "' + str(args.__dict__) + '" are missing something')

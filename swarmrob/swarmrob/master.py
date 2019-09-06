@@ -54,11 +54,13 @@ def main():
     console_arguments = Args()
     try:
         switch_command(str(console_arguments.get(1)))
+        return True
     except KeyError:
         llogger.exception(traceback.format_exc())
         with indent(4, quote='>>'):
             puts(colored.red(str(console_arguments.get(1)) + " is not a valid command"))
             puts(colored.red("Type 'swarmrob help' for a command list"))
+        return False
 
 
 def switch_command(cmd):
@@ -182,9 +184,12 @@ def swarm_status():
 
     try:
         swarmrob_daemon_proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
-        swarm_status_as_json = swarmrob_daemon_proxy.get_swarm_status_as_json()
-        print(table_builder.swarm_status_to_table(jsonpickle.decode(swarm_status_as_json)))
-        print(table_builder.swarm_status_to_worker_list(jsonpickle.decode(swarm_status_as_json)))
+        swarm_status_answer = jsonpickle.decode(swarmrob_daemon_proxy.get_swarm_status_as_json())
+        if swarm_status_answer is None:
+            puts(colored.red("No swarm status available"))
+            return False
+        print(table_builder.swarm_status_to_table(swarm_status_answer))
+        print(table_builder.swarm_status_to_worker_list(swarm_status_answer))
         return True
     except NetworkException as e:
         puts(colored.red(str(e)))
@@ -219,6 +224,9 @@ def worker_status():
         return False
 
     swarm_info = jsonpickle.decode(swarmrob_daemon_proxy.get_swarm_status_as_json())
+    if swarm_info is None:
+        puts(colored.red("No worker found with id " + params.worker_uuid))
+        return False
     worker_list = list(dict(swarm_info._worker_list).items())
 
     worker_info = None

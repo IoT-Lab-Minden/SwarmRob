@@ -115,10 +115,10 @@ class CMDParser:
             program_sub_path = filename + ' ' + program_sub_path
         return program_sub_path
 
-    def parse_arguments(self, args=None):
+    def parse_arguments(self):
         """
             Parses the command line parameters and returns their values
         :return: command line parameters
         """
-        params = self._arg_parser.parse_known_args(args)
+        params = self._arg_parser.parse_known_args(sys.argv)
         return params[0]

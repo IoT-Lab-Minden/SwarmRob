@@ -30,7 +30,7 @@ setup(
     description="Test dummy daemon for testing SwarmRob",
     license="GPL v3",
     url="https://github.com/aljoschap/swarmrob",
-    packages=['daemon_dummy', 'daemon_dummy.logger', 'daemon_dummy.swarmengine', 'daemon_dummy.utils'],
+    packages=['daemon_dummy', 'daemon_dummy.logger', 'daemon_dummy.utils'],
     entry_points={
         'console_scripts': ['swarmrob_dummy = daemon_dummy.daemon_dummy:main']
     },

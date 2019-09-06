@@ -3,8 +3,9 @@
 import sys
 
 from .logger import local_logger
-from .swarmengine import swarm
+from swarmrob.swarmengine import swarm
 from .utils.errors import SwarmException
+import jsonpickle
 
 
 class SingletonType(type):
@@ -34,6 +35,9 @@ class SwarmEngine(object, metaclass=SingletonType):
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         self.swarm = None
 
+    def reset(self):
+        self.swarm = None
+
     def create_new_swarm(self, new_master, predefined_uuid=None):
         """
             Factory method for creating a new swarm
@@ -44,6 +48,7 @@ class SwarmEngine(object, metaclass=SingletonType):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         self.swarm = swarm.Swarm(predefined_uuid, new_master)
+        print(jsonpickle.encode(self.swarm))
         return self.swarm
 
     def register_worker_in_swarm(self, swarm_uuid, new_worker):
