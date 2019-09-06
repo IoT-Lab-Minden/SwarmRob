@@ -32,8 +32,6 @@ from .utils import network
 from . import worker
 from . import daemon
 
-SWARMROB_DAEMON_RPC_NAME = "swarmrob.swarmrobd"
-
 
 def main():
     """

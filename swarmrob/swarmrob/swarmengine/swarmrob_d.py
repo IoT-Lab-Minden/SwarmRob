@@ -28,7 +28,7 @@ import jsonpickle
 
 from ..logger import local_logger
 from ..logger import evaluation_logger
-from ..utils import network
+from ..utils import network, pyro_interface
 from ..utils.errors import DockerException, SwarmException
 from . import mode
 from . import swarm_engine
@@ -36,7 +36,6 @@ from . import swarm_engine_master
 from . import swarm_engine_worker
 
 SWARMROB_MASTER_IDENTIFIER = "swarmrob.master"
-SWARMROBD_IDENTIFIER = "swarmrob.swarmrobd"
 
 
 class SingletonType(type):
@@ -100,7 +99,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         try:
             ns = Pyro4.locateNS(host_ip)
-            ns.remove(SWARMROBD_IDENTIFIER)
+            ns.remove(pyro_interface.SWARMROBD_IDENTIFIER)
         except Pyro4.errors.NamingError:
             llogger.debug("Status Daemon: Daemon is not running (Pyro4 NamingError)")
 
