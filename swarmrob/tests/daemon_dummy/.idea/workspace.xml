@@ -2,16 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebac49bd-af5d-4ba6-91e7-ffa7e0846f12" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/daemon_dummy.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/ubuntu.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/daemon_dummy/master_dummy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../swarmrob/daemon.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/daemon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_master.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarmrob_d.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarmrob_d.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/master.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmrob.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmrob.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/worker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/worker.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -178,6 +172,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -206,7 +201,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />

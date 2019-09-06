@@ -111,6 +111,8 @@ def show_help():
         puts(colored.white("check - Checks if docker is installed correctly."))
     with indent(5, quote='5.'):
         puts(colored.white("help - Prints this help page."))
+    print()
+    return True
 
 
 def log_pid():
@@ -120,6 +122,7 @@ def log_pid():
     f = open(PID_FILE, "w")
     f.write(str(os.getpid()))
     f.close()
+    return True
 
 
 def start_daemon(interface=None):
@@ -146,7 +149,7 @@ def start_daemon(interface=None):
         puts(colored.red("Host interface not valid. Specify a different host interface."))
         puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
         llogger.debug("Missing host interface. Add one with option --interface.")
-        return
+        return False
 
     pyro_nameservice_object = pyro_interface.get_name_service(network_info.ip_address, start=True)
     pyro_interface.clear_name_service(pyro_nameservice_object)
@@ -170,7 +173,7 @@ def check_daemon_running(interface=None):
         except NetworkException:
             puts(colored.red("Host interface not valid. Specify a different host interface."))
             puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
-            return
+            return False
         pyro_interface.get_daemon_proxy(network_info.ip_address)
         puts(colored.green("Daemon running"))
     except NetworkException:
@@ -178,6 +181,7 @@ def check_daemon_running(interface=None):
         result = cmd_helper.query_yes_no("Start daemon?")
         if result:
             start_daemon(interface)
+    return True
 
 
 def stop_daemon():
@@ -195,7 +199,7 @@ def stop_daemon():
         puts(colored.red("Host interface not valid. Specify a different host interface."))
         puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
         llogger.debug("Missing host interface. Add one with option --interface.")
-        return
+        return False
 
     try:
         proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
@@ -207,6 +211,8 @@ def stop_daemon():
             llogger.debug("Status Daemon: Daemon is not running")
     except NetworkException as e:
         puts(colored.red(str(e)))
+        return False
+    return True
 
 
 def status_daemon():
@@ -224,7 +230,7 @@ def status_daemon():
         puts(colored.red("Host interface not valid. Specify a different host interface."))
         puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
         llogger.debug("Missing host interface. Add one with option --interface.")
-        return
+        return False
 
     try:
         proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
@@ -232,11 +238,13 @@ def status_daemon():
             daemon_mode = jsonpickle.decode(proxy.get_mode())
             puts(colored.green("Daemon is running and in mode: " + str(daemon_mode.value)))
             llogger.debug("Status Daemon: Daemon is running in mode: %s", str(daemon_mode.value))
+            return True
         else:
             puts(colored.red("Daemon is not running"))
             llogger.debug("Status Daemon: Daemon is not running")
     except NetworkException as e:
         puts(colored.red(str(e)))
+    return False
 
 
 def check_docker():
@@ -251,6 +259,8 @@ def check_docker():
         docker_client.containers.run("ubuntu", "echo hello world")
         puts("Running a test docker environment was successful")
         llogger.debug("Running a test docker environment was successful")
+        return True
     except requests.exceptions.ConnectionError:
         puts(colored.red("Unable to start a docker environment. Is a Swarmrob Master running?"))
         llogger.debug("Unable to start a docker environment. Is a Swarmrob Master running?")
+        return False

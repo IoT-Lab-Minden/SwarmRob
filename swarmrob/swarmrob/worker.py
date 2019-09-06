@@ -88,6 +88,7 @@ def show_help():
     with indent(5, quote='4.'):
         puts(colored.white("help - Prints this help page."))
     print()
+    return True
 
 
 def join_swarm():
@@ -104,7 +105,7 @@ def join_swarm():
     if '@' not in params.uuid:
         puts(colored.red("Invalid uuid. Correct syntax is <uuid>@<ns_uri>."))
         llogger.debug("Invalid uuid. Correct syntax is <uuid>@<ns_uri>.")
-        return
+        return False
 
     swarm_uuid = str(params.uuid).split("@")[0]
     nameservice_uri = str(params.uuid).split("@")[1]
@@ -115,14 +116,16 @@ def join_swarm():
         puts(colored.red("Host interface not valid. Specify a different host interface."))
         puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
         llogger.debug("Missing host interface. Add one with option --interface.")
-        return
+        return False
 
     try:
         proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
         proxy.register_worker(swarm_uuid, nameservice_uri)
+        return True
     except NetworkException as e:
         puts(colored.red(str(e)))
         daemon.check_daemon_running(network_info.interface)
+        return False
 
 
 def leave_swarm():
@@ -139,7 +142,7 @@ def leave_swarm():
     if '@' not in params.uuid:
         puts(colored.red("Invalid swarm uuid. Correct syntax is <uuid>@<ns_uri>."))
         llogger.debug("Invalid swarm uuid. Correct syntax is <uuid>@<ns_uri>.")
-        return
+        return False
 
     swarm_uuid = str(params.swarm_uuid).split("@")[0]
     nameservice_uri = str(params.swarm_uuid).split("@")[1]
@@ -151,7 +154,7 @@ def leave_swarm():
         puts(colored.red("Host interface not valid. Specify a different host interface."))
         puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
         llogger.debug("Missing host interface. Add one with option --interface.")
-        return
+        return False
 
     try:
         proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
@@ -159,12 +162,14 @@ def leave_swarm():
         if removed:
             puts("Successfully removed worker with uuid " + worker_uuid + " from swarm " + swarm_uuid)
             llogger.debug("Successfully removed worker with uuid %s from swarm %s", worker_uuid, swarm_uuid)
+            return True
         else:
             puts(colored.red("Failed to remove worker with uuid " + worker_uuid + " from swarm " + swarm_uuid))
             llogger.error("Failed to remove worker with uuid %s from swarm %s", worker_uuid, swarm_uuid)
     except NetworkException as e:
         puts(colored.red(str(e)))
         daemon.check_daemon_running(network_info.interface)
+    return False
 
 
 def status_worker():
@@ -182,12 +187,14 @@ def status_worker():
         puts(colored.red("Host interface not valid. Specify a different host interface."))
         puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
         llogger.debug("Missing host interface. Add one with option --interface.")
-        return
+        return False
 
     try:
         proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
         worker_status_as_json = proxy.get_worker_status_as_json()
         print(table_builder.worker_daemon_status_to_table(jsonpickle.decode(worker_status_as_json)))
+        return True
     except NetworkException as e:
         puts(colored.red(str(e)))
         daemon.check_daemon_running(network_info.interface)
+        return False

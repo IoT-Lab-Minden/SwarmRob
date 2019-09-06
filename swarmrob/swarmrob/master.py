@@ -98,6 +98,7 @@ def show_help():
     with indent(5, quote='5.'):
         puts(colored.white("help - Prints this help page."))
     print()
+    return True
 
 
 def init_swarm():
@@ -119,7 +120,7 @@ def init_swarm():
         puts(colored.red("Host interface not valid. Specify a different host interface."))
         puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
         llogger.debug("Missing host interface. Add one with option --interface.")
-        return
+        return False
 
     if params.advertise_address is None:
         params.advertise_address = network_info.ip_address
@@ -154,10 +155,11 @@ def init_swarm():
                 new_swarm.advertise_address) + "' on the node to join the swarm"))
         llogger.debug("Swarm created: Type 'swarmrob worker join --uuid " + str(new_swarm.uuid) + "@" + str(
                 new_swarm.advertise_address) + "' on the node to join the swarm")
-
+        return True
     else:
         llogger.error("Can't create the swarm")
         puts(colored.red("Can't create the swarm"))
+        return False
 
 
 def swarm_status():
@@ -176,16 +178,18 @@ def swarm_status():
         puts(colored.red("Host interface not valid. Specify a different host interface."))
         puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
         llogger.debug("Missing host interface. Add one with option --interface.")
-        return
+        return False
 
     try:
         swarmrob_daemon_proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
         swarm_status_as_json = swarmrob_daemon_proxy.get_swarm_status_as_json()
         print(table_builder.swarm_status_to_table(jsonpickle.decode(swarm_status_as_json)))
         print(table_builder.swarm_status_to_worker_list(jsonpickle.decode(swarm_status_as_json)))
+        return True
     except NetworkException as e:
         puts(colored.red(str(e)))
         daemon.check_daemon_running(network_info.interface)
+    return False
 
 
 def worker_status():
@@ -205,14 +209,14 @@ def worker_status():
         puts(colored.red("Host interface not valid. Specify a different host interface."))
         puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
         llogger.debug("Missing host interface. Add one with option --interface.")
-        return
+        return False
 
     try:
         swarmrob_daemon_proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
     except NetworkException as e:
         puts(colored.red(str(e)))
         daemon.check_daemon_running(network_info.interface)
-        return
+        return False
 
     swarm_info = jsonpickle.decode(swarmrob_daemon_proxy.get_swarm_status_as_json())
     worker_list = list(dict(swarm_info._worker_list).items())
@@ -225,10 +229,11 @@ def worker_status():
 
     if worker_info is None:
         puts(colored.red("No worker found with id " + params.worker_uuid))
-        return
+        return False
 
     print(table_builder.worker_status_to_table(worker_info))
     print(table_builder.service_list_to_table(worker_info))
+    return True
 
 
 def start_swarm_by_compose_file():
@@ -248,18 +253,18 @@ def start_swarm_by_compose_file():
         puts(colored.red("Host interface not valid. Specify a different host interface."))
         puts(colored.red("Possible options are: " + " ".join(network.get_interface_list())))
         llogger.debug("Missing host interface. Add one with option --interface.")
-        return
+        return False
 
     try:
         swarm_composition = edf_parser.create_service_composition_from_edf(params.compose_file)
     except CompositionException as e:
         puts(colored.red(str(e)))
         llogger.exception(e, "Unable to load edf file")
-        return
+        return False
 
     if swarm_composition.is_empty():
         puts(colored.red("No services found. Make sure the edf file exists and contains services."))
-        return
+        return False
 
     llogger.debug("Try to start swarm: %s with the following composition", params.uuid)
     llogger.debug("\n" + swarm_composition.format_service_composition_as_table())
@@ -271,7 +276,7 @@ def start_swarm_by_compose_file():
     except NetworkException as e:
         puts(colored.red(str(e)))
         daemon.check_daemon_running(network_info.interface)
-        return
+        return False
 
     if params.log_identifier is not None or params.log_folder is not None:
         swarmrob_daemon_proxy.configure_evaluation_logger(params.log_folder, params.log_identifier, True)
@@ -280,6 +285,8 @@ def start_swarm_by_compose_file():
     try:
         swarmrob_daemon_proxy.start_swarm_by_composition(jsonpickle.encode(swarm_composition), params.uuid)
         puts(colored.yellow("Successfully started swarm"))
+        return True
     except RuntimeError as e:
         puts("Error while starting swarm\n" + str(e))
         llogger.exception(e, "Error while starting swarm")
+        return False
