@@ -1,48 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-# Copyright 2018,2019 Aljoscha Pörtner
-# Copyright 2019 André Kirsch
-# This file is part of SwarmRob.
-#
-# SwarmRob is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# SwarmRob is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with SwarmRob.  If not, see <https://www.gnu.org/licenses/>.
-
 import sys
 import os
-import traceback
 
-import Pyro4
-import Pyro4.errors
 import jsonpickle
+import Pyro4
 
-from ..logger import local_logger
-from ..logger import evaluation_logger
-from ..utils import network
-from ..utils.errors import DockerException, SwarmException
-from . import mode
-from . import swarm_engine
-from . import swarm_engine_master
-from . import swarm_engine_worker
+from . import master_dummy, worker_dummy, swarm_engine_dummy
+from .logger import local_logger
+from .utils import network
+from .utils import pyro_interface
+from .utils.errors import NetworkException
 
+PORT = 0
 SWARMROB_MASTER_IDENTIFIER = "swarmrob.master"
-SWARMROBD_IDENTIFIER = "swarmrob.swarmrobd"
 
 
 class SingletonType(type):
     """
     Helper class for singleton
     """
+
     def __call__(cls, *args, **kwargs):
         try:
             return cls.__instance
@@ -62,22 +40,14 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         :return:
         """
         local_logger.LocalLogger().log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        self._daemon_running = True
         self._interface = interface
         self._master = None
         self._pyro_daemon = pyro_daemon
-        self._swarm_engine = swarm_engine.SwarmEngine()
+        self._swarm_engine = swarm_engine_dummy.SwarmEngine()
         self._swarm_list_of_worker = dict()
-        
-    def _close_pyro_daemon(self):
-        """
-            RPC method for closing the pyro daemon
-        :return:
-        """
-        llogger = local_logger.LocalLogger()
-        llogger.log_call(sys._getframe().f_code.co_name)
-        if self._pyro_daemon is not None:
-            self._pyro_daemon.close()
+
+    def reset_dummy(self):
+        self._master = None
 
     def shutdown(self, host_ip):
         """
@@ -86,23 +56,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        self._set_daemon_running(False)
-        self._unregister_daemon_at_nameservice(host_ip)
-        self._close_pyro_daemon()
         return os.getpid()
-
-    def _unregister_daemon_at_nameservice(self, host_ip):
-        """
-            RPC method for unregistering the daemon at the nameservice
-        :return:
-        """
-        llogger = local_logger.LocalLogger()
-        llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        try:
-            ns = Pyro4.locateNS(host_ip)
-            ns.remove(SWARMROBD_IDENTIFIER)
-        except Pyro4.errors.NamingError:
-            llogger.debug("Status Daemon: Daemon is not running (Pyro4 NamingError)")
 
     def is_daemon_running(self):
         """
@@ -111,17 +65,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        return self._daemon_running
-
-    def _set_daemon_running(self, daemon_running):
-        """
-            RPC method for setting if the daemon is currently running
-        :param daemon_running:
-        :return:
-        """
-        llogger = local_logger.LocalLogger()
-        llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        self._daemon_running = daemon_running
+        return True
 
     def create_new_swarm(self, advertise_address, interface, predefined_uuid=None):
         """
@@ -139,14 +83,11 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         llogger.debug("Create new swarm on %s", advertise_address)
         host_ip = network.get_ip_of_interface(self._interface)
         pyro_nameservice = Pyro4.locateNS(host=host_ip, port=9090, broadcast=False)
-        uri = self._pyro_daemon.register(swarm_engine_master.Master(interface, advertise_address))
+        uri = self._pyro_daemon.register(master_dummy.Master(interface, advertise_address))
         pyro_nameservice.register(SWARMROB_MASTER_IDENTIFIER, uri)
         self._master = Pyro4.Proxy(uri)
         self._master.start_remote_logging_server()
-        try:
-            return jsonpickle.encode(self._swarm_engine.create_new_swarm(self._master, predefined_uuid=predefined_uuid))
-        except DockerException:
-            raise RuntimeError(traceback.format_exc())
+        return jsonpickle.encode(self._swarm_engine.create_new_swarm(self._master, predefined_uuid=predefined_uuid))
 
     def register_worker_at_local_daemon(self, new_worker):
         """
@@ -180,7 +121,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         llogger.debug("Try to register worker with interface: %s in swarm: %s at host: %s", self._interface,
                       swarm_uuid, nameservice_uri)
         ns = Pyro4.locateNS(host=str(nameservice_uri))
-        new_worker = swarm_engine_worker.Worker(swarm_uuid, self._interface)
+        new_worker = worker_dummy.Worker(swarm_uuid, self._interface)
         uri = self._pyro_daemon.register(new_worker, objectId=new_worker.uuid)
         new_worker = Pyro4.Proxy(uri)
         ns.register(str(new_worker.uuid), uri)
@@ -195,11 +136,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def join_docker_swarm(self, worker_uuid, master_address, join_token):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        worker = self._swarm_list_of_worker[worker_uuid]
-        if worker is not None:
-            worker.join_docker_swarm(master_address, join_token)
-            return True
-        return False
+        return True
 
     def unregister_worker(self, swarm_uuid, nameservice_uri, worker_uuid):
         """
@@ -222,14 +159,6 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
             llogger.debug("Couldn't remove worker %s. Swarm %s doesn't have a worker with uuid %S on this machine.",
                           worker_uuid, swarm_uuid)
             return False
-        ns = Pyro4.locateNS(host=str(nameservice_uri))
-        master_uri = ns.lookup(SWARMROB_MASTER_IDENTIFIER)
-        master_proxy = Pyro4.Proxy(master_uri)
-        self._swarm_list_of_worker[swarm_uuid].stop_all_services()
-        master_proxy.unregister_worker_at_master(jsonpickle.encode(swarm_uuid), jsonpickle.encode(worker_uuid))
-        ns.remove(str(worker_uuid))
-        self._pyro_daemon.unregister(worker_uuid)
-        self.unregister_worker_at_local_daemon(swarm_uuid)
         llogger.debug("Successfully removed worker with uuid %s from swarm %s", worker_uuid, swarm_uuid)
         return True
 
@@ -240,11 +169,14 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        if self._master is not None:
-            return jsonpickle.encode(mode.Mode.MASTER)
+        if self._master is True:
+            return '{"py/reduce": [{"py/type": "swarmrob.swarmengine.mode.Mode"}, ' \
+                   '{"py/tuple": ["MASTER"]}, null, null, null]}'
         if len(self._swarm_list_of_worker) > 0:
-            return jsonpickle.encode(mode.Mode.WORKER)
-        return jsonpickle.encode(mode.Mode.NOT_DEFINED)
+            return '{"py/reduce": [{"py/type": "swarmrob.swarmengine.mode.Mode"}, ' \
+                   '{"py/tuple": ["WORKER"]}, null, null, null]}'
+        return '{"py/reduce": [{"py/type": "swarmrob.swarmengine.mode.Mode"}, ' \
+               '{"py/tuple": ["NOT_DEFINED"]}, null, null, null]}'
 
     def get_worker_status_as_json(self):
         """
@@ -263,12 +195,8 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        composition = jsonpickle.decode(composition_as_json)
-        try:
-            self._swarm_engine.start_swarm_by_composition(composition, swarm_uuid)
-        except SwarmException as e:
-            llogger.exception(e, "Unable to start swarm")
-            raise RuntimeError(traceback.format_exc())
+        if type(composition_as_json) != str or swarm_uuid is None:
+            raise RuntimeError()
 
     def get_swarm_status_as_json(self):
         """
@@ -294,13 +222,6 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        eval_logger = evaluation_logger.EvaluationLogger()
-        if log_folder is not None:
-            eval_logger.set_log_folder(log_folder)
-        if log_ident is not None:
-            eval_logger.set_log_ident(log_ident)
-        self.reset_evaluation_logger()
-        eval_logger.enable(enable)
 
     def reset_evaluation_logger(self):
         """
@@ -309,4 +230,27 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        evaluation_logger.EvaluationLogger().reset_time()
+
+
+def main():
+    llogger = local_logger.LocalLogger()
+    llogger.log_call(sys._getframe().f_code.co_name)
+    llogger.enable = True
+
+    try:
+        network_info = network.NetworkInfo("lo")
+    except NetworkException:
+        llogger.debug("Unable to access localhost network")
+        return
+    pyro_nameservice_object = pyro_interface.get_name_service(network_info.ip_address, start=True)
+    pyro_interface.clear_name_service(pyro_nameservice_object)
+    with Pyro4.Daemon(host=network_info.ip_address, port=PORT) as pyro_daemon:
+        daemon_uri = pyro_daemon.register(SwarmRobDaemon(network_info.interface, pyro_daemon))
+        pyro_nameservice_object.register(pyro_interface.SWARMROBD_IDENTIFIER, daemon_uri)
+        llogger.debug("Daemon started. Object URI = %s", daemon_uri)
+        pyro_daemon.requestLoop(SwarmRobDaemon().is_daemon_running)
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

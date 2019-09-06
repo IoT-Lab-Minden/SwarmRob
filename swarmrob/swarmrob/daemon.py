@@ -45,7 +45,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 def signal_handler_shutdown(signalnum, frame):
     """
-        Signal handler for closing the ETCD connection to the cluster when an interrupt occured
+        Signal handler for closing the ETCD connection to the cluster when an interrupt occurred
     :param signalnum:
     :param frame:
     :return:
@@ -201,7 +201,7 @@ def stop_daemon():
         proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
         if proxy.is_daemon_running():
             pid = proxy.shutdown(network_info.ip_address)
-            os.kill(pid, signal.SIGINT)
+            os.kill(pid, signal.SIGKILL)
         else:
             puts(colored.red("Daemon is not running"))
             llogger.debug("Status Daemon: Daemon is not running")

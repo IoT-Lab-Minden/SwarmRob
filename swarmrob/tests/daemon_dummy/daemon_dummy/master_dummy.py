@@ -1,37 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-# Copyright 2018,2019 Aljoscha Pörtner
-# Copyright 2019 André Kirsch
-# This file is part of SwarmRob.
-#
-# SwarmRob is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# SwarmRob is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with SwarmRob.  If not, see <https://www.gnu.org/licenses/>.
-
 import sys
-import uuid
-import socket
-import traceback
 
 import jsonpickle
 import Pyro4
-import Pyro4.naming
+import socket
+import uuid
 
-from ..logger import local_logger
-from ..logger import remote_logging_server
-from ..utils.errors import DockerException, NetworkException
-from . import swarm_engine
-
+from .logger import local_logger
+from . import swarm_engine_dummy
 
 @Pyro4.expose
 @Pyro4.behavior(instance_mode="single")
@@ -170,11 +147,8 @@ class Master:
         llogger.debug("Try to register new worker: %s", str(new_worker_as_json))
         new_worker = jsonpickle.decode(new_worker_as_json)
         swarm_uuid = jsonpickle.decode(swarm_uuid_as_json)
-        new_worker.hostname = swarm_engine.SwarmEngine().swarm.get_unique_worker_hostname(new_worker.hostname)
-        try:
-            swarm_engine.SwarmEngine().register_worker_in_swarm(swarm_uuid, new_worker)
-        except DockerException:
-            raise RuntimeError(traceback.format_exc())
+        new_worker.hostname = swarm_engine_dummy.SwarmEngine().swarm.get_unique_worker_hostname(new_worker.hostname)
+        swarm_engine_dummy.SwarmEngine().register_worker_in_swarm(swarm_uuid, new_worker)
         return self.get_swarm_status_as_json()
 
     def unregister_worker_at_master(self, swarm_uuid_as_json, worker_uuid_as_json):
@@ -200,8 +174,8 @@ class Master:
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         llogger.debug("Returning swarm with uuid: %s", self.swarm_uuid)
-        llogger.debug(jsonpickle.encode(swarm_engine.SwarmEngine().swarm))
-        return jsonpickle.encode(swarm_engine.SwarmEngine().swarm)
+        llogger.debug(jsonpickle.encode(swarm_engine_dummy.SwarmEngine().swarm))
+        return jsonpickle.encode(swarm_engine_dummy.SwarmEngine().swarm)
 
     def start_remote_logging_server(self):
         """
@@ -210,15 +184,8 @@ class Master:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        self._remote_logging_server = remote_logging_server.RemoteLoggingServer(self._interface)
-        try:
-            self._remote_logging_server = remote_logging_server.RemoteLoggingServer(self._interface)
-            self._remote_logging_server.start()
-            llogger.debug("Started logging server for swarm: %s on interface: %s with hostname: %s:%s",
-                          self._swarm_uuid, self._remote_logging_server.interface, self._remote_logging_server.hostname,
-                          self._remote_logging_server.port)
-        except NetworkException as e:
-            llogger.exception(e, "Unable to start Remote Logger using interface " + self._interface)
+        llogger.debug("Started logging server for swarm: %s on interface: %s with hostname: %s:%s",
+                      self._swarm_uuid, "lo", "foo", 0)
 
     def get_remote_logging_server_info(self):
         """
@@ -227,4 +194,4 @@ class Master:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        return self._remote_logging_server.hostname, self._remote_logging_server.port
+        return "foo", 0
