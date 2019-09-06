@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebac49bd-af5d-4ba6-91e7-ffa7e0846f12" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../test_cmd_master.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/master.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/utils/cmd_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/utils/cmd_parser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daemon_dummy/master_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/master_dummy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daemon_dummy/swarmengine/swarm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../utils/test_cmd_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/../utils/test_cmd_parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_cmd_swarmrob.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_cmd_swarmrob.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

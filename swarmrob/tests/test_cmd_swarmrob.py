@@ -3,13 +3,74 @@
 
 from unittest import TestCase
 from unittest.mock import patch
-from swarmrob import master
+from swarmrob import swarmrob
 
 from swarmrob.utils import pyro_interface
 
 
 class TestCmdSwarmrob(TestCase):
-    pass
+    def setUp(self):
+        reset_daemon_dummy()
+
+    @patch('sys.argv', ['-i', 'lo'])
+    def test_switch_command_init(self):
+        try:
+            self.assertFalse(swarmrob.switch_command('daemon'))
+        except KeyError:
+            self.fail(msg="The master init command does not exist")
+
+    @patch('sys.argv', ['-i', 'lo'])
+    def test_switch_command_swarm_status(self):
+        try:
+            self.assertFalse(swarmrob.switch_command('master'))
+        except KeyError:
+            self.fail(msg="The master swarm_status command does not exist")
+
+    @patch('sys.argv', ['-i', 'lo'])
+    def test_switch_command_worker_status(self):
+        try:
+            self.assertFalse(swarmrob.switch_command('worker'))
+        except KeyError:
+            self.fail(msg="The master worker_status command does not exist")
+
+    @patch('sys.argv', ['-i', 'lo', '-r', 'foo'])
+    def test_switch_command_start_swarm(self):
+        try:
+            self.assertFalse(swarmrob.switch_command('check'))
+        except KeyError:
+            self.fail(msg="The master start_swarm command does not exist")
+
+    @patch('sys.argv', ['-i', 'lo'])
+    def test_switch_command_help(self):
+        try:
+            self.assertTrue(swarmrob.switch_command('help'))
+        except KeyError:
+            self.fail(msg="The master help command does not exist")
+
+    @patch('sys.argv', ['-i', 'lo'])
+    def test_switch_command_non_existent(self):
+        try:
+            swarmrob.switch_command('non_existent')
+            self.fail(msg="An unknown command should throw a KeyError")
+        except KeyError:
+            pass
+
+    @patch('sys.argv', ['-r', 'foo'])
+    def test_check_for_startup(self):
+        self.assertTrue(swarmrob.check_for_startup())
+
+    @patch('sys.argv', ['-r', 'non_existent'])
+    def test_check_for_startup_non_existent_repo(self):
+        self.assertFalse(swarmrob.check_for_startup())
+
+    def test_show_help(self):
+        self.assertTrue(swarmrob.show_help())
+
+    def test_print_master_error_message(self):
+        self.assertTrue(swarmrob.print_master_error_message())
+
+    def test_is_master_available(self):
+        self.assertTrue(swarmrob.is_master_available())
 
 
 def reset_daemon_dummy():
