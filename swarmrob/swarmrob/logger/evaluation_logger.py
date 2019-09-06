@@ -168,7 +168,6 @@ class EvaluationLogger(metaclass=SingletonType):
         if not os.path.isfile(filepath):
             with open(filepath, 'wb') as csv_file:
                 writer = csv.writer(csv_file, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                print(self.get_log_type_header(log_type))
                 writer.writerow(self.get_log_type_header(log_type))
             return True
         return False
