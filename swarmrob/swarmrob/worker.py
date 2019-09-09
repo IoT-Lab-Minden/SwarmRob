@@ -46,10 +46,12 @@ def main():
     args = Args()
     try:
         switch_command(str(args.get(1)))
+        return True
     except KeyError:
         with indent(4, quote='>>'):
             puts(colored.red(str(args.get(1)) + " is not a valid command"))
             puts(colored.red("Type 'swarmrob help' for a command list"))
+        return False
 
 
 def switch_command(cmd):
@@ -100,7 +102,7 @@ def join_swarm():
     llogger.log_call(sys._getframe().f_code.co_name)
     puts(colored.yellow("Join swarm"))
     params = CMDParser(program_path="worker join", description="Join a swarm as a worker.",
-                       arguments=[Argument.INTERFACE, Argument.UUID]).parse_arguments()
+                       arguments=[Argument.INTERFACE, Argument.UUID, Argument.WORKER_UUID_OPTIONAL]).parse_arguments()
 
     if '@' not in params.uuid:
         puts(colored.red("Invalid uuid. Correct syntax is <uuid>@<ns_uri>."))
@@ -120,11 +122,15 @@ def join_swarm():
 
     try:
         proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
-        proxy.register_worker(swarm_uuid, nameservice_uri)
+        proxy.register_worker(swarm_uuid, nameservice_uri, params.worker_uuid)
         return True
     except NetworkException as e:
         puts(colored.red(str(e)))
         daemon.check_daemon_running(network_info.interface)
+        return False
+    except RuntimeError as e:
+        puts(colored.red(str(e)))
+        llogger.error(e)
         return False
 
 
@@ -137,16 +143,16 @@ def leave_swarm():
     llogger.log_call(sys._getframe().f_code.co_name)
     puts(colored.yellow("Leave swarm"))
     params = CMDParser(program_path="worker leave", description="Leave a swarm.",
-                       arguments=[Argument.INTERFACE, Argument.SWARM_UUID, Argument.UUID]).parse_arguments()
+                       arguments=[Argument.INTERFACE, Argument.SWARM_UUID, Argument.WORKER_UUID]).parse_arguments()
 
-    if '@' not in params.uuid:
+    if '@' not in params.swarm_uuid:
         puts(colored.red("Invalid swarm uuid. Correct syntax is <uuid>@<ns_uri>."))
         llogger.debug("Invalid swarm uuid. Correct syntax is <uuid>@<ns_uri>.")
         return False
 
     swarm_uuid = str(params.swarm_uuid).split("@")[0]
     nameservice_uri = str(params.swarm_uuid).split("@")[1]
-    worker_uuid = str(params.uuid)
+    worker_uuid = str(params.worker_uuid)
 
     try:
         network_info = network.NetworkInfo(params.interface)

@@ -29,7 +29,7 @@ import jsonpickle
 from ..logger import local_logger
 from ..logger import evaluation_logger
 from ..utils import network, pyro_interface
-from ..utils.errors import DockerException, SwarmException
+from ..utils.errors import DockerException, SwarmException, NetworkException
 from . import mode
 from . import swarm_engine
 from . import swarm_engine_master
@@ -167,11 +167,12 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         del self._swarm_list_of_worker[str(swarm_uuid)]
 
-    def register_worker(self, swarm_uuid, nameservice_uri):
+    def register_worker(self, swarm_uuid, nameservice_uri, worker_uuid):
         """
             Register the worker at the nameservice
         :param swarm_uuid: UUID of the swarm
         :param nameservice_uri: URI of the nameservice
+        :param worker_uuid: UUID of the worker
         :return:
         """
         llogger = local_logger.LocalLogger()
@@ -179,7 +180,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         llogger.debug("Try to register worker with interface: %s in swarm: %s at host: %s", self._interface,
                       swarm_uuid, nameservice_uri)
         ns = Pyro4.locateNS(host=str(nameservice_uri))
-        new_worker = swarm_engine_worker.Worker(swarm_uuid, self._interface)
+        new_worker = swarm_engine_worker.Worker(swarm_uuid, self._interface, worker_uuid)
         uri = self._pyro_daemon.register(new_worker, objectId=new_worker.uuid)
         new_worker = Pyro4.Proxy(uri)
         ns.register(str(new_worker.uuid), uri)
@@ -276,11 +277,14 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        host_ip = network.get_ip_of_interface(self._interface)
-        ns = Pyro4.locateNS(host=str(host_ip))
-        master_uri = ns.lookup(SWARMROB_MASTER_IDENTIFIER)
-        proxy = Pyro4.Proxy(master_uri)
-        return proxy.get_swarm_status_as_json()
+        try:
+            host_ip = network.get_ip_of_interface(self._interface)
+            ns = Pyro4.locateNS(host=str(host_ip))
+            master_uri = ns.lookup(SWARMROB_MASTER_IDENTIFIER)
+            proxy = Pyro4.Proxy(master_uri)
+            return proxy.get_swarm_status_as_json()
+        except (NetworkException, Pyro4.errors.NamingError):
+            return None
 
     def configure_evaluation_logger(self, log_folder=None, log_ident=None, enable=True):
         """

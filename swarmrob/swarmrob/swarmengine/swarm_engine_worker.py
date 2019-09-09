@@ -40,7 +40,7 @@ from ..utils.errors import DockerException, NetworkException
 @Pyro4.behavior(instance_mode="single")
 class Worker:
 
-    def __init__(self, swarm_uuid, interface):
+    def __init__(self, swarm_uuid, interface, worker_uuid=None):
         """
             Initialization method of a worker object
         :param swarm_uuid: uuid of the swarm the worker is assigned to
@@ -51,7 +51,10 @@ class Worker:
         self._advertise_address = network.get_ip_of_interface(interface)
         self._interface = interface
         self._hostname = socket.gethostname()
-        self._uuid = uuid.uuid4().hex
+        if worker_uuid is None:
+            self._uuid = uuid.uuid4().hex
+        else:
+            self._uuid = worker_uuid
         self._swarm_uuid = swarm_uuid
         self._remote_logger = None
         self._container_list = docker_container_list.DockerContainerList()

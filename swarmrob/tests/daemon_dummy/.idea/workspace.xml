@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ebac49bd-af5d-4ba6-91e7-ffa7e0846f12" name="Default Changelist" comment="" />
+    <list default="true" id="ebac49bd-af5d-4ba6-91e7-ffa7e0846f12" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../test_cmd_worker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/master.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_master.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_worker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_worker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarmrob_d.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarmrob_d.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/utils/cmd_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/utils/cmd_parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/worker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/worker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/daemon_dummy/master_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/master_dummy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_cmd_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_cmd_master.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../utils/test_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/../utils/test_network.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -9,7 +23,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -29,19 +43,34 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/daemon_dummy/utils/network.py">
+        <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-931">
-              <caret line="23" selection-start-line="23" selection-end-line="23" />
+            <state relative-caret-position="735">
+              <caret line="238" column="23" selection-start-line="238" selection-start-column="23" selection-end-line="238" selection-end-column="23" />
+              <folding>
+                <element signature="e#46#56#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
+        <entry file="file://$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1669">
-              <caret line="51" column="45" selection-start-line="51" selection-start-column="45" selection-end-line="51" selection-end-column="45" />
+            <state relative-caret-position="318">
+              <caret line="28" column="8" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="8" />
+              <folding>
+                <element signature="e#46#56#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/daemon_dummy/master_dummy.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="618">
+              <caret line="149" column="55" selection-start-line="149" selection-start-column="55" selection-end-line="149" selection-end-column="55" />
               <folding>
                 <element signature="e#46#56#0" expanded="true" />
               </folding>
@@ -52,10 +81,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/daemon_dummy/worker_dummy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2865">
-              <caret line="191" column="49" selection-start-line="191" selection-start-column="49" selection-end-line="191" selection-end-column="49" />
+            <state relative-caret-position="824">
+              <caret line="261" column="40" selection-start-line="261" selection-start-column="40" selection-end-line="261" selection-end-column="40" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#48#58#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -76,6 +105,9 @@
       <find>_swarm_engine</find>
       <find>_container_list</find>
       <find>_master</find>
+      <find>register_worker</find>
+      <find>.get_unique</find>
+      <find>.SwarmEngine()</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -86,11 +118,11 @@
       <list>
         <option value="$PROJECT_DIR$/__init__.py" />
         <option value="$PROJECT_DIR$/daemon_dummy/__init__.py" />
-        <option value="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/daemon_dummy/utils/network.py" />
-        <option value="$PROJECT_DIR$/daemon_dummy/master_dummy.py" />
         <option value="$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py" />
+        <option value="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" />
+        <option value="$PROJECT_DIR$/daemon_dummy/master_dummy.py" />
         <option value="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" />
       </list>
     </option>
@@ -141,6 +173,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -171,13 +204,9 @@
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16539301" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -185,6 +214,10 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -212,6 +245,7 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/daemon_dummy/swarmengine/swarm.py" />
     <entry file="file://$PROJECT_DIR$/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -219,48 +253,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/daemon_dummy/worker_dummy.py">
+    <entry file="file://$PROJECT_DIR$/daemon_dummy/utils/network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2865">
-          <caret line="191" column="49" selection-start-line="191" selection-start-column="49" selection-end-line="191" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daemon_dummy/swarmengine/swarm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-181" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="38" column="25" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
-          <folding>
-            <element signature="e#46#56#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daemon_dummy/master_dummy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-405">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#46#56#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1669">
-          <caret line="51" column="45" selection-start-line="51" selection-start-column="45" selection-end-line="51" selection-end-column="45" />
-          <folding>
-            <element signature="e#46#56#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-165">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
         </state>
       </provider>
     </entry>
@@ -271,10 +267,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/daemon_dummy/utils/network.py">
+    <entry file="file://$PROJECT_DIR$/daemon_dummy/worker_dummy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-931">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
+        <state relative-caret-position="824">
+          <caret line="261" column="40" selection-start-line="261" selection-start-column="40" selection-end-line="261" selection-end-column="40" />
+          <folding>
+            <element signature="e#48#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/daemon_dummy/master_dummy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="618">
+          <caret line="149" column="55" selection-start-line="149" selection-start-column="55" selection-end-line="149" selection-end-column="55" />
+          <folding>
+            <element signature="e#46#56#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="28" column="8" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="8" />
+          <folding>
+            <element signature="e#46#56#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/daemon_dummy/utils/pyro_interface.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="749">
+          <caret line="123" column="52" lean-forward="true" selection-start-line="123" selection-start-column="52" selection-end-line="127" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="238" column="23" selection-start-line="238" selection-start-column="23" selection-end-line="238" selection-end-column="23" />
+          <folding>
+            <element signature="e#46#56#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -45,7 +45,7 @@ class TestCheckNetworkBandwidth(TestCase):
 
     def test_existing_repository(self):
         try:
-            results = network.check_network_bandwidth_of_repository("existing_repository")
+            results = network.check_network_bandwidth_of_repository("foo")
             self.assertIsNotNone(results)
         except errors.NetworkException:
             self.fail(msg="Unable to connect to an existing repository. Please check if the repository can be reached")

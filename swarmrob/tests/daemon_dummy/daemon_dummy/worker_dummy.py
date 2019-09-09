@@ -9,6 +9,8 @@ import jsonpickle
 import socket
 import uuid
 
+from swarmrob.swarmengine.swarm_engine_worker import WorkerInfo
+
 from .logger import local_logger
 from .utils import network
 
@@ -17,7 +19,7 @@ from .utils import network
 @Pyro4.behavior(instance_mode="single")
 class Worker:
 
-    def __init__(self, swarm_uuid, interface):
+    def __init__(self, swarm_uuid, interface, worker_uuid):
         """
             Initialization method of a worker object
         :param swarm_uuid: uuid of the swarm the worker is assigned to
@@ -28,7 +30,10 @@ class Worker:
         self._advertise_address = network.get_ip_of_interface(interface)
         self._interface = interface
         self._hostname = socket.gethostname()
-        self._uuid = uuid.uuid4().hex
+        if worker_uuid is None:
+            self._uuid = uuid.uuid4().hex
+        else:
+            self._uuid = worker_uuid
         self._swarm_uuid = swarm_uuid
         self._remote_logger = None
 
@@ -255,17 +260,3 @@ class Worker:
         worker = WorkerInfo(uuid=self._uuid, hostname=self._hostname, advertise_address=self._advertise_address,
                             swarm_uuid=self._swarm_uuid)
         return jsonpickle.encode(worker)
-
-
-class WorkerInfo:
-    """
-    Worker representation containing only its data
-    """
-    def __init__(self, uuid, hostname, advertise_address=None, swarm_uuid=None):
-        llogger = local_logger.LocalLogger()
-        llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        self.uuid = uuid
-        self.advertise_address = advertise_address
-        self.hostname = hostname
-        self.swarm_uuid = swarm_uuid
-        self.services = []

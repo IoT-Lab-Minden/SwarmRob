@@ -5,6 +5,7 @@ import os
 
 import jsonpickle
 import Pyro4
+import Pyro4.errors
 
 from . import master_dummy, worker_dummy, swarm_engine_dummy
 from .logger import local_logger
@@ -53,6 +54,18 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         self._master = None
         self._swarm_engine.reset()
         self._swarm_list_of_worker = dict()
+        try:
+            network_info = network.NetworkInfo("lo")
+        except NetworkException:
+            llogger.debug("Unable to access localhost network")
+            return
+        pyro_nameservice_object = pyro_interface.get_name_service(network_info.ip_address)
+        dict_of_registered_objects = pyro_nameservice_object.list()
+        for key_of_registered_objects, _ in list(dict_of_registered_objects.items()):
+            if key_of_registered_objects != pyro_interface.SWARMROBD_IDENTIFIER:
+                llogger.debug("Remove %s from nameserver", key_of_registered_objects)
+                self._pyro_daemon.unregister(key_of_registered_objects)
+                pyro_nameservice_object.remove(name=key_of_registered_objects)
 
     def shutdown(self, host_ip):
         """
@@ -114,29 +127,33 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         del self._swarm_list_of_worker[str(swarm_uuid)]
 
-    def register_worker(self, swarm_uuid, nameservice_uri):
+    def register_worker(self, swarm_uuid, nameservice_uri, worker_uuid):
         """
             Register the worker at the nameservice
         :param swarm_uuid: UUID of the swarm
         :param nameservice_uri: URI of the nameservice
+        :param worker_uuid: UUID of the worker
         :return:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         llogger.debug("Try to register worker with interface: %s in swarm: %s at host: %s", self._interface,
                       swarm_uuid, nameservice_uri)
-        ns = Pyro4.locateNS(host=str(nameservice_uri))
-        new_worker = worker_dummy.Worker(swarm_uuid, self._interface)
-        uri = self._pyro_daemon.register(new_worker, objectId=new_worker.uuid)
-        new_worker = Pyro4.Proxy(uri)
-        ns.register(str(new_worker.uuid), uri)
-        proxy = Pyro4.Proxy(ns.lookup(SWARMROB_MASTER_IDENTIFIER))
-        swarm_info = jsonpickle.decode(
-            proxy.register_worker_at_master(jsonpickle.encode(swarm_uuid), jsonpickle.encode(new_worker)))
-        llogger.debug("SwarmInfo:" + jsonpickle.encode(swarm_info))
-        self.register_worker_at_local_daemon(new_worker)
-        hostname, port = proxy.get_remote_logging_server_info()
-        new_worker.start_remote_logger(hostname, port)
+        try:
+            ns = Pyro4.locateNS(host=str(nameservice_uri))
+            proxy = Pyro4.Proxy(ns.lookup(SWARMROB_MASTER_IDENTIFIER))
+            new_worker = worker_dummy.Worker(swarm_uuid, self._interface, worker_uuid)
+            uri = self._pyro_daemon.register(new_worker, objectId=new_worker.uuid)
+            new_worker = Pyro4.Proxy(uri)
+            ns.register(str(new_worker.uuid), uri)
+            swarm_info = jsonpickle.decode(
+                proxy.register_worker_at_master(jsonpickle.encode(swarm_uuid), jsonpickle.encode(new_worker)))
+            llogger.debug("SwarmInfo:" + jsonpickle.encode(swarm_info))
+            self.register_worker_at_local_daemon(new_worker)
+            hostname, port = proxy.get_remote_logging_server_info()
+            new_worker.start_remote_logger(hostname, port)
+        except Pyro4.errors.NamingError as e:
+            raise RuntimeError(e)
 
     def join_docker_swarm(self, worker_uuid, master_address, join_token):
         llogger = local_logger.LocalLogger()
@@ -200,7 +217,9 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        if type(composition_as_json) != str or swarm_uuid is None:
+        if self._master is None:
+            raise RuntimeError("Swarm not initialized")
+        if type(composition_as_json) != str or swarm_uuid is None or self._master is None:
             raise RuntimeError()
 
     def get_swarm_status_as_json(self):
@@ -210,11 +229,14 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        host_ip = network.get_ip_of_interface(self._interface)
-        ns = Pyro4.locateNS(host=str(host_ip))
-        master_uri = ns.lookup(SWARMROB_MASTER_IDENTIFIER)
-        proxy = Pyro4.Proxy(master_uri)
-        return proxy.get_swarm_status_as_json()
+        try:
+            host_ip = network.get_ip_of_interface(self._interface)
+            ns = Pyro4.locateNS(host=str(host_ip))
+            master_uri = ns.lookup(SWARMROB_MASTER_IDENTIFIER)
+            proxy = Pyro4.Proxy(master_uri)
+            return proxy.get_swarm_status_as_json()
+        except (NetworkException, Pyro4.errors.NamingError):
+            return None
 
     def configure_evaluation_logger(self, log_folder=None, log_ident=None, enable=True):
         """

@@ -116,6 +116,9 @@ def init_swarm():
                        arguments=[Argument.ADVERTISE_ADDRESS, Argument.INTERFACE, Argument.UUID_OPTIONAL
                                   ]).parse_arguments()
 
+    if params.uuid is not None and '@' in params.uuid:
+        params.uuid = str(params.uuid).split("@")[0]
+
     try:
         network_info = network.NetworkInfo(params.interface)
     except NetworkException:
@@ -184,12 +187,12 @@ def swarm_status():
 
     try:
         swarmrob_daemon_proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
-        swarm_status_answer = jsonpickle.decode(swarmrob_daemon_proxy.get_swarm_status_as_json())
-        if swarm_status_answer is None:
+        swarm_status_as_json = swarmrob_daemon_proxy.get_swarm_status_as_json()
+        if swarm_status_as_json is None:
             puts(colored.red("No swarm status available"))
             return False
-        print(table_builder.swarm_status_to_table(swarm_status_answer))
-        print(table_builder.swarm_status_to_worker_list(swarm_status_answer))
+        print(table_builder.swarm_status_to_table(jsonpickle.decode(swarm_status_as_json)))
+        print(table_builder.swarm_status_to_worker_list(jsonpickle.decode(swarm_status_as_json)))
         return True
     except NetworkException as e:
         puts(colored.red(str(e)))
@@ -223,11 +226,11 @@ def worker_status():
         daemon.check_daemon_running(network_info.interface)
         return False
 
-    swarm_info = jsonpickle.decode(swarmrob_daemon_proxy.get_swarm_status_as_json())
-    if swarm_info is None:
+    swarm_status_as_json = swarmrob_daemon_proxy.get_swarm_status_as_json()
+    if swarm_status_as_json is None:
         puts(colored.red("No worker found with id " + params.worker_uuid))
         return False
-    worker_list = list(dict(swarm_info._worker_list).items())
+    worker_list = list(dict(jsonpickle.decode(swarm_status_as_json)._worker_list).items())
 
     worker_info = None
     for _, worker_list_val in worker_list:

@@ -168,6 +168,8 @@ class Master:
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         llogger.debug("Try to register new worker: %s", str(new_worker_as_json))
+        if swarm_engine.SwarmEngine().swarm is None:
+            raise RuntimeError("Swarm not initialized")
         new_worker = jsonpickle.decode(new_worker_as_json)
         swarm_uuid = jsonpickle.decode(swarm_uuid_as_json)
         new_worker.hostname = swarm_engine.SwarmEngine().swarm.get_unique_worker_hostname(new_worker.hostname)
