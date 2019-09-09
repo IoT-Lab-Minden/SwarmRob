@@ -18,17 +18,20 @@ class DummyContainer:
         self.killed = True
 
 
-class TestDockerContainerList(TestCase):
+class TestDockerContainerListInit(TestCase):
     def setUp(self):
-        self.container_list = docker_container_list.DockerContainerList()
-        self.container_list.append(DummyContainer())
-        self.container_list.append(DummyContainer("running"))
+        self.container_list = default_setup()
 
     def test_init(self):
         container_list = docker_container_list.DockerContainerList()
         self.assertEqual(0, len(container_list))
 
-    def test_reload_container(self):
+
+class TestDockerContainerListReloadContainers(TestCase):
+    def setUp(self):
+        self.container_list = default_setup()
+
+    def test_reload_containers(self):
         self.container_list.reload_containers()
         self.assertEqual(1, self.container_list[0].reload_count)
         self.assertEqual(1, self.container_list[1].reload_count)
@@ -38,6 +41,11 @@ class TestDockerContainerList(TestCase):
         self.container_list.reload_containers()
         self.assertEqual(2, self.container_list[0].reload_count)
         self.assertEqual(2, self.container_list[1].reload_count)
+
+
+class TestDockerContainerListStopAllContainers(TestCase):
+    def setUp(self):
+        self.container_list = default_setup()
 
     def test_kill_container(self):
         kill_count = self.container_list.stop_all_containers()
@@ -51,8 +59,20 @@ class TestDockerContainerList(TestCase):
         kill_count = self.container_list.stop_all_containers()
         self.assertEqual(0, kill_count)
 
+
+class TestDockerContainerListGetRunningContainers(TestCase):
+    def setUp(self):
+        self.container_list = default_setup()
+
     def test_get_running_containers(self):
         containers = self.container_list.get_running_containers()
         self.assertEqual(1, len(containers))
         self.assertEqual("running", containers[0].status)
         self.assertFalse(containers[0].killed)
+
+
+def default_setup():
+    container_list = docker_container_list.DockerContainerList()
+    container_list.append(DummyContainer())
+    container_list.append(DummyContainer("running"))
+    return container_list

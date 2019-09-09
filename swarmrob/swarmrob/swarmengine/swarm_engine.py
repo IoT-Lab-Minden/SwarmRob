@@ -194,7 +194,7 @@ class SwarmEngine(object, metaclass=SingletonType):
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         open_allocations = composition.get_open_allocations()
         llogger.debug("Open service allocations: %s", len(open_allocations))
-        service_allocation_dict = self.allocate_services_to_workers(composition, open_allocations)
+        service_allocation_dict = self._allocate_services_to_workers(composition, open_allocations)
         if service_allocation_dict is not None:
             for worker, service_list in list(service_allocation_dict.items()):
                 composition.assign_worker_to_services(service_list, worker)
@@ -207,7 +207,25 @@ class SwarmEngine(object, metaclass=SingletonType):
             llogger.debug(composition._allocation)
             return False
 
-    def get_cost_and_hardware_matrix(self, composition, allocations):
+    def _allocate_services_to_workers(self, composition, allocations):
+        llogger = local_logger.LocalLogger()
+        llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        from ..service_allocation import ortools_interface
+        hardware_matrix, cost_matrix = self._get_cost_and_hardware_matrix(composition, allocations)
+        start_timer = datetime.datetime.now()
+        service_allocation_dict = ortools_interface.allocate_services_to_workers(
+            services=allocations,
+            workers=self.swarm._worker_list,
+            hardware_matrix=hardware_matrix,
+            cost_matrix=cost_matrix)
+        time_of_allocation = datetime.datetime.now() - start_timer
+        evaluation_logger.EvaluationLogger().write(["Time of service_allocation", "*", "*",
+                                                    time_of_allocation.total_seconds(),
+                                                    self.swarm.get_worker_count(), len(allocations)],
+                                                   evaluation_logger.LogType.ALLOC_METRICS)
+        return service_allocation_dict
+
+    def _get_cost_and_hardware_matrix(self, composition, allocations):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         hardware_matrix = []
@@ -215,7 +233,7 @@ class SwarmEngine(object, metaclass=SingletonType):
         start_timer = datetime.datetime.now()
         for service_key in allocations:
             service = composition.get_service(service_key)
-            hardware_row_for_service, cost_row_for_service = self.get_cost_and_hardware_row_for_service(service)
+            hardware_row_for_service, cost_row_for_service = self._get_cost_and_hardware_row_for_service(service)
             hardware_matrix.append(hardware_row_for_service)
             cost_matrix.append(cost_row_for_service)
         time_of_calculation = datetime.datetime.now() - start_timer
@@ -225,7 +243,7 @@ class SwarmEngine(object, metaclass=SingletonType):
         llogger.debug("Time elapsed for cost calculation: %f", time_of_calculation.total_seconds())
         return hardware_matrix, cost_matrix
 
-    def get_cost_and_hardware_row_for_service(self, service):
+    def _get_cost_and_hardware_row_for_service(self, service):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         from ..service_allocation import cost_calculation
@@ -261,21 +279,3 @@ class SwarmEngine(object, metaclass=SingletonType):
                 hardware_row_for_service.append(thread_result.get(i).get("hw"))
                 cost_row_for_service.append(thread_result.get(i).get("cost"))
         return hardware_row_for_service, cost_row_for_service
-
-    def allocate_services_to_workers(self, composition, allocations):
-        llogger = local_logger.LocalLogger()
-        llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        from ..service_allocation import ortools_interface
-        hardware_matrix, cost_matrix = self.get_cost_and_hardware_matrix(composition, allocations)
-        start_timer = datetime.datetime.now()
-        service_allocation_dict = ortools_interface.allocate_services_to_workers(
-            services=allocations,
-            workers=self.swarm._worker_list,
-            hardware_matrix=hardware_matrix,
-            cost_matrix=cost_matrix)
-        time_of_allocation = datetime.datetime.now() - start_timer
-        evaluation_logger.EvaluationLogger().write(["Time of service_allocation", "*", "*",
-                                                    time_of_allocation.total_seconds(),
-                                                    self.swarm.get_worker_count(), len(allocations)],
-                                                   evaluation_logger.LogType.ALLOC_METRICS)
-        return service_allocation_dict

@@ -3,15 +3,18 @@ from swarmrob.swarmengine import swarm_engine_worker
 from swarmrob.services import service_composition, service
 
 
-class TestServiceComposition(TestCase):
+class TestServiceCompositionInit(TestCase):
     def setUp(self):
-        self.service = service.Service()
-        self.worker = swarm_engine_worker.Worker("foo", "lo")
-        self.composition = service_composition.ServiceComposition()
+        self.service, self.worker, self.composition = default_setup()
 
-    def test_empty_composition(self):
+    def test_init_empty_composition(self):
         self.assertTrue(self.composition.is_empty())
         self.assertEqual(0, self.composition.get_service_count())
+
+
+class TestServiceCompositionAddService(TestCase):
+    def setUp(self):
+        self.service, self.worker, self.composition = default_setup()
 
     def test_add_service(self):
         self.composition.add_service("KEY", self.service)
@@ -31,6 +34,11 @@ class TestServiceComposition(TestCase):
         self.composition.add_service("KEY", None)
         self.assertTrue(self.composition.is_empty())
 
+
+class TestServiceCompositionAssignWorkerToService(TestCase):
+    def setUp(self):
+        self.service, self.worker, self.composition = default_setup()
+
     def test_assign_worker_to_service(self):
         self.composition.add_service("KEY", self.service)
         self.composition.assign_worker_to_service("KEY", self.worker)
@@ -48,6 +56,11 @@ class TestServiceComposition(TestCase):
         self.composition.add_service("KEY", self.service)
         self.composition.assign_worker_to_service("KEY", None)
         self.assertEqual(None, self.composition.get_worker_key("KEY"))
+
+
+class TestServiceCompositionAssignWorkerToServices(TestCase):
+    def setUp(self):
+        self.service, self.worker, self.composition = default_setup()
 
     def test_assign_worker_to_services(self):
         self.composition.add_service("KEY", self.service)
@@ -77,6 +90,11 @@ class TestServiceComposition(TestCase):
         self.assertEqual(None, self.composition.get_worker_key("KEY"))
         self.assertEqual(None, self.composition.get_worker_key("KEY2"))
 
+
+class TestServiceCompositionGetOpenAllocations(TestCase):
+    def setUp(self):
+        self.service, self.worker, self.composition = default_setup()
+
     def test_get_open_allocations(self):
         self.composition.add_service("KEY", self.service)
         self.composition.add_service("KEY2", self.service)
@@ -97,6 +115,11 @@ class TestServiceComposition(TestCase):
         self.composition.assign_worker_to_services(["KEY", "KEY2"], self.worker)
         self.assertEqual([], self.composition.get_open_allocations())
 
+
+class TestServiceCompositionGetListOfAllocatedWorkers(TestCase):
+    def setUp(self):
+        self.service, self.worker, self.composition = default_setup()
+
     def test_get_list_of_allocated_workers(self):
         self.composition.add_service("KEY", self.service)
         self.composition.add_service("KEY2", self.service)
@@ -111,6 +134,11 @@ class TestServiceComposition(TestCase):
         self.composition.add_service("KEY2", self.service)
         self.assertEqual([], self.composition.get_list_of_allocated_workers())
 
+
+class TestServiceCompositionGetWorkerKey(TestCase):
+    def setUp(self):
+        self.service, self.worker, self.composition = default_setup()
+
     def test_get_worker_key(self):
         self.composition.add_service("KEY", self.service)
         self.composition.assign_worker_to_service("KEY", self.worker)
@@ -121,6 +149,11 @@ class TestServiceComposition(TestCase):
         self.composition.assign_worker_to_service("KEY", self.worker)
         self.assertEqual(None, self.composition.get_worker_key(None))
 
+
+class TestServiceCompositionGetService(TestCase):
+    def setUp(self):
+        self.service, self.worker, self.composition = default_setup()
+
     def test_get_service(self):
         self.composition.add_service("KEY", self.service)
         self.assertEqual(self.service, self.composition.get_service("KEY"))
@@ -128,6 +161,11 @@ class TestServiceComposition(TestCase):
     def test_get_service_none_key(self):
         self.composition.add_service("KEY", self.service)
         self.assertEqual(None, self.composition.get_service(None))
+
+
+class TestServiceCompositionGetServiceKeyList(TestCase):
+    def setUp(self):
+        self.service, self.worker, self.composition = default_setup()
 
     def test_get_service_key_list(self):
         self.composition.add_service("KEY", self.service)
@@ -142,3 +180,10 @@ class TestServiceComposition(TestCase):
         self.composition.add_service("KEY2", self.service)
         self.composition.assign_worker_to_service("KEY", self.worker)
         self.assertEqual(sorted(["KEY", "KEY2"]), sorted(self.composition.get_service_key_list()))
+
+
+def default_setup():
+    srv = service.Service()
+    worker = swarm_engine_worker.Worker("foo", "lo")
+    composition = service_composition.ServiceComposition()
+    return srv, worker, composition

@@ -2,7 +2,21 @@ from unittest import TestCase
 from swarmrob.services import service
 
 
-class TestService(TestCase):
+class TestServiceInit(TestCase):
+    def setUp(self):
+        self.service = service.Service()
+
+    def test_init(self):
+        self.assertIsNone(self.service._id)
+        self.assertIsNone(self.service._tag)
+        self.assertEqual(dict(), self.service._environment)
+        self.assertEqual(dict(), self.service._deploy)
+        self.assertEqual(set(), self.service._dependsOn)
+        self.assertEqual(dict(), self.service._volumes)
+        self.assertEqual(list(), self.service._devices)
+
+
+class TestServiceAddEnv(TestCase):
     def setUp(self):
         self.service = service.Service()
 
@@ -10,7 +24,7 @@ class TestService(TestCase):
         self.service.add_env("KEY", "VALUE")
         self.assertEqual({"KEY": "VALUE"}, self.service._environment)
 
-    def test_add_twice(self):
+    def test_add_env_twice(self):
         self.service.add_env("KEY", "VALUE")
         self.service.add_env("KEY2", "VALUE2")
         self.assertEqual({"KEY": "VALUE", "KEY2": "VALUE2"}, self.service._environment)
@@ -38,6 +52,11 @@ class TestService(TestCase):
     def test_add_env_empty_none(self):
         self.service.add_env("", "")
         self.assertEqual({}, self.service._environment)
+
+
+class TestServiceAddDeployment(TestCase):
+    def setUp(self):
+        self.service = service.Service()
 
     def test_add_deployment(self):
         self.service.add_deployment("KEY", "VALUE")
@@ -72,6 +91,11 @@ class TestService(TestCase):
         self.service.add_deployment("", "")
         self.assertEqual({}, self.service._deploy)
 
+
+class TestServiceAddDependency(TestCase):
+    def setUp(self):
+        self.service = service.Service()
+
     def test_add_dependency(self):
         self.service.add_dependency("VALUE")
         self.assertEqual({"VALUE"}, self.service._dependsOn)
@@ -88,6 +112,11 @@ class TestService(TestCase):
     def test_add_dependency_empty_value(self):
         self.service.add_dependency("")
         self.assertEqual(set(), self.service._dependsOn)
+
+
+class TestServiceAddVolume(TestCase):
+    def setUp(self):
+        self.service = service.Service()
 
     def test_add_volume(self):
         self.service.add_volume("KEY", "VALUE")
@@ -140,6 +169,11 @@ class TestService(TestCase):
         self.service.add_volume("KEY", "VALUE", None)
         self.assertEqual({}, self.service._volumes)
 
+
+class TestServiceAddDevice(TestCase):
+    def setUp(self):
+        self.service = service.Service()
+
     def test_add_device(self):
         self.service.add_device("KEY", "VALUE")
         self.assertEqual(['KEY:VALUE:rwm'], self.service._devices)
@@ -189,6 +223,11 @@ class TestService(TestCase):
     def test_add_device_none_mode(self):
         self.service.add_device("KEY", "VALUE", None)
         self.assertEqual([], self.service._devices)
+
+
+class TestServiceAreDependenciesStarted(TestCase):
+    def setUp(self):
+        self.service = service.Service()
 
     def test_are_dependencies_started_true(self):
         self.service.add_dependency("ONE")

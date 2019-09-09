@@ -2,7 +2,7 @@ from unittest import TestCase
 from swarmrob.logger import local_logger
 
 
-class TestLocalLogger(TestCase):
+class TestLocalLoggerLogMethodCall(TestCase):
     def setUp(self):
         self.logger = local_logger.LocalLogger()
 
@@ -26,6 +26,11 @@ class TestLocalLogger(TestCase):
         self.logger.enable = False
         self.assertFalse(self.logger.log_method_call("CLASS_NAME", "METHOD_NAME"))
 
+
+class TestLocalLoggerLogFunctionCall(TestCase):
+    def setUp(self):
+        self.logger = local_logger.LocalLogger()
+
     def test_log_function_call(self):
         self.logger.log_calls = True
         self.logger.enable = True
@@ -46,6 +51,11 @@ class TestLocalLogger(TestCase):
         self.logger.enable = False
         self.assertFalse(self.logger.log_call("FUNCTION_NAME"))
 
+
+class TestLocalLoggerDebug(TestCase):
+    def setUp(self):
+        self.logger = local_logger.LocalLogger()
+
     def test_debug(self):
         self.logger.enable = True
         self.assertTrue(self.logger.debug("DEBUG_MESSAGE"))
@@ -54,6 +64,11 @@ class TestLocalLogger(TestCase):
         self.logger.enable = False
         self.assertFalse(self.logger.debug("DEBUG_MESSAGE"))
 
+
+class TestLocalLoggerError(TestCase):
+    def setUp(self):
+        self.logger = local_logger.LocalLogger()
+
     def test_error(self):
         self.logger.enable = True
         self.assertTrue(self.logger.error("DEBUG_MESSAGE"))
@@ -61,6 +76,11 @@ class TestLocalLogger(TestCase):
     def test_error_disabled(self):
         self.logger.enable = False
         self.assertFalse(self.logger.error("DEBUG_MESSAGE"))
+
+
+class TestLocalLoggerException(TestCase):
+    def setUp(self):
+        self.logger = local_logger.LocalLogger()
 
     def test_exception(self):
         self.logger.enable = True

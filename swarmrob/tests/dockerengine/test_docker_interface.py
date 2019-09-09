@@ -12,10 +12,9 @@ class TestDockerInterfaceInit(TestCase):
         self.assertIsNotNone(interface._docker_env)
 
 
-class TestDockerInterface(TestCase):
+class TestDockerInterfaceCheckVolumes(TestCase):
     def setUp(self):
-        self.interface = docker_interface.DockerInterface()
-        self.interface._pull_image("hello-world")
+        self.interface = default_setup()
 
     def test_check_volumes_existing_volume(self):
         srv = service.Service()
@@ -46,6 +45,11 @@ class TestDockerInterface(TestCase):
         volume_vector = self.interface.check_volumes(srv)
         self.assertEqual([1, 1, 1], volume_vector)
 
+
+class TestDockerInterfaceCheckDevices(TestCase):
+    def setUp(self):
+        self.interface = default_setup()
+
     def test_check_devices_existing_device(self):
         srv = service.Service()
         srv.add_device("/dev", "/dev")
@@ -66,6 +70,11 @@ class TestDockerInterface(TestCase):
         srv = service.Service()
         volume_vector = self.interface.check_devices(srv)
         self.assertEqual([], volume_vector)
+
+
+class TestDockerInterfaceRunContainerInBackground(TestCase):
+    def setUp(self):
+        self.interface = default_setup()
 
     def test_run_container_in_background(self):
         try:
@@ -115,6 +124,11 @@ class TestDockerInterface(TestCase):
         except DockerException:
             pass
 
+
+class TestDockerInterfaceInitSwarm(TestCase):
+    def setUp(self):
+        self.interface = default_setup()
+
     def test_init_docker_swarm(self):
         try:
             self.interface.init_docker_swarm("lo")
@@ -136,7 +150,12 @@ class TestDockerInterface(TestCase):
         except DockerException:
             pass
 
-    # join_docker_swarm is not tested here because it needs two instances of swarmrob
+# join_docker_swarm is not tested here because it needs two instances of swarmrob
+
+
+class TestDockerInterfaceGetJoinToken(TestCase):
+    def setUp(self):
+        self.interface = default_setup()
 
     def test_get_join_token(self):
         try:
@@ -156,6 +175,11 @@ class TestDockerInterface(TestCase):
             self.fail()
         except DockerException:
             pass
+
+
+class TestDockerInterfaceCreateNetwork(TestCase):
+    def setUp(self):
+        self.interface = default_setup()
 
     def test_create_network(self):
         try:
@@ -194,6 +218,11 @@ class TestDockerInterface(TestCase):
         except DockerException:
             pass
 
+
+class TestDockerInterfaceHasNetworkWithName(TestCase):
+    def setUp(self):
+        self.interface = default_setup()
+
     def test_has_network_with_name(self):
         self.interface.create_network("foo")
         self.assertTrue(self.interface.has_network_with_name("foo"))
@@ -203,6 +232,11 @@ class TestDockerInterface(TestCase):
 
     def test_has_network_with_name_none(self):
         self.assertFalse(self.interface.has_network_with_name(None))
+
+
+class TestDockerInterfaceGetNetworkByName(TestCase):
+    def setUp(self):
+        self.interface = default_setup()
 
     def test_get_network_by_name(self):
         try:
@@ -226,6 +260,11 @@ class TestDockerInterface(TestCase):
         except DockerException:
             pass
 
+
+class TestDockerInterfaceIsImageAvailable(TestCase):
+    def setUp(self):
+        self.interface = default_setup()
+
     def test_is_image_available(self):
         self.assertTrue(self.interface.is_image_available("hello-world"))
 
@@ -235,6 +274,11 @@ class TestDockerInterface(TestCase):
     def test_is_image_available_none(self):
         self.assertFalse(self.interface.is_image_available(None))
 
+
+class TestDockerInterfaceGetImageSize(TestCase):
+    def setUp(self):
+        self.interface = default_setup()
+
     def test_get_image_size(self):
         self.assertTrue(0 <= self.interface.get_image_size("hello-world"))
 
@@ -243,3 +287,9 @@ class TestDockerInterface(TestCase):
 
     def test_get_image_size_none(self):
         self.assertEqual(-1, self.interface.get_image_size(None))
+
+
+def default_setup():
+    interface = docker_interface.DockerInterface()
+    interface._pull_image("hello-world")
+    return interface

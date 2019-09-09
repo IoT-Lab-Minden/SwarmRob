@@ -39,10 +39,9 @@ class WorkerDummy:
         return 0
 
 
-class TestCostCalculation(TestCase):
+class TestCostCalculationInit(TestCase):
     def setUp(self):
-        evaluation_logger.EvaluationLogger().enable(False)
-        self.cost_calculation = cost_calculation.CostCalculation()
+        self.cost_calculation = default_setup()
 
     def test___init__(self):
         self.assertIsNotNone(self.cost_calculation.cpu_cost_weight)
@@ -50,8 +49,10 @@ class TestCostCalculation(TestCase):
         self.assertIsNotNone(self.cost_calculation.swap_cost_weight)
         self.assertIsNotNone(self.cost_calculation.image_download_cost_weight)
 
-    def test_params_none(self):
-        self.cost_calculation.calculate_costs_and_check_hardware_in_thread(None, None, None, None)
+
+class TestCostCalculationFunction(TestCase):
+    def setUp(self):
+        self.cost_calculation = default_setup()
 
     def test_cost_calculation(self):
         srv = service.Service("foo", "bar")
@@ -59,6 +60,9 @@ class TestCostCalculation(TestCase):
         q = queue.Queue()
         self.cost_calculation.calculate_costs_and_check_hardware_in_thread(0, srv, worker, q)
         self.assertEqual({0: {'cost': 99999, 'hw': 1}}, q.get())
+
+    def test_cost_calculation_params_none(self):
+        self.assertIsNone(self.cost_calculation.calculate_costs_and_check_hardware_in_thread(None, None, None, None))
 
     def test_cost_calculation_2(self):
         srv = service.Service("foo", "bar")
@@ -87,3 +91,8 @@ class TestCostCalculation(TestCase):
         q = queue.Queue()
         self.cost_calculation.calculate_costs_and_check_hardware_in_thread(0, srv, worker, q)
         self.assertEqual({0: {'cost': 40625, 'hw': 0}}, q.get())
+
+
+def default_setup():
+    evaluation_logger.EvaluationLogger().enable(False)
+    return cost_calculation.CostCalculation()

@@ -3,7 +3,7 @@ from swarmrob.swarmengine.swarm_engine_worker import Worker
 from swarmrob.service_allocation import ortools_interface
 
 
-class TestOrToolsInterface(TestCase):
+class TestOrToolsInterfaceAllocateServicesToWorkers(TestCase):
     def test_default_parameters(self):
         result = ortools_interface.allocate_services_to_workers()
         self.assertIsNone(result)
