@@ -81,11 +81,12 @@ class Swarm:
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         if worker_uuid is None:
-            return
+            return False
         try:
             del self._worker_list[str(worker_uuid)]
+            return True
         except KeyError:
-            return
+            return False
 
     def get_worker(self, worker_uuid):
         """

@@ -2,19 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebac49bd-af5d-4ba6-91e7-ffa7e0846f12" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../swarmengine/test_mode.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../swarmengine/test_swarm_engine_master.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../docs/source/conf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_master.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_worker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_worker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarmrob_d.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarmrob_d.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dockerengine/test_docker_container_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/../dockerengine/test_docker_container_list.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dockerengine/test_docker_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../dockerengine/test_docker_interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logger/test_evaluationLogger.py" beforeDir="false" afterPath="$PROJECT_DIR$/../logger/test_evaluationLogger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logger/test_local_logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/../logger/test_local_logger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../logger/test_remote_logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/../logger/test_remote_logger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../service_allocation/test_cost_calculation.py" beforeDir="false" afterPath="$PROJECT_DIR$/../service_allocation/test_cost_calculation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../service_allocation/test_ortools_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../service_allocation/test_ortools_interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../services/test_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/../services/test_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../services/test_service_composition.py" beforeDir="false" afterPath="$PROJECT_DIR$/../services/test_service_composition.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../swarmengine/test_swarm.py" beforeDir="false" afterPath="$PROJECT_DIR$/../swarmengine/test_swarm.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -202,6 +197,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16539301" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />

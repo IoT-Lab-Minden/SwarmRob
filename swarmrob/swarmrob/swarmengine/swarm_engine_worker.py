@@ -219,11 +219,11 @@ class Worker:
     def stop_all_services(self):
         """
             Stops all containers of the current worker
-        :return:
+        :return: Amount of stopped services
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        self._container_list.stop_all_containers()
+        return self._container_list.stop_all_containers()
 
     def check_hardware(self, service_definition_as_json):
         """

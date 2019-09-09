@@ -102,7 +102,7 @@ class SwarmEngine(object, metaclass=SingletonType):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         llogger.debug("Remove worker: " + str(worker_uuid) + " from swarm: " + swarm_uuid)
-        self.swarm.remove_worker_from_list(worker_uuid)
+        return self.swarm.remove_worker_from_list(worker_uuid)
 
     def start_swarm_by_composition(self, composition, swarm_uuid):
         """

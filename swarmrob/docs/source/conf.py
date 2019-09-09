@@ -16,13 +16,13 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-#from __future__ import with_statement
+# from __future__ import with_statement
 import os
 import sys
-#import types
-#from datetime import datetime
+# import types
+# from datetime import datetime
 
-print os.path.abspath('../../../')
+print(os.path.abspath('../../../'))
 sys.path.insert(0, os.path.abspath('../../../'))
 
 
@@ -36,11 +36,11 @@ sys.path.insert(0, os.path.abspath('../../../'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.githubpages']
+              'sphinx.ext.githubpages']
 
 # 'releases' (changelog) settings
-#releases_issue_uri = "http://rs09-min/Robotic/Swarmbot/issues/%s"
-#releases_release_uri = "http://rs09-min/Robotic/Swarmbot/tree/%s"
+# releases_issue_uri = "http://rs09-min/Robotic/Swarmbot/issues/%s"
+# releases_release_uri = "http://rs09-min/Robotic/Swarmbot/tree/%s"
 
 
 # Add any paths that contain templates here, relative to this directory.

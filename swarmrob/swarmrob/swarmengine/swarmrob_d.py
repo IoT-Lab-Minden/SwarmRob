@@ -225,13 +225,15 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         ns = Pyro4.locateNS(host=str(nameservice_uri))
         master_uri = ns.lookup(SWARMROB_MASTER_IDENTIFIER)
         master_proxy = Pyro4.Proxy(master_uri)
-        self._swarm_list_of_worker[swarm_uuid].stop_all_services()
-        master_proxy.unregister_worker_at_master(jsonpickle.encode(swarm_uuid), jsonpickle.encode(worker_uuid))
-        ns.remove(str(worker_uuid))
-        self._pyro_daemon.unregister(worker_uuid)
-        self.unregister_worker_at_local_daemon(swarm_uuid)
-        llogger.debug("Successfully removed worker with uuid %s from swarm %s", worker_uuid, swarm_uuid)
-        return True
+        result = master_proxy.unregister_worker_at_master(jsonpickle.encode(swarm_uuid), jsonpickle.encode(worker_uuid))
+        if result:
+            self._swarm_list_of_worker[swarm_uuid].stop_all_services()
+            ns.remove(str(worker_uuid))
+            self._pyro_daemon.unregister(worker_uuid)
+            self.unregister_worker_at_local_daemon(swarm_uuid)
+            llogger.debug("Successfully removed worker with uuid %s from swarm %s", worker_uuid, swarm_uuid)
+            return True
+        return False
 
     def get_mode(self):
         """

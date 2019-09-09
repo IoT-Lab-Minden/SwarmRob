@@ -1,8 +1,15 @@
 language: python
+
 python:
   - "3.5"
+
+services:
+  - docker
+
 cache: pip
+
 install:
   - pip install -r swarmrob/requirements.txt
+
 script:
   - ./swarmrob/unittest.sh

@@ -170,6 +170,8 @@ class Master:
         llogger.debug("Try to register new worker: %s", str(new_worker_as_json))
         if swarm_engine.SwarmEngine().swarm is None:
             raise RuntimeError("Swarm not initialized")
+        if swarm_uuid_as_json is None or new_worker_as_json is None:
+            raise RuntimeError("A parameter is None")
         new_worker = jsonpickle.decode(new_worker_as_json)
         swarm_uuid = jsonpickle.decode(swarm_uuid_as_json)
         new_worker.hostname = swarm_engine.SwarmEngine().swarm.get_unique_worker_hostname(new_worker.hostname)
@@ -188,11 +190,14 @@ class Master:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if swarm_engine.SwarmEngine().swarm is None:
+            raise RuntimeError("Swarm not initialized")
+        if swarm_uuid_as_json is None or worker_uuid_as_json is None:
+            return False
         worker_uuid = jsonpickle.decode(worker_uuid_as_json)
         llogger.debug("Try to unregister worker: %s", worker_uuid)
         swarm_uuid = jsonpickle.decode(swarm_uuid_as_json)
-        swarm_engine.SwarmEngine().unregister_worker_in_swarm(swarm_uuid, worker_uuid)
-        return self.get_swarm_status_as_json()
+        return swarm_engine.SwarmEngine().unregister_worker_in_swarm(swarm_uuid, worker_uuid)
 
     def get_swarm_status_as_json(self):
         """
@@ -229,4 +234,6 @@ class Master:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        return self._remote_logging_server.hostname, self._remote_logging_server.port
+        if self._remote_logging_server is not None:
+            return self._remote_logging_server.hostname, self._remote_logging_server.port
+        return None, None
