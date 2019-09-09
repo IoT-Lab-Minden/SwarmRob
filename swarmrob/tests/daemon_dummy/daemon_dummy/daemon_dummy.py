@@ -198,7 +198,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
             return '{"py/reduce": [{"py/type": "swarmrob.swarmengine.mode.Mode"}, ' \
                    '{"py/tuple": ["WORKER"]}, null, null, null]}'
         return '{"py/reduce": [{"py/type": "swarmrob.swarmengine.mode.Mode"}, ' \
-               '{"py/tuple": ["NOT_DEFINED"]}, null, null, null]}'
+               '{"py/tuple": ["NONE"]}, null, null, null]}'
 
     def get_worker_status_as_json(self):
         """

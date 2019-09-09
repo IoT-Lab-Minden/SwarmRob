@@ -24,6 +24,7 @@ import requests
 import signal
 
 import docker
+import docker.errors
 import jsonpickle
 import Pyro4
 import Pyro4.naming
@@ -67,10 +68,12 @@ def main():
     args = Args()
     try:
         switch_command(str(args.get(1)))
+        return True
     except KeyError:
         with indent(4, quote='>>'):
             puts(colored.red(str(args.get(1)) + " is not a valid command"))
             puts(colored.red("Type 'swarmrob help' for a command list"))
+        return False
 
 
 def switch_command(cmd):
@@ -256,11 +259,13 @@ def check_docker():
     llogger.log_call(sys._getframe().f_code.co_name)
     try:
         docker_client = docker.from_env()
-        docker_client.containers.run("ubuntu", "echo hello world")
+        docker_client.containers.run("hello-world")
         puts("Running a test docker environment was successful")
         llogger.debug("Running a test docker environment was successful")
+        docker_client.close()
         return True
-    except requests.exceptions.ConnectionError:
-        puts(colored.red("Unable to start a docker environment. Is a Swarmrob Master running?"))
-        llogger.debug("Unable to start a docker environment. Is a Swarmrob Master running?")
+    except (docker.errors.APIError, requests.exceptions.ConnectionError) as e:
+        print(e)
+        puts(colored.red("Unable to start a docker environment."))
+        llogger.exception(e, "Unable to start a docker environment.")
         return False

@@ -2,19 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebac49bd-af5d-4ba6-91e7-ffa7e0846f12" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../test_cmd_worker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/master.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_master.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_worker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine_worker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarmrob_d.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarmrob_d.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/utils/cmd_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/utils/cmd_parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/worker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/worker.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test_cmd_daemon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/daemon.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/daemon.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daemon_dummy/master_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/master_dummy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_cmd_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_cmd_master.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../utils/test_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/../utils/test_network.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,8 +36,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="238" column="23" selection-start-line="238" selection-start-column="23" selection-end-line="238" selection-end-column="23" />
+            <state relative-caret-position="494">
+              <caret line="200" column="35" selection-start-line="200" selection-start-column="35" selection-end-line="200" selection-end-column="35" />
               <folding>
                 <element signature="e#46#56#0" expanded="true" />
               </folding>
@@ -306,8 +297,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="238" column="23" selection-start-line="238" selection-start-column="23" selection-end-line="238" selection-end-column="23" />
+        <state relative-caret-position="494">
+          <caret line="200" column="35" selection-start-line="200" selection-start-column="35" selection-end-line="200" selection-end-column="35" />
           <folding>
             <element signature="e#46#56#0" expanded="true" />
           </folding>
