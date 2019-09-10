@@ -1,6 +1,8 @@
 import queue
 import jsonpickle
 from unittest import TestCase
+
+from daemon_dummy import worker_dummy
 from swarmrob.service_allocation import cost_calculation
 from swarmrob.services import service
 from swarmrob.logger import evaluation_logger
@@ -91,6 +93,66 @@ class TestCostCalculationFunction(TestCase):
         q = queue.Queue()
         self.cost_calculation.calculate_costs_and_check_hardware_in_thread(0, srv, worker, q)
         self.assertEqual({0: {'cost': 40625, 'hw': 0}}, q.get())
+
+
+class TestCostCalculationCalculateOverallCosts(TestCase):
+    def setUp(self):
+        self.cost_calculation = default_setup()
+
+    def test_calculate_overall_costs(self):
+        self.assertEqual(1, self.cost_calculation._calculate_overall_costs(1, 1, 1, 1))
+
+    def test_calculate_overall_costs_only_cpu_costs(self):
+        self.assertEqual(0.25, self.cost_calculation._calculate_overall_costs(1, 0, 0, 0))
+
+    def test_calculate_overall_costs_only_vram_costs(self):
+        self.assertEqual(0.25, self.cost_calculation._calculate_overall_costs(0, 1, 0, 0))
+
+    def test_calculate_overall_costs_only_swap_costs(self):
+        self.assertEqual(0.25, self.cost_calculation._calculate_overall_costs(0, 0, 1, 0))
+
+    def test_calculate_overall_costs_only_image_download_costs(self):
+        self.assertEqual(0.25, self.cost_calculation._calculate_overall_costs(0, 0, 0, 1))
+
+
+class TestCostCalculationCalculatePartialCosts(TestCase):
+    def setUp(self):
+        self.cost_calculation = default_setup()
+
+    def test_calculate_partial_costs(self):
+        cpu_costs, vram_costs, swap_costs, image_download_costs = self.cost_calculation._calculate_partial_costs(
+            1, 1, 1, 1, 1
+        )
+        self.assertEqual(100000, cpu_costs)
+        self.assertEqual(100000, vram_costs)
+        self.assertEqual(100000, swap_costs)
+        self.assertEqual(0, image_download_costs)
+
+    def test_calculate_partial_costs_all_zero(self):
+        cpu_costs, vram_costs, swap_costs, image_download_costs = self.cost_calculation._calculate_partial_costs(
+            0, 0, 0, 0, 0
+        )
+        print(cpu_costs, vram_costs, swap_costs, image_download_costs)
+        self.assertEqual(0, cpu_costs)
+        self.assertEqual(0, vram_costs)
+        self.assertEqual(0, swap_costs)
+        self.assertEqual(100000, image_download_costs)
+
+
+class TestGetUsageOfWorker(TestCase):
+    def setUp(self):
+        self.cost_calculation = default_setup()
+
+    def test_get_usage_of_worker(self):
+        worker = worker_dummy.Worker("foo", "lo", "bar")
+        srv = service.Service("baz", "hello-world")
+        cpu_usage, vram_usage, swap_usage, image_size, bandwidth_percent = self.cost_calculation._get_usage_of_worker(
+            worker, srv)
+        self.assertEqual(0.005, cpu_usage)
+        self.assertEqual(0.005, vram_usage)
+        self.assertEqual(0.005, swap_usage)
+        self.assertEqual(100, image_size)
+        self.assertEqual(8e-06, bandwidth_percent)
 
 
 def default_setup():
