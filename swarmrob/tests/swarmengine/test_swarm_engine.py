@@ -4,7 +4,7 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from daemon_dummy import worker_dummy
-from swarmrob.services import edf_parser
+from swarmrob.services import edf_parser, service
 from swarmrob.swarmengine import swarm_engine, swarm_engine_master, swarm_engine_worker
 from swarmrob.utils.errors import DockerException, SwarmException
 
@@ -142,6 +142,218 @@ class TestSwarmEngineStartSwarmByComposition(TestCase):
             self.fail(msg="None swarm_uuid should throw a SwarmException")
         except SwarmException:
             pass
+
+
+class TestSwarmEngineStartServicesOnWorkers(TestCase):
+    def setUp(self):
+        self.swarm_engine = default_setup()
+        self.composition = edf_parser.create_service_composition_from_edf(COMPOSITION_FILE)
+
+    def test_start_services_on_workers(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = worker_dummy.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.swarm_engine._assign_services_to_workers(self.composition)
+        self.swarm_engine._start_services_on_workers(self.composition, "foo")
+
+    def test_start_services_on_workers_composition_none(self):
+        try:
+            master = swarm_engine_master.Master("lo", "127.0.0.1")
+            worker = worker_dummy.Worker("foo", "lo", "bar")
+            self.swarm_engine.create_new_swarm(master, "foo")
+            self.swarm_engine.register_worker_in_swarm("foo", worker)
+            self.swarm_engine._start_services_on_workers(None, "foo")
+            self.fail("Starting a swarm with a None composition should throw a SwarmException")
+        except SwarmException:
+            pass
+
+    def test_start_services_on_workers_network_none(self):
+        try:
+            master = swarm_engine_master.Master("lo", "127.0.0.1")
+            worker = worker_dummy.Worker("foo", "lo", "bar")
+            self.swarm_engine.create_new_swarm(master, "foo")
+            self.swarm_engine.register_worker_in_swarm("foo", worker)
+            self.swarm_engine._start_services_on_workers(self.composition, None)
+            self.fail("Starting a swarm with a None network should throw a SwarmException")
+        except SwarmException:
+            pass
+
+    def test_start_services_on_workers_services_not_assigned(self):
+        try:
+            master = swarm_engine_master.Master("lo", "127.0.0.1")
+            worker = worker_dummy.Worker("foo", "lo", "bar")
+            self.swarm_engine.create_new_swarm(master, "foo")
+            self.swarm_engine.register_worker_in_swarm("foo", worker)
+            self.swarm_engine._start_services_on_workers(self.composition, "foo")
+            self.fail("Starting a swarm without assigning workers to services should throw a SwarmException")
+        except SwarmException:
+            pass
+
+    def test_start_services_on_workers_no_worker_registered(self):
+        try:
+            master = swarm_engine_master.Master("lo", "127.0.0.1")
+            self.swarm_engine.create_new_swarm(master, "foo")
+            self.swarm_engine._start_services_on_workers(self.composition, "foo")
+            self.fail("Starting services without a registered worker should throw a SwarmException")
+        except SwarmException:
+            pass
+
+    def test_start_services_on_workers_swarm_not_initialized(self):
+        try:
+            self.swarm_engine._start_services_on_workers(self.composition, "foo")
+            self.fail("Starting services on an uninitialized swarm should throw a SwarmException")
+        except SwarmException:
+            pass
+
+
+class TestSwarmEngineCreateDockerNetwork(TestCase):
+    def setUp(self):
+        self.swarm_engine = default_setup()
+
+    def test_create_docker_network(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.assertEqual("foo", self.swarm_engine._create_docker_network())
+
+    def test_create_docker_network_no_swarm_created(self):
+        self.assertIsNone(self.swarm_engine._create_docker_network())
+
+
+class TestSwarmEngineAssignServicesToWorkers(TestCase):
+    def setUp(self):
+        self.swarm_engine = default_setup()
+        self.composition = edf_parser.create_service_composition_from_edf(COMPOSITION_FILE)
+
+    def test_assign_services_to_workers(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = swarm_engine_worker.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.assertTrue(self.swarm_engine._assign_services_to_workers(self.composition))
+
+    def test_assign_services_to_workers_no_workers_registered(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.assertFalse(self.swarm_engine._assign_services_to_workers(self.composition))
+
+    def test_assign_services_to_workers_swarm_not_initialized(self):
+        self.assertFalse(self.swarm_engine._assign_services_to_workers(self.composition))
+
+    def test_assign_services_to_workers_swarm_composition_none(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = swarm_engine_worker.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.assertFalse(self.swarm_engine._assign_services_to_workers(None))
+
+
+class TestSwarmEngineAllocateServicesToWorkers(TestCase):
+    def setUp(self):
+        self.swarm_engine = default_setup()
+        self.composition = edf_parser.create_service_composition_from_edf(COMPOSITION_FILE)
+
+    def test_allocate_services_to_workers(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = swarm_engine_worker.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.assertIsNotNone(self.swarm_engine._allocate_services_to_workers(self.composition,
+                                                                             self.composition.get_open_allocations()))
+
+    def test_allocate_services_to_workers_no_workers_registered(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.assertIsNone(self.swarm_engine._allocate_services_to_workers(self.composition,
+                                                                          self.composition.get_open_allocations()))
+
+    def test_allocate_services_to_workers_swarm_not_initialized(self):
+        self.assertIsNone(self.swarm_engine._allocate_services_to_workers(self.composition,
+                                                                          self.composition.get_open_allocations()))
+
+    def test_allocate_services_to_workers_swarm_composition_none(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = swarm_engine_worker.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.assertIsNone(self.swarm_engine._allocate_services_to_workers(None,
+                                                                          self.composition.get_open_allocations()))
+
+    def test_allocate_services_to_workers_swarm_open_allocations_none(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = swarm_engine_worker.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.assertIsNone(self.swarm_engine._allocate_services_to_workers(self.composition, None))
+
+
+class TestSwarmEngineGetCostAndHardwareMatrix(TestCase):
+    def setUp(self):
+        self.swarm_engine = default_setup()
+        self.composition = edf_parser.create_service_composition_from_edf(COMPOSITION_FILE)
+
+    def test_get_cost_and_hardware_matrix(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = swarm_engine_worker.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.assertIsNotNone(self.swarm_engine._get_cost_and_hardware_matrix(self.composition,
+                                                                             self.composition.get_open_allocations()))
+
+    def test_get_cost_and_hardware_matrix_no_workers_registered(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.assertEqual(([], []),
+                         self.swarm_engine._get_cost_and_hardware_matrix(self.composition,
+                                                                         self.composition.get_open_allocations()))
+
+    def test_get_cost_and_hardware_matrix_swarm_not_initialized(self):
+        self.assertEqual((None, None),
+                         self.swarm_engine._get_cost_and_hardware_matrix(self.composition,
+                                                                         self.composition.get_open_allocations()))
+
+    def test_get_cost_and_hardware_matrix_swarm_composition_none(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = swarm_engine_worker.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.assertEqual((None, None),
+                         self.swarm_engine._get_cost_and_hardware_matrix(None, self.composition.get_open_allocations()))
+
+    def test_get_cost_and_hardware_matrix_swarm_open_allocations_none(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = swarm_engine_worker.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.assertEqual((None, None), self.swarm_engine._get_cost_and_hardware_matrix(self.composition, None))
+
+
+class TestSwarmEngineGetCostAndHardwareRowForService(TestCase):
+    def setUp(self):
+        self.swarm_engine = default_setup()
+        self.service = service.Service("id", "tag")
+
+    def test_get_cost_and_hardware_row_for_service(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = swarm_engine_worker.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.assertIsNotNone(self.swarm_engine._get_cost_and_hardware_row_for_service(self.service))
+
+    def test_get_cost_and_hardware_row_for_service_no_workers_registered(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.assertEqual(([], []), self.swarm_engine._get_cost_and_hardware_row_for_service(self.service))
+
+    def test_get_cost_and_hardware_row_for_service_swarm_not_initialized(self):
+        self.assertEqual((None, None), self.swarm_engine._get_cost_and_hardware_row_for_service(self.service))
+
+    def test_get_cost_and_hardware_row_for_service_composition_none(self):
+        master = swarm_engine_master.Master("lo", "127.0.0.1")
+        worker = swarm_engine_worker.Worker("foo", "lo", "bar")
+        self.swarm_engine.create_new_swarm(master, "foo")
+        self.swarm_engine.register_worker_in_swarm("foo", worker)
+        self.assertEqual((None, None), self.swarm_engine._get_cost_and_hardware_row_for_service(None))
 
 
 def default_setup():

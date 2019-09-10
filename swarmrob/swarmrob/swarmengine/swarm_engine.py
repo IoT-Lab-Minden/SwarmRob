@@ -151,6 +151,8 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if not self.swarm or not composition or not network or self.swarm.get_worker_count() <= 0:
+            raise SwarmException("Preconditions for starting services not met")
         start_timer = datetime.datetime.now()
         service_key_queue = deque(list(composition._allocation.keys()))
         started_services = []
@@ -165,8 +167,8 @@ class SwarmEngine(object, metaclass=SingletonType):
             if service.are_dependencies_started(started_services):
                 worker = self.swarm.get_worker(worker_key)
                 if worker is None:
-                    llogger.debug("Error worker not found for worker key %s", worker_key)
-                    raise SwarmException("Worker not found for worker key " + worker_key)
+                    llogger.debug("Error worker not found for worker key %s", str(worker_key))
+                    raise SwarmException("Worker not found for worker key " + str(worker_key))
                 elif worker.start_service(jsonpickle.encode(service), network) is False:
                     llogger.debug("Error starting service %s on worker %s", service.tag, worker.uuid)
                     raise SwarmException("Failed to start service " + service.tag + " on worker " + worker.uuid)
@@ -189,6 +191,8 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if self.swarm is None:
+            return None
         docker_interface_object = docker_interface.DockerInterface()
         network = docker_interface_object.create_network(network_name=self.swarm.uuid)
         llogger.debug("Network created: %s", jsonpickle.encode(network.attrs))
@@ -202,6 +206,8 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if not composition or not self.swarm:
+            return False
         open_allocations = composition.get_open_allocations()
         llogger.debug("Open service allocations: %s", len(open_allocations))
         service_allocation_dict = self._allocate_services_to_workers(composition, open_allocations)
@@ -220,6 +226,8 @@ class SwarmEngine(object, metaclass=SingletonType):
     def _allocate_services_to_workers(self, composition, allocations):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if not composition or not allocations or not self.swarm:
+            return None
         from ..service_allocation import ortools_interface
         hardware_matrix, cost_matrix = self._get_cost_and_hardware_matrix(composition, allocations)
         start_timer = datetime.datetime.now()
@@ -238,14 +246,17 @@ class SwarmEngine(object, metaclass=SingletonType):
     def _get_cost_and_hardware_matrix(self, composition, allocations):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if not composition or not allocations or not self.swarm:
+            return None, None
         hardware_matrix = []
         cost_matrix = []
         start_timer = datetime.datetime.now()
         for service_key in allocations:
             service = composition.get_service(service_key)
-            hardware_row_for_service, cost_row_for_service = self._get_cost_and_hardware_row_for_service(service)
-            hardware_matrix.append(hardware_row_for_service)
-            cost_matrix.append(cost_row_for_service)
+            if not service:
+                hardware_row_for_service, cost_row_for_service = self._get_cost_and_hardware_row_for_service(service)
+                hardware_matrix.append(hardware_row_for_service)
+                cost_matrix.append(cost_row_for_service)
         time_of_calculation = datetime.datetime.now() - start_timer
         evaluation_logger.EvaluationLogger().write(["Time of cost calculation", "*", "*",
                                                     time_of_calculation.total_seconds(), self.swarm.get_worker_count(),
@@ -256,6 +267,8 @@ class SwarmEngine(object, metaclass=SingletonType):
     def _get_cost_and_hardware_row_for_service(self, service):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if not service or not self.swarm:
+            return None, None
         from ..service_allocation import cost_calculation
         hardware_row_for_service = []
         cost_row_for_service = []
