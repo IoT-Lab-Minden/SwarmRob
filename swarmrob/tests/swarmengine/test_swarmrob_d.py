@@ -9,7 +9,58 @@ from swarmrob.logger import evaluation_logger
 from swarmrob.services import service_composition
 from swarmrob.swarmengine import swarmrob_d, swarm_engine, swarm_engine_worker, mode
 from swarmrob.utils import pyro_interface
-from swarmrob.utils.errors import SwarmException
+from swarmrob.utils.errors import SwarmException, NetworkException
+
+
+class PyroDaemonDummy:
+    def close(self):
+        pass
+
+    def register(self, obj, objectId=None):
+        pass
+
+    def unregister(self, object_id):
+        pass
+
+
+def locate_ns_dummy(host, port=9090, broadcast=False):
+    class NameService:
+        def register(self, id, uri):
+            pass
+
+        def lookup(self, uri):
+            pass
+
+        def remove(self, uri):
+            pass
+
+    return NameService()
+
+
+class ProxyDummy:
+    def __init__(self, uri):
+        self.uuid = "bar"
+        self.interface = "lo"
+        self.advertise_address = "127.0.0.1"
+        self.swarm_uuid = "foo"
+
+    def start_remote_logging_server(self):
+        pass
+
+    def register_worker_at_master(self, swarm_uuid, worker):
+        return jsonpickle.encode(None)
+
+    def unregister_worker_at_master(self, swarm_uuid, worker):
+        return True
+
+    def get_remote_logging_server_info(self):
+        return "127.0.0.1", 0
+
+    def start_remote_logger(self, hostname, port):
+        pass
+
+    def stop_all_services(self):
+        pass
 
 
 class TestSwarmrobDInit(TestCase):
@@ -25,7 +76,15 @@ class TestSwarmrobDInit(TestCase):
         self.assertEqual(dict(), self.daemon._swarm_list_of_worker)
 
 
-# Not testing the methods _close_pyro_daemon, shutdown, _unregister_daemon_at_nameservice because they may cause
+class TestSwarmrobDClosePyroDaemon(TestCase):
+    def setUp(self):
+        self.daemon = default_setup()
+
+    def test_close_pyro_daemon(self):
+        self.daemon._close_pyro_daemon()
+
+
+# Not testing the methods shutdown, _unregister_daemon_at_nameservice because they may cause
 # problems with the swarmrob daemon dummy
 
 class TestSwarmrobDIsDaemonRunning(TestCase):
@@ -53,7 +112,87 @@ class TestSwarmrobDSetDaemonRunning(TestCase):
         self.assertFalse(self.daemon._daemon_running)
 
 
-# Not testing create_new_swarm and register_worker, unregister_worker because of conflicts with Pyro4
+# Not testing register_worker and unregister_worker because of conflicts with Pyro4
+
+
+@patch('Pyro4.locateNS', locate_ns_dummy)
+@patch('Pyro4.Proxy', ProxyDummy)
+class TestSwarmrobDCreateNewSwarm(TestCase):
+    def setUp(self):
+        self.daemon = default_setup()
+
+    def test_create_new_swarm(self):
+        self.daemon.create_new_swarm("127.0.0.1", "lo", "foo")
+
+    def test_create_new_swarm_advertise_address_none(self):
+        try:
+            self.daemon.create_new_swarm(None, "lo", "foo")
+            self.fail(msg="create_new_swarm should throw a RuntimeError when no advertise_address is given")
+        except RuntimeError:
+            pass
+
+    def test_create_new_swarm_interface_none(self):
+        try:
+            self.daemon.create_new_swarm("127.0.0.1", None, "foo")
+            self.fail(msg="create_new_swarm should throw a RuntimeError when no interface is given")
+        except RuntimeError:
+            pass
+
+    def test_create_new_swarm_no_swarm_uuid(self):
+        self.daemon.create_new_swarm("127.0.0.1", "lo")
+
+    def test_create_new_swarm_init_master_twice(self):
+        try:
+            self.daemon.create_new_swarm("127.0.0.1", "lo", "foo")
+            self.daemon.create_new_swarm("127.0.0.1", "lo", "foo")
+            self.fail(msg="Master can't be initialized twice")
+        except RuntimeError:
+            pass
+
+
+@patch('Pyro4.locateNS', locate_ns_dummy)
+@patch('Pyro4.Proxy', ProxyDummy)
+class TestSwarmrobDRegisterWorker(TestCase):
+    def setUp(self):
+        self.daemon = default_setup()
+
+    def test_register_worker(self):
+        self.assertTrue(self.daemon.register_worker("foo", "127.0.0.1", "bar"))
+
+    def test_register_worker_swarm_uuid_none(self):
+        self.assertFalse(self.daemon.register_worker(None, "127.0.0.1", "bar"))
+
+    def test_register_worker_nameservice_uri_none(self):
+        self.assertFalse(self.daemon.register_worker("foo", None, "bar"))
+
+    def test_register_worker_worker_uuid_none(self):
+        self.assertTrue(self.daemon.register_worker("foo", "127.0.0.1", None))
+
+
+@patch('Pyro4.locateNS', locate_ns_dummy)
+@patch('Pyro4.Proxy', ProxyDummy)
+class TestSwarmrobDUnregisterWorker(TestCase):
+    def setUp(self):
+        self.daemon = default_setup()
+
+    def test_unregister_worker(self):
+        self.daemon.register_worker("foo", "127.0.0.1", "bar")
+        self.assertTrue(self.daemon.unregister_worker("foo", "127.0.0.1", "bar"))
+
+    def test_unregister_worker_swarm_uuid_none(self):
+        self.daemon.register_worker("foo", "127.0.0.1", "bar")
+        self.assertFalse(self.daemon.unregister_worker(None, "127.0.0.1", "bar"))
+
+    def test_unregister_worker_nameservice_uri_none(self):
+        self.daemon.register_worker("foo", "127.0.0.1", "bar")
+        self.assertFalse(self.daemon.unregister_worker("foo", None, "bar"))
+
+    def test_unregister_worker_worker_uuid_none(self):
+        self.daemon.register_worker("foo", "127.0.0.1", "bar")
+        self.assertFalse(self.daemon.unregister_worker("foo", "127.0.0.1", None))
+
+    def test_unregister_worker_worker_not_registered(self):
+        self.assertFalse(self.daemon.unregister_worker("foo", "127.0.0.1", "bar"))
 
 
 class TestSwarmrobDRegisterWorkerAtLocalDaemon(TestCase):
@@ -133,8 +272,10 @@ class TestSwarmrobDGetMode(TestCase):
         self.daemon.register_worker_at_local_daemon(worker)
         self.assertEqual(mode.Mode.WORKER, jsonpickle.decode(self.daemon.get_mode()))
 
+    @patch('Pyro4.locateNS', locate_ns_dummy)
+    @patch('Pyro4.Proxy', ProxyDummy)
     def test_master(self):
-        self.daemon._master = {}
+        self.daemon.create_new_swarm("127.0.0.1", "lo", "foo")
         self.assertEqual(mode.Mode.MASTER, jsonpickle.decode(self.daemon.get_mode()))
 
 
@@ -253,7 +394,6 @@ def reset_daemon_dummy():
 
 
 def default_setup():
-    pyro_daemon = jsonpickle.decode(pyro_interface.get_daemon_proxy("127.0.0.1").get_pyro_daemon())
-    daemon = swarmrob_d.SwarmRobDaemon("lo", pyro_daemon)
-    daemon.__init__("lo", pyro_daemon)
+    daemon = swarmrob_d.SwarmRobDaemon("lo", PyroDaemonDummy())
+    daemon.__init__("lo", PyroDaemonDummy())
     return daemon

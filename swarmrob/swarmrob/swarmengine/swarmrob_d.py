@@ -135,6 +135,8 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         if self._master is not None:
             llogger.debug("Tried to initialize master twice. Aborting.")
             raise RuntimeError("Tried to initialize master twice. Aborting.")
+        if advertise_address is None or interface is None:
+            raise RuntimeError("Missing parameter")
         llogger.debug("Create new swarm on %s", advertise_address)
         host_ip = network.get_ip_of_interface(self._interface)
         pyro_nameservice = Pyro4.locateNS(host=host_ip, port=9090, broadcast=False)
@@ -181,6 +183,8 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         llogger.debug("Try to register worker with interface: %s in swarm: %s at host: %s", self._interface,
                       swarm_uuid, nameservice_uri)
+        if not swarm_uuid or not nameservice_uri:
+            return False
         ns = Pyro4.locateNS(host=str(nameservice_uri))
         new_worker = swarm_engine_worker.Worker(swarm_uuid, self._interface, worker_uuid)
         uri = self._pyro_daemon.register(new_worker, objectId=new_worker.uuid)
@@ -189,10 +193,11 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         proxy = Pyro4.Proxy(ns.lookup(SWARMROB_MASTER_IDENTIFIER))
         swarm_info = jsonpickle.decode(
             proxy.register_worker_at_master(jsonpickle.encode(swarm_uuid), jsonpickle.encode(new_worker)))
-        llogger.debug("SwarmInfo:" + jsonpickle.encode(swarm_info))
+        llogger.debug("SwarmInfo:" + str(jsonpickle.encode(swarm_info)))
         self.register_worker_at_local_daemon(new_worker)
         hostname, port = proxy.get_remote_logging_server_info()
         new_worker.start_remote_logger(hostname, port)
+        return True
 
     def join_docker_swarm(self, worker_uuid, master_address, join_token):
         llogger = local_logger.LocalLogger()
@@ -219,6 +224,8 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         llogger.debug("Try to unregister worker with interface: %s in swarm: %s at host: %s", self._interface,
                       swarm_uuid, nameservice_uri)
+        if not swarm_uuid or not nameservice_uri or not worker_uuid:
+            return False
         try:
             if self._swarm_list_of_worker[swarm_uuid].uuid != worker_uuid:
                 llogger.debug("Couldn't remove worker %s. Swarm %s doesn't have a worker with uuid %S on this machine.",
