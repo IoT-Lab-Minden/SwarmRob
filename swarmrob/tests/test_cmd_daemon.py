@@ -13,13 +13,13 @@ def fake_get_non_existent(obj, num):
     return 'non_existent'
 
 
-class TestCmdDaemon(TestCase):
+class TestCmdDaemonMain(TestCase):
     def setUp(self):
         reset_daemon_dummy()
 
     @patch('sys.argv', ['-i', 'lo'])
     @patch('clint.arguments.Args.get', fake_get_help)
-    def test_main_init(self):
+    def test_main(self):
         try:
             self.assertTrue(daemon.main())
         except KeyError:
@@ -33,7 +33,13 @@ class TestCmdDaemon(TestCase):
         except KeyError:
             self.fail(msg="daemon main should catch the KeyError")
 
-    # Not testing the start and stop commands because these would mess up other tests using the swarmrob daemon dummy
+
+# Not testing the start and stop commands because these would mess up other tests using the swarmrob daemon dummy
+
+
+class TestCmdDaemonSwitchCommand(TestCase):
+    def setUp(self):
+        reset_daemon_dummy()
 
     @patch('sys.argv', ['-i', 'lo'])
     def test_switch_command_status(self):
@@ -62,15 +68,21 @@ class TestCmdDaemon(TestCase):
         except KeyError:
             pass
 
+
+class TestCmdDaemonShowHelp(TestCase):
     def test_show_help(self):
         self.assertTrue(daemon.show_help())
 
+
+class TestCmdDaemonCheckDaemonRunning(TestCase):
     def test_check_daemon_running(self):
         self.assertTrue(daemon.check_daemon_running('lo'))
 
     def test_check_daemon_running_non_existent_interface(self):
         self.assertFalse(daemon.check_daemon_running('non_existent'))
 
+
+class TestCmdDaemonStatusDaemon(TestCase):
     @patch('sys.argv', ['-i', 'lo'])
     def test_status_daemon(self):
         self.assertTrue(daemon.status_daemon())
@@ -79,6 +91,8 @@ class TestCmdDaemon(TestCase):
     def test_status_daemon_non_existent_interface(self):
         self.assertFalse(daemon.status_daemon())
 
+
+class TestCmdDaemonCheckDocker(TestCase):
     def test_check_docker(self):
         self.assertTrue(daemon.check_docker())
 

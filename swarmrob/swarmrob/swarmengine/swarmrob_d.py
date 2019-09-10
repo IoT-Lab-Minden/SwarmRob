@@ -155,7 +155,8 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        self._swarm_list_of_worker.update({str(new_worker.swarm_uuid): new_worker})
+        if new_worker:
+            self._swarm_list_of_worker.update({str(new_worker.swarm_uuid): new_worker})
 
     def unregister_worker_at_local_daemon(self, swarm_uuid):
         """
@@ -165,7 +166,8 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        del self._swarm_list_of_worker[str(swarm_uuid)]
+        if swarm_uuid in self._swarm_list_of_worker.keys():
+            del self._swarm_list_of_worker[str(swarm_uuid)]
 
     def register_worker(self, swarm_uuid, nameservice_uri, worker_uuid):
         """
@@ -195,10 +197,14 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def join_docker_swarm(self, worker_uuid, master_address, join_token):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        worker = self._swarm_list_of_worker[worker_uuid]
+        worker = self._swarm_list_of_worker.get(worker_uuid)
         if worker is not None:
-            worker.join_docker_swarm(master_address, join_token)
-            return True
+            try:
+                worker.join_docker_swarm(master_address, join_token)
+                return True
+            except RuntimeError as e:
+                llogger.exception(e, "Unable to join docker swarm")
+                return False
         return False
 
     def unregister_worker(self, swarm_uuid, nameservice_uri, worker_uuid):
@@ -265,6 +271,8 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if composition_as_json is None or type(composition_as_json) != str:
+            raise RuntimeError("service composition must be in json format")
         composition = jsonpickle.decode(composition_as_json)
         try:
             self._swarm_engine.start_swarm_by_composition(composition, swarm_uuid)
@@ -281,11 +289,9 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         try:
             host_ip = network.get_ip_of_interface(self._interface)
-            ns = Pyro4.locateNS(host=str(host_ip))
-            master_uri = ns.lookup(SWARMROB_MASTER_IDENTIFIER)
-            proxy = Pyro4.Proxy(master_uri)
+            proxy = pyro_interface.get_proxy(SWARMROB_MASTER_IDENTIFIER, host_ip)
             return proxy.get_swarm_status_as_json()
-        except (NetworkException, Pyro4.errors.NamingError):
+        except NetworkException:
             return None
 
     def configure_evaluation_logger(self, log_folder=None, log_ident=None, enable=True):

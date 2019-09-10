@@ -189,7 +189,7 @@ def swarm_status():
         swarmrob_daemon_proxy = pyro_interface.get_daemon_proxy(network_info.ip_address)
         swarm_status_as_json = swarmrob_daemon_proxy.get_swarm_status_as_json()
         if swarm_status_as_json is None:
-            puts(colored.red("No swarm status available"))
+            puts(colored.red("No swarm status available. Is the master initialized?"))
             return False
         print(table_builder.swarm_status_to_table(jsonpickle.decode(swarm_status_as_json)))
         print(table_builder.swarm_status_to_worker_list(jsonpickle.decode(swarm_status_as_json)))

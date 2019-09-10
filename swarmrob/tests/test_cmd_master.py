@@ -21,13 +21,13 @@ def fake_get_non_existent(obj, num):
     return 'non_existent'
 
 
-class TestCmdMaster(TestCase):
+class TestCmdMasterMain(TestCase):
     def setUp(self):
         reset_daemon_dummy()
 
     @patch('sys.argv', ['-i', 'lo'])
     @patch('clint.arguments.Args.get', fake_get_init)
-    def test_main_init(self):
+    def test_main(self):
         try:
             self.assertTrue(master.main())
         except KeyError:
@@ -40,6 +40,11 @@ class TestCmdMaster(TestCase):
             self.assertFalse(master.main())
         except KeyError:
             self.fail(msg="master main should catch the KeyError")
+
+
+class TestCmdMasterSwitchCommand(TestCase):
+    def setUp(self):
+        reset_daemon_dummy()
 
     @patch('sys.argv', ['-i', 'lo'])
     def test_switch_command_init(self):
@@ -84,6 +89,11 @@ class TestCmdMaster(TestCase):
         except KeyError:
             pass
 
+
+class TestCmdMasterInitswarm(TestCase):
+    def setUp(self):
+        reset_daemon_dummy()
+
     @patch('sys.argv', ['-i', 'lo'])
     def test_init_swarm(self):
         self.assertTrue(master.init_swarm())
@@ -112,6 +122,11 @@ class TestCmdMaster(TestCase):
     def test_init_swarm_non_existent_interface(self):
         self.assertFalse(master.init_swarm())
 
+
+class TestCmdMasterSwarmStatus(TestCase):
+    def setUp(self):
+        reset_daemon_dummy()
+
     @patch('sys.argv', ['-i', 'lo'])
     def test_swarm_status(self):
         master.init_swarm()
@@ -130,6 +145,11 @@ class TestCmdMaster(TestCase):
     def test_swarm_status_swarm_not_initialized(self):
         self.assertFalse(master.swarm_status())
 
+
+class TestCmdMasterWorkerStatus(TestCase):
+    def setUp(self):
+        reset_daemon_dummy()
+
     @patch('sys.argv', ['-i', 'lo', '-u', 'foo@127.0.0.1', '-w', 'bar'])
     def test_worker_status(self):
         master.init_swarm()
@@ -144,6 +164,11 @@ class TestCmdMaster(TestCase):
     @patch('sys.argv', ['-i', 'non_existent', '-u', 'foo@127.0.0.1', '-w', 'bar'])
     def test_worker_status_non_existent_interface(self):
         self.assertFalse(master.worker_status())
+
+
+class TestCmdMasterStartSwarmByComposeFile(TestCase):
+    def setUp(self):
+        reset_daemon_dummy()
 
     @patch('sys.argv', ['-i', 'lo', '-u', 'foo', '-c', COMPOSE_TEST])
     def test_start_swarm_by_compose_file(self):

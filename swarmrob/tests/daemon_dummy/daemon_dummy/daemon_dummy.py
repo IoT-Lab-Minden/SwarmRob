@@ -67,6 +67,11 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
                 self._pyro_daemon.unregister(key_of_registered_objects)
                 pyro_nameservice_object.remove(name=key_of_registered_objects)
 
+    def get_pyro_daemon(self):
+        llogger = local_logger.LocalLogger()
+        llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        return jsonpickle.encode(self._pyro_daemon)
+
     def shutdown(self, host_ip):
         """
             RPC method for closing the pyro daemon

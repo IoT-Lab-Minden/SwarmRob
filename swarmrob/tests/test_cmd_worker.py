@@ -13,13 +13,13 @@ def fake_get_non_existent(obj, num):
     return 'non_existent'
 
 
-class TestCmdWorker(TestCase):
+class TestCmdWorkerMain(TestCase):
     def setUp(self):
         reset_daemon_dummy()
 
     @patch('sys.argv', ['-i', 'lo'])
     @patch('clint.arguments.Args.get', fake_get_status)
-    def test_main_init(self):
+    def test_main(self):
         try:
             self.assertTrue(worker.main())
         except KeyError:
@@ -32,6 +32,11 @@ class TestCmdWorker(TestCase):
             self.assertFalse(worker.main())
         except KeyError:
             self.fail(msg="worker main should catch the KeyError")
+
+
+class TestCmdWorkerSwitchCommand(TestCase):
+    def setUp(self):
+        reset_daemon_dummy()
 
     @patch('sys.argv', ['-i', 'lo', '-u', 'foo@127.0.0.1'])
     def test_switch_command_join(self):
@@ -70,6 +75,11 @@ class TestCmdWorker(TestCase):
         except KeyError:
             pass
 
+
+class TestCmdWorkerJoinSwarm(TestCase):
+    def setUp(self):
+        reset_daemon_dummy()
+
     @patch('sys.argv', ['-i', 'lo', '-u', 'foo@127.0.0.1'])
     def test_join_swarm(self):
         master.init_swarm()
@@ -87,6 +97,11 @@ class TestCmdWorker(TestCase):
     @patch('sys.argv', ['-i', 'non_existent', '-u', 'foo@127.0.0.1'])
     def test_join_swarm_non_existent_interface(self):
         self.assertFalse(worker.join_swarm())
+
+
+class TestCmdWorkerLeaveSwarm(TestCase):
+    def setUp(self):
+        reset_daemon_dummy()
 
     @patch('sys.argv', ['-i', 'lo', '-s', 'foo@127.0.0.1', '-u', 'foo@127.0.0.1', '-w', 'bar'])
     def test_leave_swarm(self):
@@ -108,6 +123,11 @@ class TestCmdWorker(TestCase):
     @patch('sys.argv', ['-i', 'non_existent', '-s', 'foo@127.0.0.1', '-u', 'foo@127.0.0.1', '-w', 'bar'])
     def test_leave_swarm_non_existent_interface(self):
         self.assertFalse(worker.leave_swarm())
+
+
+class TestCmdWorkerStatusWorker(TestCase):
+    def setUp(self):
+        reset_daemon_dummy()
 
     @patch('sys.argv', ['-i', 'lo'])
     def test_status_worker(self):
