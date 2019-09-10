@@ -52,13 +52,15 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         llogger.debug("RESETTING DAEMON DUMMY")
         self._master = None
-        self._swarm_engine.reset()
+        self._swarm_engine.__init__()
         self._swarm_list_of_worker = dict()
+
         try:
             network_info = network.NetworkInfo("lo")
         except NetworkException:
             llogger.debug("Unable to access localhost network")
             return
+
         pyro_nameservice_object = pyro_interface.get_name_service(network_info.ip_address)
         dict_of_registered_objects = pyro_nameservice_object.list()
         for key_of_registered_objects, _ in list(dict_of_registered_objects.items()):

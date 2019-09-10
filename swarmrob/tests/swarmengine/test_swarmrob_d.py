@@ -253,12 +253,7 @@ def reset_daemon_dummy():
 
 
 def default_setup():
-    daemon = swarmrob_d.SwarmRobDaemon("lo", {"daemon": True})
-    daemon._daemon_running = True
-    daemon._interface = "lo"
-    daemon._master = None
-    swarmrob_daemon_proxy = pyro_interface.get_daemon_proxy("127.0.0.1")
-    daemon._pyro_daemon = jsonpickle.decode(swarmrob_daemon_proxy.get_pyro_daemon())
-    daemon._swarm_engine = swarm_engine.SwarmEngine()
-    daemon._swarm_list_of_worker = dict()
+    pyro_daemon = jsonpickle.decode(pyro_interface.get_daemon_proxy("127.0.0.1").get_pyro_daemon())
+    daemon = swarmrob_d.SwarmRobDaemon("lo", pyro_daemon)
+    daemon.__init__("lo", pyro_daemon)
     return daemon

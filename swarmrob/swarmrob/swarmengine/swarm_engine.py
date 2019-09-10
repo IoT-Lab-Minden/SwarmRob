@@ -72,6 +72,8 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if new_master is None:
+            return None
         docker_interface_object = docker_interface.DockerInterface()
         docker_interface_object.init_docker_swarm(new_master.interface)
         self.swarm = swarm.Swarm(predefined_uuid, new_master)
@@ -86,7 +88,9 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        llogger.debug("Add worker: " + str(new_worker) + " to swarm: " + swarm_uuid)
+        if not new_worker or not swarm_uuid:
+            return
+        llogger.debug("Add worker: " + str(new_worker) + " to swarm: " + str(swarm_uuid))
         self.swarm.add_worker_to_list(new_worker)
         dio = docker_interface.DockerInterface()
         if new_worker.advertise_address != self.swarm.master.advertise_address:
@@ -101,7 +105,9 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        llogger.debug("Remove worker: " + str(worker_uuid) + " from swarm: " + swarm_uuid)
+        if not worker_uuid or not swarm_uuid:
+            return
+        llogger.debug("Remove worker: " + str(worker_uuid) + " from swarm: " + str(swarm_uuid))
         return self.swarm.remove_worker_from_list(worker_uuid)
 
     def start_swarm_by_composition(self, composition, swarm_uuid):
@@ -114,25 +120,29 @@ class SwarmEngine(object, metaclass=SingletonType):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         start_timer = datetime.datetime.now()
+        if composition is None or swarm_uuid is None:
+            raise SwarmException("Start swarm parameters are None")
         if self.swarm is None:
             raise SwarmException("Swarm not initialized")
-        llogger.debug("Try to match swarm: %s with the following composition", swarm_uuid)
+        llogger.debug("Try to match swarm: %s with the following composition", str(swarm_uuid))
         llogger.debug("\n" + composition.format_service_composition_as_table())
-        result = self.assign_services_to_workers(composition)
+        result = self._assign_services_to_workers(composition)
         if result is True:
             llogger.debug("Worker matched. Try to start network")
-            network = self.create_docker_network()
+            network = self._create_docker_network()
             llogger.debug(composition._allocation)
-            self.start_services_on_workers(composition, network)
-        total_time_of_run = datetime.datetime.now() - start_timer
-        evaluation_logger.EvaluationLogger().write(["Total Time of Run", "*", "*",
-                                                    total_time_of_run.total_seconds(),
-                                                    self.swarm.get_worker_count(),
-                                                    len(composition.get_open_allocations())],
-                                                   evaluation_logger.LogType.ALLOC_METRICS)
-        llogger.debug("Time elapsed for Total Run: %f", total_time_of_run.total_seconds())
+            self._start_services_on_workers(composition, network)
+            total_time_of_run = datetime.datetime.now() - start_timer
+            evaluation_logger.EvaluationLogger().write(["Total Time of Run", "*", "*",
+                                                        total_time_of_run.total_seconds(),
+                                                        self.swarm.get_worker_count(),
+                                                        len(composition.get_open_allocations())],
+                                                       evaluation_logger.LogType.ALLOC_METRICS)
+            llogger.debug("Time elapsed for Total Run: %f", total_time_of_run.total_seconds())
+            return True
+        return False
 
-    def start_services_on_workers(self, composition, network):
+    def _start_services_on_workers(self, composition, network):
         """
             Start the services on the allocated workers
         :param composition: Object of service composition
@@ -172,7 +182,7 @@ class SwarmEngine(object, metaclass=SingletonType):
                                                    evaluation_logger.LogType.ALLOC_METRICS)
         llogger.debug("Time elapsed for starting containers: %f", elapsed_time_until_service_start.total_seconds())
 
-    def create_docker_network(self):
+    def _create_docker_network(self):
         """
             Create a new Docker network
         :return: List of Networks
@@ -184,7 +194,7 @@ class SwarmEngine(object, metaclass=SingletonType):
         llogger.debug("Network created: %s", jsonpickle.encode(network.attrs))
         return network.attrs.get("Name")
 
-    def assign_services_to_workers(self, composition):
+    def _assign_services_to_workers(self, composition):
         """
             Assign the composition of services to the swarm workers
         :param composition: Service composition

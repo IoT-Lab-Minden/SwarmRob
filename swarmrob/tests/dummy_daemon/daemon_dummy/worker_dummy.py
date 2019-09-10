@@ -170,8 +170,6 @@ class Worker:
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         llogger.debug("Run container: %s in background", service_definition_as_json)
-        container = object()
-        container.service_definition = service_definition_as_json
         return True
 
     def join_docker_swarm(self, master_address, join_token):

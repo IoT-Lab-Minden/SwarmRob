@@ -2,17 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebac49bd-af5d-4ba6-91e7-ffa7e0846f12" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../swarmengine/test_swarmrob_d.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/logger/local_logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/logger/local_logger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/master.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarmrob_d.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarmrob_d.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../swarmengine/test_swarm_engine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../swarmrob/swarmengine/swarm_engine.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daemon_dummy/logger/local_logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/logger/local_logger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_cmd_daemon.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_cmd_daemon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_cmd_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_cmd_master.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_cmd_swarmrob.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_cmd_swarmrob.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_cmd_worker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_cmd_worker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../swarmengine/test_swarmrob_d.py" beforeDir="false" afterPath="$PROJECT_DIR$/../swarmengine/test_swarmrob_d.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="823">
-              <caret line="71" column="88" selection-start-line="71" selection-start-column="88" selection-end-line="71" selection-end-column="88" />
+            <state relative-caret-position="682">
+              <caret line="62" selection-start-line="62" selection-end-line="62" />
               <folding>
                 <element signature="e#46#56#0" expanded="true" />
               </folding>
@@ -64,8 +60,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="28" column="8" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="8" />
+            <state relative-caret-position="224">
+              <caret line="35" column="25" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="25" />
               <folding>
                 <element signature="e#46#56#0" expanded="true" />
               </folding>
@@ -73,25 +69,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/daemon_dummy/master_dummy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2115">
+            <state relative-caret-position="618">
               <caret line="149" column="55" selection-start-line="149" selection-start-column="55" selection-end-line="149" selection-end-column="55" />
               <folding>
                 <element signature="e#46#56#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/daemon_dummy/worker_dummy.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3765">
-              <caret line="261" column="40" selection-start-line="261" selection-start-column="40" selection-end-line="261" selection-end-column="40" />
-              <folding>
-                <element signature="e#48#58#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -115,6 +99,9 @@
       <find>register_worker</find>
       <find>.get_unique</find>
       <find>.SwarmEngine()</find>
+      <find>create_docker_network</find>
+      <find>start_services_on_workers</find>
+      <find>start_swarm_by_composition</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -127,11 +114,11 @@
         <option value="$PROJECT_DIR$/daemon_dummy/__init__.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/daemon_dummy/utils/network.py" />
-        <option value="$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py" />
-        <option value="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" />
         <option value="$PROJECT_DIR$/daemon_dummy/master_dummy.py" />
         <option value="$PROJECT_DIR$/daemon_dummy/logger/local_logger.py" />
+        <option value="$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py" />
         <option value="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" />
+        <option value="$PROJECT_DIR$/daemon_dummy/worker_dummy.py" />
       </list>
     </option>
   </component>
@@ -210,7 +197,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-4" width="1857" height="1085" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16539301" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -282,20 +268,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/daemon_dummy/logger/local_logger.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="56" column="16" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/daemon_dummy/swarm_engine_dummy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="28" column="8" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="8" />
+        <state relative-caret-position="224">
+          <caret line="35" column="25" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="25" />
           <folding>
             <element signature="e#46#56#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/daemon_dummy/master_dummy.py">
+    <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2115">
-          <caret line="149" column="55" selection-start-line="149" selection-start-column="55" selection-end-line="149" selection-end-column="55" />
+        <state relative-caret-position="682">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
           <folding>
             <element signature="e#46#56#0" expanded="true" />
           </folding>
@@ -304,25 +297,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/daemon_dummy/worker_dummy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3765">
-          <caret line="261" column="40" selection-start-line="261" selection-start-column="40" selection-end-line="261" selection-end-column="40" />
+        <state relative-caret-position="841">
+          <caret line="171" column="84" selection-start-line="171" selection-start-column="84" selection-end-line="171" selection-end-column="84" />
           <folding>
             <element signature="e#48#58#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/daemon_dummy/logger/local_logger.py">
+    <entry file="file://$PROJECT_DIR$/daemon_dummy/master_dummy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="56" column="16" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="823">
-          <caret line="71" column="88" selection-start-line="71" selection-start-column="88" selection-end-line="71" selection-end-column="88" />
+        <state relative-caret-position="618">
+          <caret line="149" column="55" selection-start-line="149" selection-start-column="55" selection-end-line="149" selection-end-column="55" />
           <folding>
             <element signature="e#46#56#0" expanded="true" />
           </folding>
