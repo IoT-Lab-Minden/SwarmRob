@@ -1,3 +1,4 @@
+import time
 import docker.errors
 from unittest import TestCase
 from swarmrob.dockerengine import docker_interface
@@ -82,6 +83,7 @@ class TestDockerInterfaceRunContainerInBackground(TestCase):
             logger = remote_logger.RemoteLogger(None, None, None, None)
             srv = service.Service("foo", "hello-world")
             self.interface.create_network("bar")
+            time.sleep(1)
             self.assertIsNotNone(self.interface.run_container_in_background(srv, logger, "bar"))
         except DockerException:
             self.fail()
@@ -91,6 +93,7 @@ class TestDockerInterfaceRunContainerInBackground(TestCase):
             self.interface.init_docker_swarm("lo")
             srv = service.Service("foo", "hello-world")
             self.interface.create_network("bar")
+            time.sleep(1)
             self.assertIsNotNone(self.interface.run_container_in_background(srv, None, "bar"))
         except DockerException:
             self.fail()
@@ -100,7 +103,6 @@ class TestDockerInterfaceRunContainerInBackground(TestCase):
             self.interface.init_docker_swarm("lo")
             logger = remote_logger.RemoteLogger(None, None, None, None)
             srv = service.Service("foo", "hello-world")
-            self.interface.create_network("bar")
             self.assertIsNotNone(self.interface.run_container_in_background(srv, logger, None))
         except DockerException:
             self.fail()
@@ -109,6 +111,7 @@ class TestDockerInterfaceRunContainerInBackground(TestCase):
         try:
             logger = remote_logger.RemoteLogger(None, None, None, None)
             self.interface.create_network("bar")
+            time.sleep(1)
             self.interface.run_container_in_background(None, logger, "bar")
             self.fail()
         except DockerException:
@@ -119,6 +122,7 @@ class TestDockerInterfaceRunContainerInBackground(TestCase):
             logger = remote_logger.RemoteLogger(None, None, None, None)
             srv = service.Service(None, None)
             self.interface.create_network("bar")
+            time.sleep(1)
             self.interface.run_container_in_background(srv, logger, "bar")
             self.fail()
         except DockerException:
@@ -225,6 +229,7 @@ class TestDockerInterfaceHasNetworkWithName(TestCase):
 
     def test_has_network_with_name(self):
         self.interface.create_network("foo")
+        time.sleep(1)
         self.assertTrue(self.interface.has_network_with_name("foo"))
 
     def test_has_network_with_name_non_existent(self):
@@ -242,6 +247,7 @@ class TestDockerInterfaceGetNetworkByName(TestCase):
         try:
             self.interface.init_docker_swarm("lo")
             self.interface.create_network("foo")
+            time.sleep(1)
             self.assertIsNotNone(self.interface.get_network_by_name("foo"))
         except DockerException:
             self.fail(msg="Unable to get network")
