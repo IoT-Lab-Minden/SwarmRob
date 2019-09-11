@@ -25,9 +25,12 @@ import os
 import speedtest
 
 from ..logger import local_logger
+from .config import Config, Section, Option
 from .errors import NetworkException
 
 SPEEDTEST_MINI_PORT = 8085
+
+config = Config()
 
 
 class NetworkInfo:
@@ -112,6 +115,9 @@ def get_default_interface():
     """
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
+    interface = config.get(Section.INTERNET, Option.INTERFACE)
+    if interface is not None:
+        return interface
 
     # TODO: Only works on Linux
     in_stream = os.popen("hostname -I")

@@ -9,8 +9,7 @@ import Pyro4.errors
 
 from . import master_dummy, worker_dummy, swarm_engine_dummy
 from .logger import local_logger
-from .utils import network
-from .utils import pyro_interface
+from .utils import network, process_helper, pyro_interface
 from .utils.errors import NetworkException
 
 PORT = 0
@@ -267,6 +266,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
 
 
 def main():
+    process_helper.create_daemon()
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
     llogger.enable = True
