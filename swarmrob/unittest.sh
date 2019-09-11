@@ -1,3 +1,3 @@
 #!/bin/bash
 swarmrob_dummy
-python3 -m unittest discover
+python3 -m unittest discover swarmrob

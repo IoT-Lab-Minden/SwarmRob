@@ -20,7 +20,7 @@
 
 import os
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="Swarmrob-Full",
@@ -30,8 +30,9 @@ setup(
     description="An Orchestration Tool for Container-based Robot Applications",
     license="GPL v3",
     url="https://github.com/aljoschap/swarmrob",
-    packages=['swarmrob', 'swarmrob.dockerengine', 'swarmrob.logger', 'swarmrob.service_allocation',
-              'swarmrob.services', 'swarmrob.swarmengine', 'swarmrob.utils'],
+    #packages=['swarmrob', 'swarmrob.dockerengine', 'swarmrob.logger', 'swarmrob.service_allocation',
+    #          'swarmrob.services', 'swarmrob.swarmengine', 'swarmrob.utils'],
+    packages=find_packages(),
     entry_points={
         'console_scripts': ['swarmrob = swarmrob.swarmrob:main']
     },
