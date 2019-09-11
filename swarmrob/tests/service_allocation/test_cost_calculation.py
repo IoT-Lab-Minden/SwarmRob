@@ -132,7 +132,6 @@ class TestCostCalculationCalculatePartialCosts(TestCase):
         cpu_costs, vram_costs, swap_costs, image_download_costs = self.cost_calculation._calculate_partial_costs(
             0, 0, 0, 0, 0
         )
-        print(cpu_costs, vram_costs, swap_costs, image_download_costs)
         self.assertEqual(0, cpu_costs)
         self.assertEqual(0, vram_costs)
         self.assertEqual(0, swap_costs)
