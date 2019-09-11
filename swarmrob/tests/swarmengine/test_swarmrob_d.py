@@ -112,9 +112,6 @@ class TestSwarmrobDSetDaemonRunning(TestCase):
         self.assertFalse(self.daemon._daemon_running)
 
 
-# Not testing register_worker and unregister_worker because of conflicts with Pyro4
-
-
 @patch('Pyro4.locateNS', locate_ns_dummy)
 @patch('Pyro4.Proxy', ProxyDummy)
 class TestSwarmrobDCreateNewSwarm(TestCase):

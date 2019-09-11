@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebac49bd-af5d-4ba6-91e7-ffa7e0846f12" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/daemon_dummy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daemon_dummy/utils/network.py" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy/utils/network.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daemon_dummy_modules.txt" beforeDir="false" afterPath="$PROJECT_DIR$/daemon_dummy_modules.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../swarmengine/test_swarmrob_d.py" beforeDir="false" afterPath="$PROJECT_DIR$/../swarmengine/test_swarmrob_d.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,8 +33,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="524">
-              <caret line="268" column="34" selection-start-line="268" selection-start-column="34" selection-end-line="268" selection-end-column="34" />
+            <state relative-caret-position="449">
+              <caret line="206" column="59" lean-forward="true" selection-start-line="206" selection-start-column="59" selection-end-line="206" selection-end-column="59" />
               <folding>
                 <element signature="e#46#56#0" expanded="true" />
               </folding>
@@ -305,8 +302,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/daemon_dummy/daemon_dummy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="524">
-          <caret line="268" column="34" selection-start-line="268" selection-start-column="34" selection-end-line="268" selection-end-column="34" />
+        <state relative-caret-position="449">
+          <caret line="206" column="59" lean-forward="true" selection-start-line="206" selection-start-column="59" selection-end-line="206" selection-end-column="59" />
           <folding>
             <element signature="e#46#56#0" expanded="true" />
           </folding>
