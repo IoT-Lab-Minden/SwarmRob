@@ -9,8 +9,8 @@ services:
 cache: pip
 
 install:
-  - pip3 install swarmrob -r swarmrob/requirements.txt
-  - pip3 install swarmrob/tests/dummy_daemon -r /swarmrob/tests/dummy_daemon/requirements.txt
+  - pip3 install $PWD/swarmrob -r $PWD/swarmrob/requirements.txt
+  - pip3 install $PWD/swarmrob/tests/dummy_daemon -r $PWD/swarmrob/tests/dummy_daemon/requirements.txt
 
 script:
   - ./swarmrob/unittest.sh
