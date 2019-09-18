@@ -59,7 +59,7 @@ services:
 
 Afterwards, the researchers just need to publish the SDFs and EDFs along with the publication to allow other researchers to get them and reproduce the experiment. As previously described, therefore SwarmRob relies on container virtualization to enable the reproduction of software-intensive multi-robot experiments. A key feature of multi-robot systems is the communicaiton. In order to enable a capsulated and inference-free communication between the robots, SwarmRob makes use of the virtual network feature of Docker based on VXLAN. While the use of container virtualization becomes more common in robotics, especially the networking is a very time-consuming and error-prone procedure. SwarmRob automates this by using a distributed key-value store to spread the correct network configuration to all participating robots. This enables the communication between e.g. ROS nodes via virtual networks on top of the original underlying network. The whole configuration of the swarm is carried out by the software. The researchers only need to initialize a swarm, add the workers and start the swarm.
 
-![Networking](docs/_static/images/networking.png)
+![Networking](docs/_static/images/networking.png =558x513)
 *System and Inter-Robot Network Architecture using Overlay Networks - The Underlay Network represents the physical network connection between the hosts, the Intra-Swarm Communication represents the commands and information exchanged between the participants of a swarm and the Overlay Network is the communication channel used for the communication between containerized applications*
 
 A good start to connect with SwarmRob is to follow the Getting started guide which you can find [here](https://insertpagehere.pls/).
