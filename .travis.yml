@@ -15,5 +15,8 @@ install:
   - pip3 install $PWD/swarmrob -r $PWD/swarmrob/requirements.txt
   - pip3 install $PWD/swarmrob/tests/dummy_daemon -r $PWD/swarmrob/tests/dummy_daemon/requirements.txt
 
+before_script:
+  - swarmrob_dummy
+
 script:
   - ./swarmrob/unittest.sh
