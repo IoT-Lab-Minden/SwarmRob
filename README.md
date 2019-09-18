@@ -9,14 +9,14 @@ in robotics research.
 The reproduction of experiments and its results is one of the fundamental problems of robotics. SwarmRob tries to solve it by providing a solution for re-executing and reproducing experiments. The solution allows to run an experiment not only on one robot but also having a cluster of robots run multiple services that communicate with each other. For this purpose, SwarmRob uses container virtualization in combination with an orchestration mechanism that is adapted to the requirements of robotics. The software is oriented along the master-worker-pattern, where a single master manages the experiment together with the participating robots called worker.
 
 <figure>
-  <img src="{{site.url}}/docs/_static/images/swarmrob_architecture.png" alt="SwarmRob Architecture"/>
+  <img src="docs/_static/images/swarmrob_architecture.png" alt="SwarmRob Architecture"/>
   <figcaption>The Architecture of SwarmRob - The green cubes represent the worker nodes and the red cubes represent the master nodes. Every bounding box illustrates a swarm.The outer box illustrates the local network of the laboratory and the grey boxes illustrates the repositories where the worker can obtain the definition files.</figcaption>
 </figure>
 
 An experiment is described using Docker-like configuration files which can be published using private or public repositories and can be obtained by other researchers. The workflow can be subdivided in two phases: the research phase and the review phase.
 
 <figure>
-  <img src="{{site.url}}/docs/_static/images/workflow.png" alt="Workflow"/>
+  <img src="docs/_static/images/workflow.png" alt="Workflow"/>
   <figcaption>Workflow of SwarmRob - The figure illustrates the research phase (left timeline) and the review phase (right timeline) of the workflow with their related subphases.</figcaption>
 </figure>
 
@@ -64,7 +64,7 @@ services:
 Afterwards, the researchers just need to publish the SDFs and EDFs along with the publication to allow other researchers to get them and reproduce the experiment. As previously described, therefore SwarmRob relies on container virtualization to enable the reproduction of software-intensive multi-robot experiments. A key feature of multi-robot systems is the communicaiton. In order to enable a capsulated and inference-free communication between the robots, SwarmRob makes use of the virtual network feature of Docker based on VXLAN. While the use of container virtualization becomes more common in robotics, especially the networking is a very time-consuming and error-prone procedure. SwarmRob automates this by using a distributed key-value store to spread the correct network configuration to all participating robots. This enables the communication between e.g. ROS nodes via virtual networks on top of the original underlying network. The whole configuration of the swarm is carried out by the software. The researchers only need to initialize a swarm, add the workers and start the swarm.
 
 <figure>
-  <img src="{{site.url}}/docs/_static/images/networking.png" alt="Networking"/>
+  <img src="docs/_static/images/networking.png" alt="Networking"/>
   <figcaption>System and Inter-Robot Network Architecture using Overlay Networks - The Underlay Network represents the physical network connection between the hosts, the Intra-Swarm Communication represents the commands and information exchanged between the participants of a swarm and the Overlay Network is the communication channel used for the communication between containerized applications</figcaption>
 </figure>
 
