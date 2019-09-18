@@ -16,8 +16,15 @@ eggs/
 .eggs/
 lib/
 lib64/
+logs/
+lint/
 parts/
 sdist/
+swarmrob/dist
+swarmrob/.idea
+swarmrob/tests/daemon_dummy/.idea
+swarmrobw/.idea
+swarmrobw/dist
 var/
 wheels/
 *.egg-info/

@@ -1,0 +1,27 @@
+version: '3'
+services:
+ witz:
+  image: hello-world
+ witz2:
+  image: hello-world
+  depends_on:
+    - witz
+ witz3:
+  image: hello-world
+  depends_on:
+    - witz
+    - witz4
+ witz4:
+  image: hello-world
+  depends_on:
+    - witz2
+ witz5:
+  image: hello-world
+  depends_on:
+    - witz
+    - witz6
+ witz6:
+  image: hello-world
+  depends_on:
+    - witz
+    - witz4

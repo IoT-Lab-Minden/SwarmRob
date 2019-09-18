@@ -1,0 +1,12 @@
+version: '3'
+services: 
+ rviz0:
+  image: hello-world
+ rviz1:
+  image: hello-world
+ rviz2:
+  image: hello-world
+ rviz3:
+  image: hello-world
+ rviz4:
+  image: hello-world

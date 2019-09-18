@@ -1,0 +1,9 @@
+swarmrob/dockerengine
+swarmrob/logger
+swarmrob/swarmengine
+swarmrob/daemon.py
+swarmrob/swarmrob.py
+swarmrob/worker.py
+swarmrob/utils
+scripts
+requirements.txt

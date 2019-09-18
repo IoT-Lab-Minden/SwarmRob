@@ -1,0 +1,10 @@
+version: '3'
+services:
+ ping0:
+  image: willfarrell/ping
+ ping1:
+  image: willfarrell/ping
+ ping2:
+  image: willfarrell/ping
+ ping3:
+  image: willfarrell/ping
