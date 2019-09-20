@@ -65,7 +65,7 @@ Afterwards, the researchers just need to publish the SDFs and EDFs along with th
 
 *System and Inter-Robot Network Architecture using Overlay Networks - The Underlay Network represents the physical network connection between the hosts, the Intra-Swarm Communication represents the commands and information exchanged between the participants of a swarm and the Overlay Network is the communication channel used for the communication between containerized applications*
 
-A good start to connect with SwarmRob is to follow the Getting started guide which you can find [here](https://insertpagehere.pls/).
+A good start to connect with SwarmRob is to follow the Getting started guide which you can find [here](https://aljoschap.github.io/SwarmRob/).
 
 ### Copyright
 Copyright 2018,2019 Aljoscha Pörtner
