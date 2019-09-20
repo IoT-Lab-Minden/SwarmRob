@@ -1,4 +1,4 @@
-# Swarmrob
+# Swarmrob ![travis_ci](https://travis-ci.com/AljoschaP/SwarmRob.svg?token=gbhG8z3VZ5gzPsveAuLR&branch=master)
 <img src="docs/_static/images/SwarmRob_Main_Logo.png" alt="SwarmRob Logo" width="193" height="212">
 
 ## Container Orchestration for Robot Applications
