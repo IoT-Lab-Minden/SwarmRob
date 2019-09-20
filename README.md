@@ -1,4 +1,4 @@
-# Swarmrob https://travis-ci.com/AljoschaP/SwarmRob.svg?token=gbhG8z3VZ5gzPsveAuLR&branch=master
+# Swarmrob ![travis_ci](https://travis-ci.com/AljoschaP/SwarmRob.svg?token=gbhG8z3VZ5gzPsveAuLR&branch=master)
 ![SwarmRob Logo](docs/_static/images/SwarmRob_Main_Logo.png)
 ## Container Orchestration for Robot Applications
 Because of the very heterogeneous composition of software and hardware in robotics, the reproduction of experiments is a common problem.
