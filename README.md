@@ -74,10 +74,11 @@ More in-depth information can be found in the publication:
 
 > A. Pörtner, M. Hoffmann, S. Zug, and M. König, “SwarmRob: A Toolkit for Reproducibility and Sharing of Experimental Artifacts in Robotics Research,” in 2018 IEEE International Conference on Systems, Man, and Cybernetics (SMC), 2018, p. 325–332. 
 
-A good start to connect with SwarmRob is to follow the [Getting started guide](https://aljoschap.github.io/SwarmRob/).
+A good start to connect with SwarmRob is to follow the [Getting started](https://aljoschap.github.io/SwarmRob/).
 
 ### Copyright
 Copyright 2018,2019 Aljoscha Pörtner
+
 Copyright 2019 André Kirsch
 
 This file is part of SwarmRob.
