@@ -40,7 +40,7 @@ RUN /opt/ros/indigo/bin/catkin_make
 ENTRYPOINT ["/home/ros/startup.sh"]
 ```
 
-Afterwards, the researcher can compose the experiment by the defining an experiment definition file (EDF) that references the prior defined SDFs. An EDF is a subset of docker-compose adapted to specific requirements of robotics like the definition of required hardware, e.g. camera, laser scanner etc.. The difference between docker-compose and SwarmRob is that the definition of devices is taken into account within the orchestration and allocation process. An example of a valid EDF is shown in the following code block.
+Afterwards, the researcher can compose the experiment by defining an experiment definition file (EDF) that references the prior defined SDFs. An EDF is a subset of docker-compose adapted to specific requirements of robotics like the definition of required hardware, e.g. camera, laser scanner etc.. The difference between docker-compose and SwarmRob is that the definition of devices is taken into account within the orchestration and allocation process. An example of a valid EDF is shown in the following code block.
 
 ```
 services:
