@@ -9,7 +9,7 @@ SwarmRob is a python framework that uses container technologies and orchestratio
 in robotics research.
 
 ### General Informations
-The reproduction of experiments and its results is one of the fundamental problems of robotics. SwarmRob tries to solve it by providing a solution for re-executing and reproducing experiments. The solution allows to run an experiment not only on one robot but also having a cluster of robots run multiple services that communicate with each other. For this purpose, SwarmRob uses container virtualization in combination with an orchestration mechanism that is adapted to the requirements of robotics. The software is oriented along the master-worker-pattern, where a single master manages the experiment together with the participating robots called worker.
+The reproduction of experiments is one of the fundamental problems of robotics research. SwarmRob tries to solve it by providing a solution to support the re-execution and reproduction of experiments. The solution simplifies the execution of experiments on a cluster of robots with multiple services communicating with each other. For this purpose, SwarmRob uses container virtualization in combination with an orchestration mechanism that is adapted to the requirements of robotics. The software is oriented along the master-worker-pattern. A single master manages the experiment and allocates the services to the participating robots called worker.
 
 <p align="center"> 
 <img src="docs/_static/images/swarmrob_architecture.png" alt="SwarmRob Architecture" width="421" height="288">
@@ -40,7 +40,7 @@ RUN /opt/ros/indigo/bin/catkin_make
 ENTRYPOINT ["/home/ros/startup.sh"]
 ```
 
-Afterwards, the researcher can compose the experiment by the defining an experiment definition file (EDF) that references the prior defined SDFs. An EDF is a subset of docker-compose adapted to specific requirements of robotics like the definition of required hardware, e.g. camera, laser scanner etc.. The difference between docker-compose and SwarmRob is that the definition of devices is taken into account within the orchestration and allocation process. An example of a valid EDF is shown in the following code block.
+Afterwards, the researcher can compose the experiment using an experiment definition file (EDF) that references the prior defined SDFs. An EDF is a subset of a Docker compose file adapted to specific requirements of robotics like the definition of required hardware, e.g. camera, laser scanner etc.. The difference between docker-compose and SwarmRob is that the definition of devices is taken into account within the orchestration and allocation process. An example of a valid EDF is shown in the following code block.
 
 ```
 services:
