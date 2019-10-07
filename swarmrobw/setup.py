@@ -2,13 +2,18 @@
 import os
 from setuptools import setup
 
+with open("../README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name = "Swarmrob-Worker",
     version = "0.1",
     author = "Aljoscha Poertner",
     author_email = "aljoscha.poertner@fh-bielefeld.de",
     description = "An Orchestration Tool for Container-based Robot Applications",
-    license = "BSD",
+    license = "GPL",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url = "https://github.com/aljoschap/swarmrob",
     packages=['swarmrob', 'swarmrob.swarmengine', 'swarmrob.dockerengine',
               'swarmrob.logger','swarmrob.utils'],
@@ -19,7 +24,7 @@ setup(
     ('/swarmrob',['scripts/swarmrob.conf']),
     ],
     classifiers=[
-        "License :: OSI Approved :: GPL v3 License",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5"
     ],
