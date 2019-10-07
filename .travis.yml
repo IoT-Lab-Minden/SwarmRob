@@ -22,14 +22,15 @@ install:
   - pip3 install $PWD/swarmrob -r $PWD/swarmrob/requirements.txt
   - pip3 install $PWD/swarmrob/tests/dummy_daemon -r $PWD/swarmrob/tests/dummy_daemon/requirements.txt
   - conda install --yes python="2.7" sphinx
-  - pip install --user travis-sphinx
+  - pip install --user travis-sphinx 
 
 before_script:
   - swarmrob_dummy
 
 script:
   - ./swarmrob/unittest.sh
-  - travis-sphinx build
+  - /usr/local/bin/sphinx-apidoc -f -o $PWD/swarmrob/docs/source $PWD/swarmrob
+  - travis-sphinx build --source=$PWD/swarmrob/docs/source
 after_success:
-    - travis-sphinx deploy
+  - travis-sphinx deploy
 
