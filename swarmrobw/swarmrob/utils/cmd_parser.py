@@ -40,8 +40,9 @@ class Argument(Enum):
     LOG_IDENTIFIER = 7, '-l', '--log_identifier', "log_identifier", "store", str, False, 'Identifier for a log file'
     LOG_FOLDER = 8, '-f', '--log_folder', "log_folder", "store", str, False, 'Path to save evaluation logs in'
     WORKER_UUID = 9, '-w', '--worker_uuid', "worker_uuid", "store", str, True, 'UUID of the worker'
-    SWARM_UUID = 10, '-s', '--swarm_uuid', "swarm_uuid", "store", str, True, 'UUID of the swarm'
-    DAEMONIZE = 11, '-n', '--no-daemon', "daemonize", "store_false", None, False, 'Run swarmrob daemon in background'
+    WORKER_UUID_OPTIONAL = 10, '-w', '--worker_uuid', "worker_uuid", "store", str, False, 'UUID of the worker'
+    SWARM_UUID = 11, '-s', '--swarm_uuid', "swarm_uuid", "store", str, True, 'UUID of the swarm'
+    DAEMONIZE = 12, '-n', '--no-daemon', "daemonize", "store_false", None, False, 'Run swarmrob daemon in background'
 
     def __new__(cls, identifier, short_name, long_name, destination, action, data_type, required, help_msg):
         """
@@ -115,10 +116,10 @@ class CMDParser:
             program_sub_path = filename + ' ' + program_sub_path
         return program_sub_path
 
-    def parse_arguments(self, args=None):
+    def parse_arguments(self):
         """
             Parses the command line parameters and returns their values
         :return: command line parameters
         """
-        params = self._arg_parser.parse_known_args(args)
+        params = self._arg_parser.parse_known_args(sys.argv)
         return params[0]

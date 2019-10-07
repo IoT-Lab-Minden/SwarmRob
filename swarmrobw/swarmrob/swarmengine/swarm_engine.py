@@ -72,6 +72,8 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if new_master is None:
+            return None
         docker_interface_object = docker_interface.DockerInterface()
         docker_interface_object.init_docker_swarm(new_master.interface)
         self.swarm = swarm.Swarm(predefined_uuid, new_master)
@@ -86,7 +88,9 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        llogger.debug("Add worker: " + str(new_worker) + " to swarm: " + swarm_uuid)
+        if not new_worker or not swarm_uuid:
+            return
+        llogger.debug("Add worker: " + str(new_worker) + " to swarm: " + str(swarm_uuid))
         self.swarm.add_worker_to_list(new_worker)
         dio = docker_interface.DockerInterface()
         if new_worker.advertise_address != self.swarm.master.advertise_address:
@@ -101,8 +105,10 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        llogger.debug("Remove worker: " + str(worker_uuid) + " from swarm: " + swarm_uuid)
-        self.swarm.remove_worker_from_list(worker_uuid)
+        if not worker_uuid or not swarm_uuid:
+            return
+        llogger.debug("Remove worker: " + str(worker_uuid) + " from swarm: " + str(swarm_uuid))
+        return self.swarm.remove_worker_from_list(worker_uuid)
 
     def start_swarm_by_composition(self, composition, swarm_uuid):
         """
@@ -114,25 +120,29 @@ class SwarmEngine(object, metaclass=SingletonType):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         start_timer = datetime.datetime.now()
+        if composition is None or swarm_uuid is None:
+            raise SwarmException("Start swarm parameters are None")
         if self.swarm is None:
             raise SwarmException("Swarm not initialized")
-        llogger.debug("Try to match swarm: %s with the following composition", swarm_uuid)
+        llogger.debug("Try to match swarm: %s with the following composition", str(swarm_uuid))
         llogger.debug("\n" + composition.format_service_composition_as_table())
-        result = self.assign_services_to_workers(composition)
+        result = self._assign_services_to_workers(composition)
         if result is True:
             llogger.debug("Worker matched. Try to start network")
-            network = self.create_docker_network()
+            network = self._create_docker_network()
             llogger.debug(composition._allocation)
-            self.start_services_on_workers(composition, network)
-        total_time_of_run = datetime.datetime.now() - start_timer
-        evaluation_logger.EvaluationLogger().write(["Total Time of Run", "*", "*",
-                                                    total_time_of_run.total_seconds(),
-                                                    self.swarm.get_worker_count(),
-                                                    len(composition.get_open_allocations())],
-                                                   evaluation_logger.LogType.ALLOC_METRICS)
-        llogger.debug("Time elapsed for Total Run: %f", total_time_of_run.total_seconds())
+            self._start_services_on_workers(composition, network)
+            total_time_of_run = datetime.datetime.now() - start_timer
+            evaluation_logger.EvaluationLogger().write(["Total Time of Run", "*", "*",
+                                                        total_time_of_run.total_seconds(),
+                                                        self.swarm.get_worker_count(),
+                                                        len(composition.get_open_allocations())],
+                                                       evaluation_logger.LogType.ALLOC_METRICS)
+            llogger.debug("Time elapsed for Total Run: %f", total_time_of_run.total_seconds())
+            return True
+        return False
 
-    def start_services_on_workers(self, composition, network):
+    def _start_services_on_workers(self, composition, network):
         """
             Start the services on the allocated workers
         :param composition: Object of service composition
@@ -141,6 +151,8 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if not self.swarm or not composition or not network or self.swarm.get_worker_count() <= 0:
+            raise SwarmException("Preconditions for starting services not met")
         start_timer = datetime.datetime.now()
         service_key_queue = deque(list(composition._allocation.keys()))
         started_services = []
@@ -155,8 +167,8 @@ class SwarmEngine(object, metaclass=SingletonType):
             if service.are_dependencies_started(started_services):
                 worker = self.swarm.get_worker(worker_key)
                 if worker is None:
-                    llogger.debug("Error worker not found for worker key %s", worker_key)
-                    raise SwarmException("Worker not found for worker key " + worker_key)
+                    llogger.debug("Error worker not found for worker key %s", str(worker_key))
+                    raise SwarmException("Worker not found for worker key " + str(worker_key))
                 elif worker.start_service(jsonpickle.encode(service), network) is False:
                     llogger.debug("Error starting service %s on worker %s", service.tag, worker.uuid)
                     raise SwarmException("Failed to start service " + service.tag + " on worker " + worker.uuid)
@@ -172,19 +184,21 @@ class SwarmEngine(object, metaclass=SingletonType):
                                                    evaluation_logger.LogType.ALLOC_METRICS)
         llogger.debug("Time elapsed for starting containers: %f", elapsed_time_until_service_start.total_seconds())
 
-    def create_docker_network(self):
+    def _create_docker_network(self):
         """
             Create a new Docker network
         :return: List of Networks
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if self.swarm is None:
+            return None
         docker_interface_object = docker_interface.DockerInterface()
         network = docker_interface_object.create_network(network_name=self.swarm.uuid)
         llogger.debug("Network created: %s", jsonpickle.encode(network.attrs))
         return network.attrs.get("Name")
 
-    def assign_services_to_workers(self, composition):
+    def _assign_services_to_workers(self, composition):
         """
             Assign the composition of services to the swarm workers
         :param composition: Service composition
@@ -192,9 +206,11 @@ class SwarmEngine(object, metaclass=SingletonType):
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if not composition or not self.swarm:
+            return False
         open_allocations = composition.get_open_allocations()
         llogger.debug("Open service allocations: %s", len(open_allocations))
-        service_allocation_dict = self.allocate_services_to_workers(composition, open_allocations)
+        service_allocation_dict = self._allocate_services_to_workers(composition, open_allocations)
         if service_allocation_dict is not None:
             for worker, service_list in list(service_allocation_dict.items()):
                 composition.assign_worker_to_services(service_list, worker)
@@ -207,17 +223,40 @@ class SwarmEngine(object, metaclass=SingletonType):
             llogger.debug(composition._allocation)
             return False
 
-    def get_cost_and_hardware_matrix(self, composition, allocations):
+    def _allocate_services_to_workers(self, composition, allocations):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if not composition or not allocations or not self.swarm:
+            return None
+        from ..service_allocation import ortools_interface
+        hardware_matrix, cost_matrix = self._get_cost_and_hardware_matrix(composition, allocations)
+        start_timer = datetime.datetime.now()
+        service_allocation_dict = ortools_interface.allocate_services_to_workers(
+            services=allocations,
+            workers=self.swarm._worker_list,
+            hardware_matrix=hardware_matrix,
+            cost_matrix=cost_matrix)
+        time_of_allocation = datetime.datetime.now() - start_timer
+        evaluation_logger.EvaluationLogger().write(["Time of service_allocation", "*", "*",
+                                                    time_of_allocation.total_seconds(),
+                                                    self.swarm.get_worker_count(), len(allocations)],
+                                                   evaluation_logger.LogType.ALLOC_METRICS)
+        return service_allocation_dict
+
+    def _get_cost_and_hardware_matrix(self, composition, allocations):
+        llogger = local_logger.LocalLogger()
+        llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if not composition or not allocations or not self.swarm:
+            return None, None
         hardware_matrix = []
         cost_matrix = []
         start_timer = datetime.datetime.now()
         for service_key in allocations:
             service = composition.get_service(service_key)
-            hardware_row_for_service, cost_row_for_service = self.get_cost_and_hardware_row_for_service(service)
-            hardware_matrix.append(hardware_row_for_service)
-            cost_matrix.append(cost_row_for_service)
+            if not service:
+                hardware_row_for_service, cost_row_for_service = self._get_cost_and_hardware_row_for_service(service)
+                hardware_matrix.append(hardware_row_for_service)
+                cost_matrix.append(cost_row_for_service)
         time_of_calculation = datetime.datetime.now() - start_timer
         evaluation_logger.EvaluationLogger().write(["Time of cost calculation", "*", "*",
                                                     time_of_calculation.total_seconds(), self.swarm.get_worker_count(),
@@ -225,9 +264,11 @@ class SwarmEngine(object, metaclass=SingletonType):
         llogger.debug("Time elapsed for cost calculation: %f", time_of_calculation.total_seconds())
         return hardware_matrix, cost_matrix
 
-    def get_cost_and_hardware_row_for_service(self, service):
+    def _get_cost_and_hardware_row_for_service(self, service):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if not service or not self.swarm:
+            return None, None
         from ..service_allocation import cost_calculation
         hardware_row_for_service = []
         cost_row_for_service = []
@@ -261,20 +302,3 @@ class SwarmEngine(object, metaclass=SingletonType):
                 hardware_row_for_service.append(thread_result.get(i).get("hw"))
                 cost_row_for_service.append(thread_result.get(i).get("cost"))
         return hardware_row_for_service, cost_row_for_service
-
-    def allocate_services_to_workers(self, composition, allocations):
-        llogger = local_logger.LocalLogger()
-        llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        from ..service_allocation import ortools_interface
-        hardware_matrix, cost_matrix = self.get_cost_and_hardware_matrix(composition, allocations)
-        start_timer = datetime.datetime.now()
-        service_allocation_dict = ortools_interface.allocate_services_to_workers(
-            services=allocations,
-            workers=self.swarm._worker_list,
-            hardware_matrix=hardware_matrix,
-            cost_matrix=cost_matrix)
-        time_of_allocation = datetime.datetime.now() - start_timer
-        evaluation_logger.EvaluationLogger().write(["Time of service_allocation", "*", "*", time_of_allocation.total_seconds(),
-                                                    self.swarm.get_worker_count(), len(allocations)],
-                                                   evaluation_logger.LogType.ALLOC_METRICS)
-        return service_allocation_dict

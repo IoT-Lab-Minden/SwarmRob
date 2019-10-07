@@ -32,8 +32,6 @@ from .utils import network
 from . import worker
 from . import daemon
 
-SWARMROB_DAEMON_RPC_NAME = "swarmrob.swarmrobd"
-
 
 def main():
     """
@@ -106,9 +104,12 @@ def check_for_startup():
         puts(colored.green("Repository is available"))
         puts(colored.green("Download: " + str(result_dict.get("download"))))
         puts(colored.green("Latency: " + str(result_dict.get("ping"))))
+        print()
+        return True
     except NetworkException:
         puts(colored.red("Repository is not available"))
-    print()
+        print()
+        return False
 
 
 def show_help():
@@ -135,6 +136,7 @@ def show_help():
     with indent(5, quote=str(index+3) + '.'):
         puts(colored.white("help - Prints this help page."))
     print()
+    return True
 
 
 def print_master_error_message():
@@ -148,6 +150,7 @@ def print_master_error_message():
         puts("You are using the worker version.")
         puts("For a list of available commands type 'swarmrob help.")
         print()
+    return True
 
 
 def is_master_available():

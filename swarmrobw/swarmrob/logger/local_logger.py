@@ -20,7 +20,7 @@
 
 import logging
 
-LOCAL_LOGGER_FILE = "/tmp/swarmrob.log"
+LOCAL_LOGGER_FILE = "/var/tmp/swarmrob.log"
 
 
 class SingletonType(type):
@@ -48,10 +48,13 @@ class LocalLogger(object, metaclass=SingletonType):
         self.local_logger.setLevel(logging.DEBUG)
         formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
 
-        file_handler = logging.FileHandler(LOCAL_LOGGER_FILE)
-        file_handler.setFormatter(formatter)
-        file_handler.setLevel(logging.DEBUG)
-        self.local_logger.addHandler(file_handler)
+        try:
+            file_handler = logging.FileHandler(LOCAL_LOGGER_FILE)
+            file_handler.setFormatter(formatter)
+            file_handler.setLevel(logging.DEBUG)
+            self.local_logger.addHandler(file_handler)
+        except PermissionError:
+            pass
 
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)

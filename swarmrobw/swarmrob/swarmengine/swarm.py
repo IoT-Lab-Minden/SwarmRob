@@ -41,10 +41,12 @@ class Swarm:
             self._uuid = uuid.uuid4().hex
         else:
             self._uuid = swarm_uuid
-        self._advertise_address = master.advertise_address
         self._worker_list = dict()
         self._master = master
-        self._master.swarm_uuid = self._uuid
+        self._advertise_address = None
+        if self._master is not None:
+            self._master.swarm_uuid = self._uuid
+            self._advertise_address = master.advertise_address
 
     @property
     def uuid(self):
@@ -66,6 +68,8 @@ class Swarm:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if worker is None:
+            return
         self._worker_list.update({str(worker.uuid): worker})
 
     def remove_worker_from_list(self, worker_uuid):
@@ -76,14 +80,29 @@ class Swarm:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        del self._worker_list[str(worker_uuid)]
+        if worker_uuid is None:
+            return False
+        try:
+            del self._worker_list[str(worker_uuid)]
+            return True
+        except KeyError:
+            return False
 
     def get_worker(self, worker_uuid):
+        """
+            Returns the worker with the given uuid
+        :param worker_uuid: uuid of the worker
+        :return: Worker
+        """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         return self._worker_list.get(worker_uuid)
 
     def get_worker_count(self):
+        """
+            Returns the amount of workers that are registered in this swarm
+        :return: int
+        """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         return len(self._worker_list)
