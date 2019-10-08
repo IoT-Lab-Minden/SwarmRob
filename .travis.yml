@@ -28,7 +28,7 @@ before_script:
 
 script:
   - ./swarmrob/unittest.sh
-  - /usr/local/bin/sphinx-apidoc -f -o $PWD/swarmrob/docs/source $PWD/swarmrob
+  - sphinx-apidoc -f -o $PWD/swarmrob/docs/source $PWD/swarmrob
   - travis-sphinx build --source=$PWD/swarmrob/docs/source
 after_success:
   - travis-sphinx deploy
