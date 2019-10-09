@@ -200,6 +200,7 @@ class DockerInterface(object, metaclass=SingletonType):
         :param network_name: Name of the overlay network
         :raises DockerException
         :return: The created network
+        
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
@@ -274,7 +275,7 @@ class DockerInterface(object, metaclass=SingletonType):
     def get_image_size(self, image_tag):
         """
             Returns the image size of the image
-            
+
         :param image_tag: name of the image
         :return: size of image, if an error occurred or the image was not found -1 is returned instead
         """
