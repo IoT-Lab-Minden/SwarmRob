@@ -66,6 +66,7 @@ class SwarmEngine(object, metaclass=SingletonType):
     def create_new_swarm(self, new_master, predefined_uuid=None):
         """
             Factory method for creating a new swarm
+
         :param new_master: Object of the new master
         :param predefined_uuid: Predefined UUID of the swarm
         :return: Object of the new swarm
@@ -82,6 +83,7 @@ class SwarmEngine(object, metaclass=SingletonType):
     def register_worker_in_swarm(self, swarm_uuid, new_worker):
         """
             Register a new worker at the swarm
+
         :param swarm_uuid: The UUID of the swarm
         :param new_worker: Object of the new worker
         :return:
@@ -99,6 +101,7 @@ class SwarmEngine(object, metaclass=SingletonType):
     def unregister_worker_in_swarm(self, swarm_uuid, worker_uuid):
         """
             Unregister worker at the swarm
+
         :param swarm_uuid: UUID of the swarm
         :param worker_uuid: UUID of the worker that should be removed
         :return:
@@ -113,6 +116,7 @@ class SwarmEngine(object, metaclass=SingletonType):
     def start_swarm_by_composition(self, composition, swarm_uuid):
         """
             Start swarm by parsed service composition
+
         :param composition: Object of service composition
         :param swarm_uuid: UUID of the swarm
         :raises SwarmException
@@ -145,6 +149,7 @@ class SwarmEngine(object, metaclass=SingletonType):
     def _start_services_on_workers(self, composition, network):
         """
             Start the services on the allocated workers
+
         :param composition: Object of service composition
         :param network: docker network
         :raises SwarmException
@@ -187,6 +192,7 @@ class SwarmEngine(object, metaclass=SingletonType):
     def _create_docker_network(self):
         """
             Create a new Docker network
+
         :return: List of Networks
         """
         llogger = local_logger.LocalLogger()
@@ -201,6 +207,7 @@ class SwarmEngine(object, metaclass=SingletonType):
     def _assign_services_to_workers(self, composition):
         """
             Assign the composition of services to the swarm workers
+            
         :param composition: Service composition
         :return: bool
         """

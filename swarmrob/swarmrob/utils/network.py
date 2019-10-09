@@ -38,6 +38,7 @@ class NetworkInfo:
     def __init__(self, interface=None):
         """
             Initialises NetworkInfo by collecting network information
+
         :param interface: interface used by the network
         """
         llogger = local_logger.LocalLogger()
@@ -61,6 +62,7 @@ class NetworkInfo:
 def check_network_bandwidth_of_repository(tag_of_repository):
     """
         Check the network bandwidth based on the network connection to the repository
+
     :param tag_of_repository: Tag of the repository
     :return: dictionary with results or None
     """
@@ -82,6 +84,7 @@ def check_network_bandwidth_of_repository(tag_of_repository):
 def get_ip_of_interface(interface_name):
     """
         Get the IP of the host based on the name of the interface
+
     :param interface_name: Name of the interface
     :return: ip of the interface if it exists or None
     """
@@ -101,6 +104,7 @@ def get_ip_of_interface(interface_name):
 def get_interface_list():
     """
         Get a list of available interfaces on the current system
+
     :return: list of available interfaces
     """
     llogger = local_logger.LocalLogger()
@@ -111,6 +115,7 @@ def get_interface_list():
 def get_default_interface():
     """
         Get the first interface listed in hostname
+
     :return: interface
     """
     llogger = local_logger.LocalLogger()
@@ -134,6 +139,7 @@ def get_default_interface():
 def get_interface_of_ip(ip_address):
     """
         Get the name of the interface with the given ip address
+        
     :param ip_address: ip address of the searched interface
     :return: interface if found or None
     """

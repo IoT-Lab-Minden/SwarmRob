@@ -35,6 +35,7 @@ SERVICE_STATUS_LIST = "Service Status List"
 def worker_daemon_status_to_table(worker_status):
     """
         Formats the worker status as a Table
+        
     :param worker_status: Table of the worker status
     :return:
     """

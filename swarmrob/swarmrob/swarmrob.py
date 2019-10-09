@@ -36,6 +36,7 @@ from . import daemon
 def main():
     """
         Main function of the Swarmrob CLI
+
     :return:
     """
     if os.geteuid():
@@ -65,6 +66,7 @@ def main():
 def switch_command(cmd):
     """
         Switch command function of the Swarmrob CLI
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -93,6 +95,7 @@ def switch_command(cmd):
 def check_for_startup():
     """
         Check function of the Swarmrob CLI. Checks if the given repository can be reached by this node.
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -115,6 +118,7 @@ def check_for_startup():
 def show_help():
     """
         Shows the help on the swarmrob CLI
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -156,6 +160,7 @@ def print_master_error_message():
 def is_master_available():
     """
         Checks if the master is supported
+        
     :return: True, when the master is supported
     """
     llogger = local_logger.LocalLogger()

@@ -34,6 +34,7 @@ from . import service
 def load_edf(path_to_edf):
     """
         Loads an Experiment Definition File (EDF) and returns it as an object
+
     :param path_to_edf: The URL of the EDF
     :return: Parsed EDF as Object
     """
@@ -48,6 +49,7 @@ def load_edf(path_to_edf):
 def create_service_composition_from_edf(path_to_edf):
     """
         Creates a service composition based on a EDF
+
     :param path_to_edf: The URL of the EDF
     :return: Parsed EDF as service composition object
     """
@@ -75,6 +77,7 @@ def create_service_composition_from_edf(path_to_edf):
 def parse_compose_services(services, service_composition_obj):
     """
         Parse services of EDF
+
     :param services: Services of the EDF
     :param service_composition_obj: Current service composition object
     :return: Updated service composition object
@@ -118,6 +121,7 @@ def parse_service_property(srv, property_key, property_value):
 def parse_edf_version(version_value, srv_composition):
     """
         Parse version of EDF
+
     :param version_value: Value of the Version Field
     :param srv_composition: Current service composition object
     :return: Updated service composition object
@@ -131,6 +135,7 @@ def parse_edf_version(version_value, srv_composition):
 def parse_service_env(env_set, srv):
     """
         Parse environment variables of the service
+
     :param env_set: Set of environment variables
     :param srv: Current single service of the EDF
     :return: Updated service object
@@ -147,6 +152,7 @@ def parse_service_env(env_set, srv):
 def parse_service_cdf(cdf_tag, srv):
     """
         Parse CDF tag of the service
+
     :param cdf_tag: Tag of the CDF
     :param srv: Current single service of the EDF
     :return: Updated service object
@@ -161,6 +167,7 @@ def parse_service_cdf(cdf_tag, srv):
 def parse_service_deploy(deployment_conf, srv):
     """
         Parse deployment configuration of the service (Not used)
+
     :param deployment_conf:  Deployment configuration of the service
     :param srv: Current single service of the EDF
     :return: Update service object
@@ -173,6 +180,7 @@ def parse_service_deploy(deployment_conf, srv):
 def parse_service_depends_on(dependency_conf_set, srv):
     """
         Parse dependencies of the service
+
     :param dependency_conf_set: Dependency configuration of the service
     :param srv: Current service object
     :return: Updated service object
@@ -187,6 +195,7 @@ def parse_service_depends_on(dependency_conf_set, srv):
 def parse_service_devices(device_conf_set, srv):
     """
         Parse devices of service
+
     :param device_conf_set: Device configuration of service
     :param srv: Current service object
     :return: Updated service object
@@ -204,6 +213,7 @@ def parse_service_devices(device_conf_set, srv):
 def parse_service_volumes(volume_conf_set, srv):
     """
         Parse volumes of the service
+        
     :param volume_conf_set:  Volume configuration of service
     :param srv: Current service object
     :return: Updated service object

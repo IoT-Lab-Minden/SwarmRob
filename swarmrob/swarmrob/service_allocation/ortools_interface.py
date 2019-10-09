@@ -31,6 +31,7 @@ def allocate_services_to_workers(services=None, workers=None, hardware_matrix=No
                                  capacity_matrix=None):
     """
         Allocate services to workers using the push-relabel algorithm specified URL
+        
     :param services: Services that should be allocated
     :param workers: Workers that should carry out the services
     :param hardware_matrix: Binary matrix where each entry specifies if a service i can be executed on a worker j

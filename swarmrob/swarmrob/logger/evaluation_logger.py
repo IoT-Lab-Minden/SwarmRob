@@ -86,6 +86,7 @@ class EvaluationLogger(metaclass=SingletonType):
     def set_log_folder(self, new_log_folder):
         """
             Sets a new log folder. If the new log folder is None then logging will be disabled.
+
         :param new_log_folder: new log folder
         :return: the new log folder
         """
@@ -102,6 +103,7 @@ class EvaluationLogger(metaclass=SingletonType):
     def set_log_ident(self, new_log_ident):
         """
             Sets a new log identifier. If the new log identifier is None then logging will be disabled.
+
         :param new_log_ident: new log identifier
         :return: the new log identifier
         """
@@ -115,6 +117,7 @@ class EvaluationLogger(metaclass=SingletonType):
         """
             Resets or creates a new time string used in the file name. Resetting the time will always create a new file
             if there is enough time between two resets (1 second).
+
         :return:
         """
         llogger = local_logger.LocalLogger()
@@ -125,6 +128,7 @@ class EvaluationLogger(metaclass=SingletonType):
         """
             Enables or disables the evaluation logger. If the log_ident or the log_folder is None the evaluation logger
             can't be enabled.
+
         :param enable: defines whether the evaluation logger should be enabled or disabled
         :return: new status of the evaluation logger
         """
@@ -141,6 +145,7 @@ class EvaluationLogger(metaclass=SingletonType):
     def write(self, data, log_type):
         """
             Logs data for the specified log_type.
+
         :param data: list of values that should be logged
         :param log_type: to which log_type the data corresponds to
         :return: boolean, True if data has been logged otherwise False
@@ -158,6 +163,7 @@ class EvaluationLogger(metaclass=SingletonType):
     def create_file(self, log_type):
         """
             Creates the sessions log_file for the specified log_type if it doesn't already exist.
+
         :param log_type: which file should be created
         :return: boolean, True if the file has been created otherwise False
         """
@@ -175,6 +181,7 @@ class EvaluationLogger(metaclass=SingletonType):
     def create_log_folder(self, log_type):
         """
             Creates the log_folder for the specified log_type if it doesn't already exist.
+
         :param log_type: which folder should be created
         :return: boolean, True if the folder has been created otherwise False
         """
@@ -188,6 +195,7 @@ class EvaluationLogger(metaclass=SingletonType):
     def get_filepath(self, log_type):
         """
             Creates the filepath for the specified log_type.
+
         :param log_type: which filepath should be created
         :return: string describing the filepath
         """
@@ -202,6 +210,7 @@ class EvaluationLogger(metaclass=SingletonType):
     def get_log_type_header(self, log_type):
         """
             Returns a list of headers for the specified log_type.
+            
         :param log_type: which headers should be returned
         :return: list of header strings
         """

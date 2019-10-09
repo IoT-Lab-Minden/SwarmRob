@@ -63,6 +63,7 @@ class DockerContainerList(list):
     def stop_all_containers(self):
         """
             Stops all containers run by the current worker and swarm
+            
         :return:
         """
         llogger = local_logger.LocalLogger()

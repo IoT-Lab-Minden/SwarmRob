@@ -47,6 +47,7 @@ class Argument(Enum):
     def __new__(cls, identifier, short_name, long_name, destination, action, data_type, required, help_msg):
         """
             Creates a new argument
+
         :param short_name: single character name of the argument
         :param long_name: complete name of the argument
         :param destination: variable name to save the value in
@@ -73,6 +74,7 @@ class CMDParser:
     def __init__(self, program_path=None, description=None, arguments=None, include_help=True):
         """
             Initializes the command line parser
+
         :param program_path: sub path of the program
         :param description: description of the command
         :param arguments: list of arguments to include
@@ -106,6 +108,7 @@ class CMDParser:
     def _get_program_path(program_sub_path):
         """
             Generates the full program path
+            
         :param program_sub_path: sub path of the program
         :return: String
         """
