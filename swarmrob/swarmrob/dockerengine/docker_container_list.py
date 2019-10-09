@@ -39,6 +39,7 @@ class DockerContainerList(list):
     def get_running_containers(self):
         """
             Creates a list of all running containers run by the worker and returns it
+            
         :return: List of all running containers
         """
         llogger = local_logger.LocalLogger()
@@ -53,6 +54,7 @@ class DockerContainerList(list):
     def reload_containers(self):
         """
             Reloads the information about all containers inside this list
+
         :return:
         """
         llogger = local_logger.LocalLogger()
@@ -63,7 +65,7 @@ class DockerContainerList(list):
     def stop_all_containers(self):
         """
             Stops all containers run by the current worker and swarm
-            
+
         :return:
         """
         llogger = local_logger.LocalLogger()
