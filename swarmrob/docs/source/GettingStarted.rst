@@ -1,4 +1,5 @@
 .. _gettingstarted:
+
 Getting started
 ================
 To follow the next steps you should have the full version of SwarmRob installed. If you haven't done this already, make sure to install SwarmRob first. You can find the instructions on how to install SwarmRob :ref:`here <installation>`.

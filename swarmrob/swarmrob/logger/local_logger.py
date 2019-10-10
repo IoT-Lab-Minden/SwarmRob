@@ -76,6 +76,7 @@ class LocalLogger(object, metaclass=SingletonType):
     def debug(self, msg, *args):
         """
             Overwritten debug method of the logging module
+
         :param msg: Message that should be logged
         :param args: List of additional arguments
         :return:
@@ -87,6 +88,7 @@ class LocalLogger(object, metaclass=SingletonType):
     def error(self, msg, *args):
         """
             Overwritten error method of the logging module
+
         :param msg: Message that should be logged
         :param args: List of additional arguments
         :return:
@@ -98,6 +100,7 @@ class LocalLogger(object, metaclass=SingletonType):
     def exception(self, exception, msg=""):
         """
             Overwritten exception method of the logging module
+            
         :param exception: Thrown exception
         :param msg: Message that should be logged
         :return:

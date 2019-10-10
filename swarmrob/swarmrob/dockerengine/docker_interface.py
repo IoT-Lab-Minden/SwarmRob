@@ -49,6 +49,7 @@ class DockerInterface(object, metaclass=SingletonType):
     def __init__(self):
         """
             Initializing the docker interface
+
         :param self: Reference
         :return:
         """
@@ -59,6 +60,7 @@ class DockerInterface(object, metaclass=SingletonType):
     def check_volumes(self, service_definition):
         """
             Check if volumes are available on the host system
+
         :param self: Reference
         :param service_definition: Definition of the service that was extracted out of the EDF
         :return: Returns a binary vector with size == number of services
@@ -80,6 +82,7 @@ class DockerInterface(object, metaclass=SingletonType):
     def check_devices(self, service_definition):
         """
             Check if devices are available on the host system
+
         :param self: Reference
         :param service_definition: Definition of the service that was extracted out of the EDF
         :return: Returns a binary vector with size == number of services
@@ -102,6 +105,7 @@ class DockerInterface(object, metaclass=SingletonType):
     def run_container_in_background(self, service_definition, remote_logger, docker_network):
         """
             Run the specified container as a daemon on the host system
+
         :param self: Reference
         :param service_definition: Definition of the service that was extracted out of the EDF
         :param remote_logger: Object of the remote logger
@@ -191,10 +195,12 @@ class DockerInterface(object, metaclass=SingletonType):
     def create_network(self, network_name):
         """
             Create overlay network for the virtual connection between services in a swarm
+
         :param self: Reference
         :param network_name: Name of the overlay network
         :raises DockerException
         :return: The created network
+        
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
@@ -214,6 +220,7 @@ class DockerInterface(object, metaclass=SingletonType):
     def has_network_with_name(self, network_name):
         """
             Check the existence of an overlay network by its name
+
         :param self: Reference
         :param network_name: Name of the network
         :return: Boolean if the network exists
@@ -230,6 +237,7 @@ class DockerInterface(object, metaclass=SingletonType):
     def get_network_by_name(self, network_name):
         """
             Returns an overlay network by its name
+
         :param self: Reference
         :param network_name: Name of the network
         :return: Object of the network
@@ -247,6 +255,7 @@ class DockerInterface(object, metaclass=SingletonType):
     def is_image_available(self, image_tag):
         """
             Checks if the docker image is downloaded or not
+
         :param image_tag: name of the image
         :return: True, when the image is available
         """
@@ -266,6 +275,7 @@ class DockerInterface(object, metaclass=SingletonType):
     def get_image_size(self, image_tag):
         """
             Returns the image size of the image
+
         :param image_tag: name of the image
         :return: size of image, if an error occurred or the image was not found -1 is returned instead
         """

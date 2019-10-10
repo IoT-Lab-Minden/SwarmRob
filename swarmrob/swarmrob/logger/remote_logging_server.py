@@ -63,6 +63,7 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
     def handle_log_record(self, record):
         """
             Handles an incoming log record and passes it to the classic logger
+            
         :param record: record that should be logged
         :return:
         """

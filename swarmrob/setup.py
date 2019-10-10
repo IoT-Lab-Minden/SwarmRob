@@ -22,16 +22,19 @@ import os
 
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
-    name="Swarmrob-Full",
+    name="Swarmrob",
     version="0.1.1",
     author="Aljoscha Poertner",
     author_email="aljoscha.poertner@fh-bielefeld.de",
     description="An Orchestration Tool for Container-based Robot Applications",
     license="GPL v3",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/aljoschap/swarmrob",
-    #packages=['swarmrob', 'swarmrob.dockerengine', 'swarmrob.logger', 'swarmrob.service_allocation',
-    #          'swarmrob.services', 'swarmrob.swarmengine', 'swarmrob.utils'],
     packages=find_packages(),
     entry_points={
         'console_scripts': ['swarmrob = swarmrob.swarmrob:main']
@@ -40,7 +43,7 @@ setup(
         ('/swarmrob/', ['requirements.txt'])
     ],
     classifiers=[
-        "License :: OSI Approved :: GPL v3 License",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5"
     ],

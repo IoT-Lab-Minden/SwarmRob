@@ -22,9 +22,9 @@ import sys
 # import types
 # from datetime import datetime
 
-print(os.path.abspath('../../../'))
+print(os.path.abspath('../../'))
 sys.path.insert(0, os.path.abspath('../../../'))
-
+#sys.path.insert(0, os.path.abspath('../../swarmrob'))
 
 # -- General configuration ------------------------------------------------
 

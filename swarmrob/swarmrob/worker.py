@@ -39,7 +39,8 @@ sys.path.insert(0, os.path.abspath('..'))
 def main():
     """
         Main method of the worker
-    :return:
+
+        :return:
     """
     llogger = local_logger.LocalLogger()
     llogger.log_call(sys._getframe().f_code.co_name)
@@ -57,6 +58,7 @@ def main():
 def switch_command(cmd):
     """
         Switch-case method of the worker commands
+
     :param cmd: command string typed in by the user
     :return:
     """
@@ -75,6 +77,7 @@ def switch_command(cmd):
 def show_help():
     """
         Shows the help on the worker CLI
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -96,6 +99,7 @@ def show_help():
 def join_swarm():
     """
         Abstracts the join_swarm command on the worker CLI
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -137,6 +141,7 @@ def join_swarm():
 def leave_swarm():
     """
         Command to remove the worker from the swarm
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -181,6 +186,7 @@ def leave_swarm():
 def status_worker():
     """
         Shows the status of the worker on the CLI
+        
     :return:
     """
     llogger = local_logger.LocalLogger()

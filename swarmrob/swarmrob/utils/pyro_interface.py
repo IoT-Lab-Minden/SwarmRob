@@ -40,6 +40,7 @@ SWARMROBD_IDENTIFIER = "swarmrob.swarmrobd"
 def get_proxy(rpc_name, ip_address):
     """
         Returns a proxy object based on its identifier and the ip of the name service
+
     :param rpc_name: name of the remote object
     :param ip_address: IP address of the name service
     :return: Daemon proxy
@@ -61,6 +62,7 @@ def get_proxy(rpc_name, ip_address):
 def get_daemon_proxy(ns_ip):
     """
         Returns a proxy object using the default daemon identifier
+
     :param ns_ip: IP address of the name service
     :return: Daemon proxy
     """
@@ -72,6 +74,7 @@ def get_daemon_proxy(ns_ip):
 def _start_nameservice(host_ip):
     """
         Starts the name service loop
+
     :param host_ip: IP address of the name service
     :return:
     """
@@ -83,6 +86,7 @@ def _start_nameservice(host_ip):
 def start_name_service(ip_address):
     """
         Starts the name service in a new thread
+
     :param ip_address: IP address of the name service
     :return: NameServer object
     """
@@ -95,6 +99,7 @@ def start_name_service(ip_address):
 def get_name_service(ip_address, start=False):
     """
         Locates the Pyro4 name service
+
     :param ip_address: IP address of the name service
     :param start: True, if the name service should be started when it does not exist
     :raises NetworkException
@@ -117,6 +122,7 @@ def get_name_service(ip_address, start=False):
 def clear_name_service(name_service):
     """
         Clears all the registered objects of the name service
+        
     :param name_service: NameServer object
     :return:
     """

@@ -63,6 +63,7 @@ class Swarm:
     def add_worker_to_list(self, worker):
         """
             Add a worker to the swarm
+
         :param worker: worker that should be added to the swarm
         :return:
         """
@@ -75,6 +76,7 @@ class Swarm:
     def remove_worker_from_list(self, worker_uuid):
         """
             Remove a worker from the swarm
+
         :param worker_uuid: uuid of a worker that should be removed from the swarm
         :return:
         """
@@ -91,6 +93,7 @@ class Swarm:
     def get_worker(self, worker_uuid):
         """
             Returns the worker with the given uuid
+
         :param worker_uuid: uuid of the worker
         :return: Worker
         """
@@ -101,6 +104,7 @@ class Swarm:
     def get_worker_count(self):
         """
             Returns the amount of workers that are registered in this swarm
+
         :return: int
         """
         llogger = local_logger.LocalLogger()
@@ -110,6 +114,7 @@ class Swarm:
     def get_worker_list(self):
         """
             Returns a list containing all worker registered in this swarm
+
         :return: list
         """
         return list(self._worker_list.items())
@@ -117,6 +122,7 @@ class Swarm:
     def has_worker_with_name(self, name):
         """
             Checks if a worker with the given name is already registered
+
         :param name: name of the worker
         :return: True when a worker with that name has been found
         """
@@ -130,6 +136,7 @@ class Swarm:
     def get_unique_worker_hostname(self, name):
         """
             Generates a unique hostname, that can be assigned to a worker
+            
         :return:
         """
         llogger = local_logger.LocalLogger()

@@ -40,7 +40,7 @@ from ..utils.errors import DockerException, NetworkException
 @Pyro4.behavior(instance_mode="single")
 class Worker:
 
-    def __init__(self, swarm_uuid, interface):
+    def __init__(self, swarm_uuid, interface, worker_uuid=None):
         """
             Initialization method of a worker object
         :param swarm_uuid: uuid of the swarm the worker is assigned to
@@ -51,7 +51,10 @@ class Worker:
         self._advertise_address = network.get_ip_of_interface(interface)
         self._interface = interface
         self._hostname = socket.gethostname()
-        self._uuid = uuid.uuid4().hex
+        if worker_uuid is None:
+            self._uuid = uuid.uuid4().hex
+        else:
+            self._uuid = worker_uuid
         self._swarm_uuid = swarm_uuid
         self._remote_logger = None
         self._container_list = docker_container_list.DockerContainerList()
@@ -193,6 +196,8 @@ class Worker:
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         docker_interface_object = docker_interface.DockerInterface()
         llogger.debug("Run container: %s in background", service_definition_as_json)
+        if service_definition_as_json is None:
+            return False
         service_definition = jsonpickle.decode(service_definition_as_json)
         try:
             container = docker_interface_object.run_container_in_background(service_definition, self._remote_logger,
@@ -216,11 +221,11 @@ class Worker:
     def stop_all_services(self):
         """
             Stops all containers of the current worker
-        :return:
+        :return: Amount of stopped services
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
-        self._container_list.stop_all_containers()
+        return self._container_list.stop_all_containers()
 
     def check_hardware(self, service_definition_as_json):
         """
@@ -230,6 +235,8 @@ class Worker:
         """
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
+        if service_definition_as_json is None:
+            return 1
         service_definition = jsonpickle.decode(service_definition_as_json)
         docker_interface_object = docker_interface.DockerInterface()
         volume_vector = docker_interface_object.check_volumes(service_definition)

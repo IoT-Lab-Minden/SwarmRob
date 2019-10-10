@@ -56,6 +56,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def __init__(self, interface, pyro_daemon):
         """
             Initialization method of the Swarmrob daemon
+
         :param interface: interface that is used by the SwarmRobDaemon
         :param pyro_daemon: pyro daemon that is used to communicate with the SwarmRobDaemon
         :return:
@@ -67,10 +68,11 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         self._pyro_daemon = pyro_daemon
         self._swarm_engine = swarm_engine.SwarmEngine()
         self._swarm_list_of_worker = dict()
-        
+
     def _close_pyro_daemon(self):
         """
             RPC method for closing the pyro daemon
+
         :return:
         """
         llogger = local_logger.LocalLogger()
@@ -81,6 +83,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def shutdown(self, host_ip):
         """
             RPC method for closing the pyro daemon
+
         :return:
         """
         llogger = local_logger.LocalLogger()
@@ -93,6 +96,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def _unregister_daemon_at_nameservice(self, host_ip):
         """
             RPC method for unregistering the daemon at the nameservice
+
         :return:
         """
         llogger = local_logger.LocalLogger()
@@ -106,6 +110,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def is_daemon_running(self):
         """
             RPC method for returning if the daemon is currently running
+
         :return:
         """
         llogger = local_logger.LocalLogger()
@@ -115,6 +120,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def _set_daemon_running(self, daemon_running):
         """
             RPC method for setting if the daemon is currently running
+
         :param daemon_running:
         :return:
         """
@@ -125,6 +131,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def create_new_swarm(self, advertise_address, interface, predefined_uuid=None):
         """
             RPC method for creating a new swarm
+
         :param advertise_address: Advertise address of the host
         :param interface: Interface of the host
         :param predefined_uuid: Predefined UUID of the new swarm
@@ -152,6 +159,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def register_worker_at_local_daemon(self, new_worker):
         """
             Method for registering a new worker at the local daemon
+
         :param new_worker: Object of the new worker
         :return:
         """
@@ -163,6 +171,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def unregister_worker_at_local_daemon(self, swarm_uuid):
         """
             Unregister the worker at the local daemon
+
         :param swarm_uuid: UUID of the swarm the worker was assigned to
         :return:
         """
@@ -174,6 +183,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def register_worker(self, swarm_uuid, nameservice_uri, worker_uuid):
         """
             Register the worker at the nameservice
+
         :param swarm_uuid: UUID of the swarm
         :param nameservice_uri: URI of the nameservice
         :param worker_uuid: UUID of the worker
@@ -215,6 +225,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def unregister_worker(self, swarm_uuid, nameservice_uri, worker_uuid):
         """
             Unregister the worker at the nameservice
+
         :param swarm_uuid: UUID of the swarm
         :param nameservice_uri: URI of the nameservice
         :param worker_uuid: UUID of the worker
@@ -251,6 +262,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def get_mode(self):
         """
             Returns the mode of the node (master/worker)
+
         :return: Mode of the node
         """
         llogger = local_logger.LocalLogger()
@@ -264,6 +276,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def get_worker_status_as_json(self):
         """
             Returns the status of the workers as JSON
+
         :return: JSON of list of workers
         """
         llogger = local_logger.LocalLogger()
@@ -273,6 +286,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def start_swarm_by_composition(self, composition_as_json, swarm_uuid):
         """
             Start the services on the swarm based on a composition definition
+
         :param composition_as_json: Composition definition as JSON
         :param swarm_uuid: UUID of the swarm
         """
@@ -290,6 +304,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def get_swarm_status_as_json(self):
         """
             Get the swarm status as JSON
+
         :return: swarm as json
         """
         llogger = local_logger.LocalLogger()
@@ -305,6 +320,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
         """
             Configures the evaluation logger by setting its log_folder, log_ident, enabling or disabling it and
             resetting its time
+
         :param log_folder: None or log folder path
         :param log_ident: identification string
         :param enable: True when the evaluation logger should be enabled
@@ -323,6 +339,7 @@ class SwarmRobDaemon(object, metaclass=SingletonType):
     def reset_evaluation_logger(self):
         """
             Resets the time of the evaluation logger to let it use a new file
+            
         :return:
         """
         llogger = local_logger.LocalLogger()

@@ -30,6 +30,7 @@ class RemoteLogger(object):
     def __init__(self, hostname, port, worker_uuid, swarm_uuid):
         """
             Initialization of the RemoteLogger
+
         :param hostname: name of the host the remote logger is running on
         :param port: port the remote logger is listening on
         """
@@ -54,6 +55,7 @@ class RemoteLogger(object):
         """
             Overwritten debug method of the logging module. Adds additional information like the uuid of the swarm and
             worker to the remote logging
+
         :param msg: Message that should be logged
         :param args: List of additional arguments
         :return:
@@ -67,6 +69,7 @@ class RemoteLogger(object):
         """
             Overwritten error method of the logging module. Adds additional information like the uuid of the swarm and
             worker to the remote logging
+
         :param msg: Message that should be logged
         :param args: List of additional arguments
         :return:
@@ -80,6 +83,7 @@ class RemoteLogger(object):
         """
             Overwritten exception method of the logging module. Adds additional information like the uuid of the swarm
             and worker to the remote logging
+            
         :param exception: Thrown exception
         :param msg: Message that should be logged
         :return:

@@ -47,6 +47,7 @@ sys.path.insert(0, os.path.abspath('..'))
 def signal_handler_shutdown(signalnum, frame):
     """
         Signal handler for closing the ETCD connection to the cluster when an interrupt occurred
+
     :param signalnum:
     :param frame:
     :return:
@@ -61,6 +62,7 @@ def signal_handler_shutdown(signalnum, frame):
 def main():
     """
         Main method of the swarmrob daemon
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -79,6 +81,7 @@ def main():
 def switch_command(cmd):
     """
         Method for switch-case the daemon mode
+
     :param cmd: first command word typed in by the user
     :return:
     """
@@ -98,6 +101,7 @@ def switch_command(cmd):
 def show_help():
     """
         Method for showing help in the daemon CLI
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -131,6 +135,7 @@ def log_pid():
 def start_daemon(interface=None):
     """
         Method for starting and registering the daemon at the nameservice
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -190,6 +195,7 @@ def check_daemon_running(interface=None):
 def stop_daemon():
     """
         Method for stopping the daemon and unregistering the daemon at the nameservice
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -221,6 +227,7 @@ def stop_daemon():
 def status_daemon():
     """
         Method for showing the status of the daemon at the daemon CLI
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -253,6 +260,7 @@ def status_daemon():
 def check_docker():
     """
         Helper method for checking if docker is installed
+        
     :return:
     """
     llogger = local_logger.LocalLogger()

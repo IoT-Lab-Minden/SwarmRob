@@ -54,6 +54,7 @@ class Master:
     def swarm_uuid(self):  # exposed as 'proxy.attr' remote attribute
         """
             RPC property method for self.swarm_uuid
+
         :return: UUID of the swarm
         """
         llogger = local_logger.LocalLogger()
@@ -64,6 +65,7 @@ class Master:
     def swarm_uuid(self, swarm_uuid):  # exposed as 'proxy.attr' writable
         """
             RPC setter method for self.swarm_uuid
+
         :param swarm_uuid:
         :return:
         """
@@ -75,6 +77,7 @@ class Master:
     def uuid(self):  # exposed as 'proxy.attr' remote attribute
         """
             RPC property method for self.uuid
+
         :return: UUID of the master
         """
         llogger = local_logger.LocalLogger()
@@ -85,6 +88,7 @@ class Master:
     def uuid(self, uuid):  # exposed as 'proxy.attr' writable
         """
             RPC setter method for self.uuid
+
         :param uuid: UUID of the master
         :return:
         """
@@ -96,6 +100,7 @@ class Master:
     def advertise_address(self):  # exposed as 'proxy.attr' remote attribute
         """
             RPC property method for self.advertise_address
+
         :return: Advertise address of the master
         """
         llogger = local_logger.LocalLogger()
@@ -106,6 +111,7 @@ class Master:
     def advertise_address(self, advertise_address):  # exposed as 'proxy.attr' writable
         """
             RPC setter method for self.advertise_address
+
         :param advertise_address: Advertise address of the master
         :return:
         """
@@ -118,6 +124,7 @@ class Master:
     def hostname(self):  # exposed as 'proxy.attr' remote attribute
         """
             RPC property method for self.hostname
+
         :return: Hostname of the master
         """
         llogger = local_logger.LocalLogger()
@@ -128,6 +135,7 @@ class Master:
     def hostname(self, hostname):  # exposed as 'proxy.attr' writable
         """
             RPC setter method for self.hostname
+
         :param hostname: Hostname of the master
         :return:
         """
@@ -140,6 +148,7 @@ class Master:
     def interface(self):  # exposed as 'proxy.attr' remote attribute
         """
             RPC property method for self.interface
+
         :return: Interface of the master
         """
         llogger = local_logger.LocalLogger()
@@ -150,6 +159,7 @@ class Master:
     def interface(self, interface):  # exposed as 'proxy.attr' writable
         """
             RPC setter method for self.interface
+
         :param interface: Interface of master
         :return:
         """
@@ -161,6 +171,7 @@ class Master:
     def register_worker_at_master(self, swarm_uuid_as_json, new_worker_as_json):
         """
             RPC method for registering a worker in the swarm
+
         :param swarm_uuid_as_json: UUID of the swarm as JSON
         :param new_worker_as_json: New worker of the swarm as JSON
         :return: Swarm status as JSON
@@ -184,6 +195,7 @@ class Master:
     def unregister_worker_at_master(self, swarm_uuid_as_json, worker_uuid_as_json):
         """
             RPC method for unregistering a worker in the swarm
+
         :param swarm_uuid_as_json: UUID of the swarm as JSON
         :param worker_uuid_as_json: UUID of the worker as JSON
         :return: Swarm status as JSON
@@ -202,6 +214,7 @@ class Master:
     def get_swarm_status_as_json(self):
         """
             RPC method for returning the swarm status as JSON
+
         :return: Swarm status as JSON
         """
         llogger = local_logger.LocalLogger()
@@ -213,6 +226,7 @@ class Master:
     def start_remote_logging_server(self):
         """
             Start remote logging server of the swarm
+
         :return:
         """
         llogger = local_logger.LocalLogger()
@@ -230,6 +244,7 @@ class Master:
     def get_remote_logging_server_info(self):
         """
             Returns the remote logging server hostname and port
+            
         :return: hostname, port
         """
         llogger = local_logger.LocalLogger()

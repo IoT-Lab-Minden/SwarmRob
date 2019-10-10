@@ -44,6 +44,7 @@ class CostCalculation:
     def calculate_costs_and_check_hardware_in_thread(self, column_id, service, worker, queue):
         """
             Wrapper method for the cost function
+
         :param column_id: ID of the cost matrix column
         :param service: Related service object
         :param worker: Related worker object
@@ -68,6 +69,7 @@ class CostCalculation:
     def _calculate_costs(self, worker, service):
         """
             Implemented cost calculation method
+            
         :param service: Related service object
         :param worker: Related worker object
         :return:

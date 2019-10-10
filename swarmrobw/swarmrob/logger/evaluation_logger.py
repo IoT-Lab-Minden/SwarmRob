@@ -194,9 +194,9 @@ class EvaluationLogger(metaclass=SingletonType):
         llogger = local_logger.LocalLogger()
         llogger.log_method_call(self.__class__.__name__, sys._getframe().f_code.co_name)
         ident = ""
-        if self.log_ident is not None or self.log_ident != "":
+        if self.log_ident is not None and self.log_ident != "":
             ident = '_' + self.log_ident
-        return self.log_folder + str(log_type.value) + '/' + str(log_type.value) + ident + '_'\
+        return self.log_folder + '/' + str(log_type.value) + '/' + str(log_type.value) + ident + '_'\
             + self.timestr + FILE_ENDING
 
     def get_log_type_header(self, log_type):

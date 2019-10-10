@@ -43,6 +43,7 @@ class Worker:
     def __init__(self, swarm_uuid, interface, worker_uuid=None):
         """
             Initialization method of a worker object
+
         :param swarm_uuid: uuid of the swarm the worker is assigned to
         :param interface: the interface the worker should listen on
         """
@@ -63,6 +64,7 @@ class Worker:
     def swarm_uuid(self):  # exposed as 'proxy.attr' remote attribute
         """
             RPC property method for self.swarm_uuid
+
         :return: UUID of the swarm
         """
         llogger = local_logger.LocalLogger()
@@ -73,6 +75,7 @@ class Worker:
     def swarm_uuid(self, swarm_uuid):  # exposed as 'proxy.attr' writable
         """
             RPC setter method for self.swarm_uuid
+
         :param swarm_uuid:
         :return:
         """
@@ -84,6 +87,7 @@ class Worker:
     def uuid(self):  # exposed as 'proxy.attr' remote attribute
         """
             RPC property method for self.uuid
+
         :return: UUID of the worker
         """
         llogger = local_logger.LocalLogger()
@@ -94,6 +98,7 @@ class Worker:
     def uuid(self, uuid):  # exposed as 'proxy.attr' writable
         """
             RPC setter method for self.uuid
+
         :param uuid: UUID of the worker
         :return:
         """
@@ -105,6 +110,7 @@ class Worker:
     def advertise_address(self):  # exposed as 'proxy.attr' remote attribute
         """
             RPC property method for self.advertise_address
+
         :return: Advertise address of the worker
         """
         llogger = local_logger.LocalLogger()
@@ -115,6 +121,7 @@ class Worker:
     def advertise_address(self, advertise_address):  # exposed as 'proxy.attr' writable
         """
             RPC setter method for self.advertise_address
+
         :param advertise_address: Advertise address of the worker
         :return:
         """
@@ -127,6 +134,7 @@ class Worker:
     def hostname(self):  # exposed as 'proxy.attr' remote attribute
         """
             RPC property method for self.hostname
+
         :return: Hostname of the worker
         """
         llogger = local_logger.LocalLogger()
@@ -137,6 +145,7 @@ class Worker:
     def hostname(self, hostname):  # exposed as 'proxy.attr' writable
         """
             RPC setter method for self.hostname
+
         :param hostname: Hostname of the worker
         :return:
         """
@@ -149,6 +158,7 @@ class Worker:
     def interface(self):  # exposed as 'proxy.attr' remote attribute
         """
             RPC property method for self.interface
+
         :return: Interface of the worker
         """
         llogger = local_logger.LocalLogger()
@@ -159,6 +169,7 @@ class Worker:
     def interface(self, interface):  # exposed as 'proxy.attr' writable
         """
             RPC setter method for self.interface
+
         :param interface: Interface of worker
         :return:
         """
@@ -170,6 +181,7 @@ class Worker:
     def start_remote_logger(self, hostname, port):
         """
             RPC method for starting the remote logger on the worker
+
         :param hostname:  Hostname of the remote logging server
         :param port: Port of the remote logging server
         :return: True when the remote logger started successfully
@@ -188,6 +200,7 @@ class Worker:
     def start_service(self, service_definition_as_json, swarm_network):
         """
             RPC method for starting a service in background on the worker
+
         :param service_definition_as_json: Service definition as JSON
         :param swarm_network: Network name
         :return: True when the service has been started successfully
@@ -221,6 +234,7 @@ class Worker:
     def stop_all_services(self):
         """
             Stops all containers of the current worker
+
         :return: Amount of stopped services
         """
         llogger = local_logger.LocalLogger()
@@ -230,6 +244,7 @@ class Worker:
     def check_hardware(self, service_definition_as_json):
         """
             RPC method for checking the hardware capabilities of the worker for a specific service
+
         :param service_definition_as_json: Service definition as JSON
         :return: 1, when all hardware requirements have been met, otherwise 0
         """
@@ -253,6 +268,7 @@ class Worker:
     def get_cpu_usage(self):
         """
             RPC method for returning the CPU usage of the worker
+
         :return: CPU usage of the worker
         """
         llogger = local_logger.LocalLogger()
@@ -262,6 +278,7 @@ class Worker:
     def get_vram_usage(self):
         """
             RPC method for returning the VRAM usage of the worker
+
         :return: VRAM usage of the worker
         """
         llogger = local_logger.LocalLogger()
@@ -272,6 +289,7 @@ class Worker:
     def get_swap_ram_usage(self):
         """
             RPC method for returning the SWAP usage of the worker
+
         :return: SWAP usage of the worker
         """
         llogger = local_logger.LocalLogger()
@@ -282,6 +300,7 @@ class Worker:
     def get_bandwidth(self, repository):
         """
             RPC method for returning the network bandwidth of the worker
+
         :param repository: repository that should be used to get the network bandwidth
         :return: network bandwidth
         """
@@ -295,6 +314,7 @@ class Worker:
     def get_remaining_image_download_size(self, image_tag):
         """
             RPC method for checking if the service image is available on the worker
+
         :param image_tag: name of the image
         :return: size of image if it needs to be downloaded, otherwise 0
         """
@@ -314,6 +334,7 @@ class Worker:
     def get_info_as_json(self):
         """
             RPC method for returning the general info of the worker
+            
         :return: WorkerInfo as json
         """
         llogger = local_logger.LocalLogger()

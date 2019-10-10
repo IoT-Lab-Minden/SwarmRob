@@ -43,6 +43,7 @@ class ServiceComposition:
     def add_service(self, service_key, service_object):
         """
             Add service to service composition
+
         :param service_key: Key of the service
         :param service_object: Object of the service
         :return:
@@ -59,6 +60,7 @@ class ServiceComposition:
     def assign_worker_to_service(self, service_key, worker_object):
         """
             Assign worker to service
+
         :param service_key: Key of the service
         :param worker_object: Object of the worker
         :return:
@@ -73,6 +75,7 @@ class ServiceComposition:
     def assign_worker_to_services(self, service_key_list, worker_object):
         """
             Assign worker to services
+
         :param service_key_list: List containing keys of services
         :param worker_object: Object of the worker
         :return:
@@ -86,6 +89,7 @@ class ServiceComposition:
     def get_open_allocations(self):
         """
             Returns the services that are not allocated yet
+
         :return: Open allocations of the service composition
         """
         llogger = local_logger.LocalLogger()
@@ -99,6 +103,7 @@ class ServiceComposition:
     def get_list_of_allocated_workers(self):
         """
             Returns a list of the workers that are already allocated
+
         :return:  List of workers that are already allocated
         """
         llogger = local_logger.LocalLogger()
@@ -112,6 +117,7 @@ class ServiceComposition:
     def is_empty(self):
         """
             Returns true when service list is empty
+
         :return:
         """
         return self.get_service_count() == 0
@@ -119,6 +125,7 @@ class ServiceComposition:
     def get_service_count(self):
         """
             Returns the amount of registered services in this service composition
+
         :return: Integer
         """
         return len(list(self._allocation.items()))
@@ -126,6 +133,7 @@ class ServiceComposition:
     def get_worker_key(self, service_key):
         """
             Returns a worker key for the given service key
+
         :param service_key: key of the service
         :return: worker_key
         """
@@ -134,6 +142,7 @@ class ServiceComposition:
     def get_service(self, service_key):
         """
             Returns the service with the given service key
+
         :param service_key: key of the service
         :return: Service
         """
@@ -142,6 +151,7 @@ class ServiceComposition:
     def get_service_key_list(self):
         """
             Returns all registered service_keys in a list
+
         :return: list
         """
         return list(self._allocation.keys())
@@ -149,6 +159,7 @@ class ServiceComposition:
     def format_service_composition_as_table(self):
         """
             Returns a service composition definition formatted as a table
+            
         :return: Updated service composition
         """
         llogger = local_logger.LocalLogger()

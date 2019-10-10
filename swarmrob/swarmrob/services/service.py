@@ -51,6 +51,7 @@ class Service:
     def add_env(self, env_key, env_value):
         """
             Add a key/value pair of an environment variable to the service
+
         :param env_key: Key of the environment variable
         :param env_value: Value of the environment variable
         :return:
@@ -65,6 +66,7 @@ class Service:
     def add_deployment(self, deployment_key, deployment_value):
         """
             Add a deployment configuration to the service
+
         :param deployment_key: Key of the deployment configuration
         :param deployment_value: Value of the deployment configuration
         :return:
@@ -78,6 +80,7 @@ class Service:
     def add_dependency(self, dependency_value):
         """
             Add a service dependency to the service
+
         :param dependency_value: Value of the dependency
         :return:
         """
@@ -90,6 +93,7 @@ class Service:
     def add_volume(self, volume_source, volume_dest, mode='rw'):
         """
             Add a volume to the service (e.g. /home/host/test:/home/container/test)
+
         :param volume_source: Source of the volume on the host system
         :param volume_dest: Destination of the volume on the virtualized system
         :param mode: Access permissions of the volume (Default: rw)
@@ -106,6 +110,7 @@ class Service:
     def add_device(self, device_source, device_dest, mode='rwm'):
         """
             Add a device to the service (e.g. /dev/usb1:/dev/usb1)
+
         :param device_source: Source of the device on the host system
         :param device_dest: Destination of the device on the virtualized system
         :param mode: Access permissions of the device (Default: rwm)
@@ -134,6 +139,7 @@ class Service:
     def are_dependencies_started(self, started_services):
         """
             Checks if all required dependencies have been started
+
         :param started_services: list of key of started services
         :return:
         """
@@ -149,6 +155,7 @@ class Service:
     def format_service_definition_as_table(self):
         """
             Format service definition as table
+
         :return: Service definition as table object
         """
         llogger = local_logger.LocalLogger()
@@ -168,6 +175,7 @@ class Service:
     def add_env_to_table(self, table_data):
         """
             Format environment variables and add them to a parent table
+
         :param table_data: Table data of the parent table
         :return: Service definition as table object
         """
@@ -184,6 +192,7 @@ class Service:
     def add_volumes_to_table(self, table_data):
         """
             Format volumes and add them to a parent table
+
         :param table_data: Table data of the parent table
         :return: Service definition as table object
         """
@@ -200,6 +209,7 @@ class Service:
     def add_devices_to_table(self, table_data):
         """
             Format devices and add them to a parent table
+
         :param table_data:  Table data of the parent table
         :return: Service definition as table object
         """
@@ -216,6 +226,7 @@ class Service:
     def add_dependencies_to_table(self, table_data):
         """
             Format dependencies and add them to a parent table
+            
         :param table_data: Table data of the parent table
         :return: Service definition as table object
         """

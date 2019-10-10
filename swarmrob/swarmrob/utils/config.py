@@ -77,6 +77,7 @@ class Config(object, metaclass=SingletonType):
     def _load_config(self, file=CONFIG_FILE):
         """
             load_config loads the configuration located at '/etc/swarmrob.conf'
+
         :return:
         """
         llogger = local_logger.LocalLogger()
@@ -88,6 +89,7 @@ class Config(object, metaclass=SingletonType):
     def get(self, section, option):
         """
             Returns the value under section and option in the config file
+
         :param section: Section Enum
         :param option: Option Enum
         :return: string value of setting or none
@@ -106,6 +108,7 @@ class Config(object, metaclass=SingletonType):
     def get_boolean(self, section, option):
         """
             Returns the value under section and option in the config file as a boolean
+
         :param section: Section Enum
         :param option: Option Enum
         :return: boolean value of setting or none
@@ -121,6 +124,7 @@ class Config(object, metaclass=SingletonType):
     def _get_values(self, section, option):
         """
             Converts section and option into their string values
+            
         :param section
         :param option
         :return:

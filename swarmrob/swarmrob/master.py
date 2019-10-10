@@ -47,6 +47,7 @@ def main():
 
     """
         Main function of the Swarmrob Master CLI
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -66,6 +67,7 @@ def main():
 def switch_command(cmd):
     """
         Switch command function of the Swarmrob Master CLI
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -83,6 +85,7 @@ def switch_command(cmd):
 def show_help():
     """
         Shows the help on the master CLI
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -107,6 +110,7 @@ def init_swarm():
     """
         Initializes a swarm and starts a master on the predefined advertise address. The uuid of the
         swarm is randomly generated at runtime or can be specified with --swarm_uuid (Hint: Only for Development)
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -170,6 +174,7 @@ def init_swarm():
 def swarm_status():
     """
         The status of the swarm (advertise address, uuid, worker list, ...). The swarm is represented as a table
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -204,6 +209,7 @@ def worker_status():
     """
         The status of a specific worker. The worker can be defined by
         --worker_uuid and represented as a table
+
     :return:
     """
     llogger = local_logger.LocalLogger()
@@ -250,6 +256,7 @@ def worker_status():
 def start_swarm_by_compose_file():
     """
         Starts a predefined swarm based on a docker compose file.
+        
     :return:
     """
     llogger = local_logger.LocalLogger()
