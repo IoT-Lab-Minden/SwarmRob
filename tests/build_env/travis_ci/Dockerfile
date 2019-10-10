@@ -13,7 +13,7 @@ RUN ./miniconda.sh -b
 ENV PATH="/root/miniconda2/bin:${PATH}"
 RUN echo $PATH
 RUN conda update --yes conda
-RUN git clone https://AljoschaP:3609264702e5d92175dcee58e8c841c0646c0859@github.com/AljoschaP/SwarmRob.git
+RUN git clone https://3609264702e5d92175dcee58e8c841c0646c0859@github.com/AljoschaP/SwarmRob.git
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 RUN apt-get install -y locales && locale-gen en_US.UTF-8 
 RUN pip3 install --upgrade setuptools pip
