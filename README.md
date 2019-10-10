@@ -1,6 +1,6 @@
 # Swarmrob ![travis_ci](https://travis-ci.com/AljoschaP/SwarmRob.svg?token=gbhG8z3VZ5gzPsveAuLR&branch=master)
 <p align="center"> 
-<img src="docs/_static/images/SwarmRob_Main_Logo.png" alt="SwarmRob Logo" width="193" height="212">
+<img src="https://github.com/IoT-Lab-Minden/SwarmRob/tree/gh-pages/_static/images/SwarmRob_Main_Logo.png" alt="SwarmRob Logo" width="193" height="212">
 </p>
 
 ## Container Orchestration for Robot Applications
@@ -12,7 +12,7 @@ in robotics research.
 The reproduction of experiments is one of the fundamental problems of robotics research. SwarmRob tries to solve it by providing a solution to support the re-execution and reproduction of experiments. The solution simplifies the execution of experiments on a cluster of robots with multiple services communicating with each other. For this purpose, SwarmRob uses container virtualization in combination with an orchestration mechanism that is adapted to the requirements of robotics. The software is oriented along the master-worker-pattern. A single master manages the experiment and allocates the services to the participating robots called worker.
 
 <p align="center"> 
-<img src="docs/_static/images/swarmrob_architecture.png" alt="SwarmRob Architecture" width="421" height="288">
+<img src="https://github.com/IoT-Lab-Minden/SwarmRob/tree/gh-pages/_static/images/swarmrob_architecture.png" alt="SwarmRob Architecture" width="421" height="288">
 </p>
 
 *The Architecture of SwarmRob - The green cubes represent the worker nodes and the red cubes represent the master nodes. Every bounding box illustrates a swarm.The outer box illustrates the local network of the laboratory and the grey boxes illustrates the repositories where the worker can obtain the definition files.*
@@ -65,7 +65,7 @@ services:
 
 Afterwards, the researchers just need to publish the SDFs and EDFs along with the publication to allow other researchers to get them and reproduce the experiment. As previously described, therefore SwarmRob relies on container virtualization to enable the reproduction of software-intensive multi-robot experiments. A key feature of multi-robot systems is the communicaiton. In order to enable a capsulated and inference-free communication between the robots, SwarmRob makes use of the virtual network feature of Docker based on VXLAN. While the use of container virtualization becomes more common in robotics, especially the networking is a very time-consuming and error-prone procedure. SwarmRob automates this by using a distributed key-value store to spread the correct network configuration to all participating robots. This enables the communication between e.g. ROS nodes via virtual networks on top of the original underlying network. The whole configuration of the swarm is carried out by the software. The researchers only need to initialize a swarm, add the workers and start the swarm.
 <p align="center"> 
-<img src="docs/_static/images/networking.png" alt="Networking" width="402" height="370">
+<img src="https://github.com/IoT-Lab-Minden/SwarmRob/tree/gh-pages/_static/images/networking.png" alt="Networking" width="402" height="370">
 </p>
 
 *System and Inter-Robot Network Architecture using Overlay Networks - The Underlay Network represents the physical network connection between the hosts, the Intra-Swarm Communication represents the commands and information exchanged between the participants of a swarm and the Overlay Network is the communication channel used for the communication between containerized applications*
@@ -74,7 +74,7 @@ More in-depth information can be found in the publication:
 
 > A. Pörtner, M. Hoffmann, S. Zug, and M. König, “SwarmRob: A Toolkit for Reproducibility and Sharing of Experimental Artifacts in Robotics Research,” in 2018 IEEE International Conference on Systems, Man, and Cybernetics (SMC), 2018, p. 325–332. 
 
-A good start to connect with SwarmRob is to follow the [Getting started](https://aljoschap.github.io/SwarmRob/).
+A good start to connect with SwarmRob is to follow the [Getting started](https://iot-lab-minden.github.io/SwarmRob/).
 
 ### Copyright
 Copyright 2018,2019 Aljoscha Pörtner
