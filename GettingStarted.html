@@ -1,0 +1,198 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Getting started &#8212; SwarmRob 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Frequently Asked Questions" href="FAQ.html" />
+    <link rel="prev" title="Installation" href="Installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="getting-started">
+<span id="gettingstarted"></span><h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>To follow the next steps you should have the full version of SwarmRob installed. If you haven’t done this already, make sure to install SwarmRob first. You can find the instructions on how to install SwarmRob <a class="reference internal" href="Installation.html#installation"><span class="std std-ref">here</span></a>.</p>
+<div class="section" id="start-the-daemon">
+<h2>Start the daemon<a class="headerlink" href="#start-the-daemon" title="Permalink to this headline">¶</a></h2>
+<p>SwarmRob uses a daemon to always be reachable from other SwarmRob nodes. You can communicate with this daemon via the command line. To do this you first need to start the daemon itself. Execute the following command to start the SwarmRob daemon:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">swarmrob</span> <span class="n">daemon</span> <span class="n">start</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="initialize-a-swarm">
+<h2>Initialize a swarm<a class="headerlink" href="#initialize-a-swarm" title="Permalink to this headline">¶</a></h2>
+<p>Since the daemon is now running you can initialize your first swarm. A swarm can only be initialized using the full version of SwarmRob because the node you run this command on will become the master of th swarm. The following command will initialize a new swarm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">swarmrob</span> <span class="n">master</span> <span class="n">init</span> <span class="o">--</span><span class="n">swarm_uuid</span> <span class="n">my_swarm</span>
+</pre></div>
+</div>
+<p>With the option <code class="docutils literal notranslate"><span class="pre">--swarm_uuid</span></code> you can give your swarm a uuid. It is possible to omit this option. SwarmRob then will automatically assign a uuid but if you have to use a specific uuid or have to write all commands by hand it is recommended to use the option.</p>
+</div>
+<div class="section" id="join-the-swarm">
+<h2>Join the swarm<a class="headerlink" href="#join-the-swarm" title="Permalink to this headline">¶</a></h2>
+<p>The command to join a swarm will be printed out by the previously executed command. It should have the following form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo swarmrob worker join --uuid my_swarm@$IP_ADDRESS
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">$IP_ADDRESS</span></code> has to be replaced with the ip address of your current system. Note that if you want to join a swarm from a system where only the worker version is installed you have to swap the command <code class="docutils literal notranslate"><span class="pre">swarmrob</span></code> to <code class="docutils literal notranslate"><span class="pre">swarmrob-worker</span></code>. It is possible to have a worker node and a master node running on the same system for easy testing purposes.</p>
+<p>To check if the worker has been registered successfully you can execute the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">swarmrob</span> <span class="n">master</span> <span class="n">swarm_status</span>
+</pre></div>
+</div>
+<p>It shows you a list of worker nodes that are registered at this swarm. In this case you should see one worker node.</p>
+</div>
+<div class="section" id="create-an-edf">
+<h2>Create an EDF<a class="headerlink" href="#create-an-edf" title="Permalink to this headline">¶</a></h2>
+<p>To start a swarm you need to have a Container Definition File (short CDF) and an Experiment Definition File (short EDF). A CDF describes a service that can be executed by a worker node. CDFs are simply just Dockerfiles. This means you can execute every Dockerfile using SwarmRob. EDFs are similar to the Compose-Files you may know from Docker. In this example we use the <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> example from Docker and write an EDF to execute the programm on our worker.</p>
+<p>First create a new file called <code class="docutils literal notranslate"><span class="pre">my_edf.yaml</span></code>. Then copy the following content into the file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span>
+<span class="n">services</span><span class="p">:</span>
+ <span class="n">my_service</span><span class="p">:</span>
+  <span class="n">image</span><span class="p">:</span> <span class="n">hello</span><span class="o">-</span><span class="n">world</span>
+</pre></div>
+</div>
+<p>This EDF describes a service with the name <code class="docutils literal notranslate"><span class="pre">my_service</span></code> that should run the image <code class="docutils literal notranslate"><span class="pre">hello-world</span></code>. If you want to you can run more services. You can do so by adding more services to the EDF. An example with two services would look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span>
+<span class="n">services</span><span class="p">:</span>
+ <span class="n">my_service</span><span class="p">:</span>
+  <span class="n">image</span><span class="p">:</span> <span class="n">hello</span><span class="o">-</span><span class="n">world</span>
+ <span class="n">my_service_2</span><span class="p">:</span>
+  <span class="n">image</span><span class="p">:</span> <span class="n">hello</span><span class="o">-</span><span class="n">world</span>
+</pre></div>
+</div>
+<p>At last you can save your file.</p>
+</div>
+<div class="section" id="start-the-swarm">
+<h2>Start the swarm<a class="headerlink" href="#start-the-swarm" title="Permalink to this headline">¶</a></h2>
+<p>We are ready to run our services. Execute the following command to start the swarm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">swarmrob</span> <span class="n">master</span> <span class="n">start_swarm</span> <span class="o">--</span><span class="n">swarm_uuid</span> <span class="n">my_swarm</span> <span class="o">--</span><span class="n">compose_file</span> <span class="n">my_edf</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>When you have started your swarm you can check the status of it again using this command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">swarmrob</span> <span class="n">master</span> <span class="n">swarm_status</span>
+</pre></div>
+</div>
+<p>You will see that there has been one service assigned. But you may also see that it is not running. But don’t worry it has already been executed successfully. To see that the service has exited you can execute the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo swarmrob master worker_status --worker_uuid $WORKER_UUID
+</pre></div>
+</div>
+<p>To execute the command replace the <code class="docutils literal notranslate"><span class="pre">$WORKER_UUID</span></code> with an actual worker uuid. You can look up the worker uuid from your worker node in the output of the status command you executed before. When you have replaced the worker uuid and executed the command you will see <code class="docutils literal notranslate"><span class="pre">exited</span></code> in the status column of the Service Status List.</p>
+<p>Congratulations! You now have successfully started your first swarm and know the basics of SwarmRob. If you want to learn more about the commands you can use you can take a look at the <a class="reference internal" href="Commands.html#commands"><span class="std std-ref">commands page</span></a>.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/images/SwarmRob_Main_Logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A Toolkit for Reproducibility and Sharing of Experimental Artifacts in Robotics Research</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=IoT-Lab-Minden&repo=SwarmRob&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">swarmrob</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Installation.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="FAQ.html" title="next chapter">Frequently Asked Questions</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Aljoscha Pörtner.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/GettingStarted.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
